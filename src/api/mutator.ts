@@ -1,13 +1,8 @@
 import axios, { AxiosRequestConfig } from "axios";
 
-// Use proxy in development, or direct URL in production
+// Always use relative paths - proxy handles routing in both dev (Vite) and prod (Vercel)
 const getBaseURL = () => {
-  // In development, use empty string to leverage Vite proxy
-  if (import.meta.env.DEV) {
-    return "";
-  }
-  // In production, use the environment variable or default
-  return import.meta.env.VITE_API_URL || "";
+  return "";
 };
 
 export const apiClient = axios.create({
