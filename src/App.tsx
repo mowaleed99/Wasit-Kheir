@@ -19,8 +19,11 @@ import { ReportDetails } from "./pages/ReportDetails";
 import { UserProfile } from "./pages/UserProfile";
 import { SearchPage } from "./pages/SearchPage";
 import { NearbyPage } from "./pages/NearbyPage";
-import { AdminDashboard } from "./pages/AdminDashboard";
-
+import { AdminLayout } from "./components/layout/AdminLayout";
+import { AdminReports } from "./pages/admin/AdminReports";
+import { AdminUsers } from "./pages/admin/AdminUsers";
+import { AdminCategories } from "./pages/admin/AdminCategories";
+import { Navigate } from "react-router-dom";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import "./i18n";
 import "./styles/globals.css";
@@ -134,9 +137,15 @@ const router = createBrowserRouter([
         path: "admin",
         element: (
           <ProtectedRoute>
-            <AdminDashboard />
+            <AdminLayout />
           </ProtectedRoute>
         ),
+        children: [
+          { index: true, element: <Navigate to="reports" replace /> },
+          { path: "reports", element: <AdminReports /> },
+          { path: "users", element: <AdminUsers /> },
+          { path: "categories", element: <AdminCategories /> },
+        ]
       },
     ],
   },
