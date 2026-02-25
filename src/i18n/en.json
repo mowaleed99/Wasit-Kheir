@@ -1,0 +1,51 @@
+{
+  "app": {
+    "title": "Wasit Kheir",
+    "whatsOnYourMind": "What's on your mind?"
+  },
+  "categories": {
+    "title": "Categories",
+    "emergencies": "Emergencies",
+    "importantDocuments": "Important Documents",
+    "moneyCards": "Money & Cards",
+    "smartsElectronics": "Smarts & Electronics",
+    "laptopsTablets": "Laptops & Tablets",
+    "smartWatches": "Smart Watches",
+    "fitnessTrackers": "Fitness Trackers",
+    "vehicles": "Vehicles",
+    "bicyclesScooters": "Bicycles & Scooters",
+    "pets": "Pets",
+    "dogs": "Dogs",
+    "personalAccessories": "Personal Accessories",
+    "valuableItems": "Valuable Items",
+    "medicalDevices": "Medical Devices",
+    "booksDocuments": "Books & Documents",
+    "tools": "Tools"
+  },
+  "auth": {
+    "login": "Login",
+    "signup": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "fullName": "Full Name",
+    "phone": "Phone",
+    "verifyEmail": "Verify Email",
+    "resendVerification": "Resend Verification"
+  },
+  "posts": {
+    "createPost": "Create Post",
+    "content": "Content",
+    "location": "Location",
+    "category": "Category",
+    "reward": "Reward (optional)",
+    "uploadImages": "Upload Images",
+    "like": "Like",
+    "comment": "Comment",
+    "share": "Share"
+  },
+  "chat": {
+    "chats": "Chats"
+  },
+  "search": "Search",
+  "profile": "Profile"
+}

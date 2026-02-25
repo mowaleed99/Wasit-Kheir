@@ -1,0 +1,51 @@
+{
+  "app": {
+    "title": "وسيط خير",
+    "whatsOnYourMind": "ما الذي يدور في ذهنك؟"
+  },
+  "categories": {
+    "title": "الفئات",
+    "emergencies": "طوارئ",
+    "importantDocuments": "وثائق مهمة",
+    "moneyCards": "نقود وبطاقات",
+    "smartsElectronics": "هواتف وإلكترونيات",
+    "laptopsTablets": "لابتوب وتابلت",
+    "smartWatches": "ساعات ذكية",
+    "fitnessTrackers": "مُتتبعات اللياقة",
+    "vehicles": "مركبات",
+    "bicyclesScooters": "دراجات وسكوتر",
+    "pets": "حيوانات أليفة",
+    "dogs": "كلاب",
+    "personalAccessories": "إكسسوارات شخصية",
+    "valuableItems": "أغراض قيمة",
+    "medicalDevices": "أجهزة طبية",
+    "booksDocuments": "كتب ووثائق",
+    "tools": "أدوات"
+  },
+  "auth": {
+    "login": "تسجيل الدخول",
+    "signup": "إنشاء حساب",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "fullName": "الاسم الكامل",
+    "phone": "الهاتف",
+    "verifyEmail": "تحقق من البريد الإلكتروني",
+    "resendVerification": "إعادة إرسال التحقق"
+  },
+  "posts": {
+    "createPost": "إنشاء منشور",
+    "content": "المحتوى",
+    "location": "الموقع",
+    "category": "الفئة",
+    "reward": "المكافأة (اختياري)",
+    "uploadImages": "رفع صور",
+    "like": "إعجاب",
+    "comment": "تعليق",
+    "share": "مشاركة"
+  },
+  "chat": {
+    "chats": "الدردشات"
+  },
+  "search": "بحث",
+  "profile": "الملف الشخصي"
+}
