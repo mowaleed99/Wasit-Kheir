@@ -60,7 +60,7 @@ export const AdminUsers: React.FC = () => {
     };
 
     return (
-        <div className="max-w-6xl mx-auto">
+        <div className="w-full">
             <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h2 className="text-2xl font-bold text-gray-900">Manage Users</h2>

@@ -81,7 +81,7 @@ export const AdminCategories: React.FC = () => {
     const isMutating = isCreatingCat || isEditingCat || isCreatingSub || isEditingSub;
 
     return (
-        <div className="max-w-4xl mx-auto">
+        <div className="w-full">
             <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h2 className="text-2xl font-bold text-gray-900">Manage Categories</h2>

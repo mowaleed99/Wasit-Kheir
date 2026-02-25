@@ -38,16 +38,24 @@ export const UserProfile: React.FC = () => {
     });
 
     // Start chat with this user
-    const { mutate: createChatSession, isPending: isCreatingChat } =
-        usePostApiChatSessionsOtherUserId({
-            mutation: {
-                onSuccess: (response: any) => {
-                    const sessionId = response?.data?.id || response?.id;
-                    navigate(sessionId ? `/chat/${sessionId}` : "/chat");
-                },
-                onError: () => alert("Failed to start chat. Please try again."),
+    const { mutate: createChatSession, isPending: isCreatingChat } = usePostApiChatSessionsOtherUserId({
+        mutation: {
+            onSuccess: (response: any) => {
+                const session = response?.data || response;
+                const sessionId = session?.id || session?.data?.id;
+                if (sessionId) {
+                    navigate(`/chat/${sessionId}`);
+                } else {
+                    console.error("Missing session ID in response:", response);
+                    navigate("/chat");
+                }
             },
-        });
+            onError: (error) => {
+                console.error("Chat creation error:", error);
+                alert("Failed to start chat. Please try again.");
+            },
+        },
+    });
 
     const user = (userData as any)?.data ?? userData;
     // API shape: { success, data: { data: [], page, totalPages } }
