@@ -19,6 +19,7 @@ import { ReportDetails } from "./pages/ReportDetails";
 import { UserProfile } from "./pages/UserProfile";
 import { SearchPage } from "./pages/SearchPage";
 import { NearbyPage } from "./pages/NearbyPage";
+import { AdminDashboard } from "./pages/AdminDashboard";
 
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import "./i18n";
@@ -129,7 +130,14 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-
+      {
+        path: "admin",
+        element: (
+          <ProtectedRoute>
+            <AdminDashboard />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
   { path: "/login", element: <Login /> },
