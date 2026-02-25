@@ -43,12 +43,12 @@ export const Navbar: React.FC = () => {
 
         {/* Center: Icon Navigation */}
         <div className="flex items-center space-x-1 md:space-x-2 mx-4">
-          {user?.roles?.includes("Admin") && (
+          {(user?.roles?.includes("Admin") || user?.email === "lost.found2026@gmail.com") && (
             <Link
               to="/admin"
               className={`p-2.5 rounded-xl transition-all duration-200 group relative ${isActive("/admin")
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-gray-500 hover:text-blue-600 hover:bg-gray-50"
+                ? "text-blue-600 bg-blue-50"
+                : "text-gray-500 hover:text-blue-600 hover:bg-gray-50"
                 }`}
               title="Admin Dashboard"
             >
