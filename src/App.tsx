@@ -133,21 +133,21 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-      {
-        path: "admin",
-        element: (
-          <ProtectedRoute>
-            <AdminLayout />
-          </ProtectedRoute>
-        ),
-        children: [
-          { index: true, element: <Navigate to="reports" replace /> },
-          { path: "reports", element: <AdminReports /> },
-          { path: "users", element: <AdminUsers /> },
-          { path: "categories", element: <AdminCategories /> },
-        ]
-      },
     ],
+  },
+  {
+    path: "/admin",
+    element: (
+      <ProtectedRoute>
+        <AdminLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      { index: true, element: <Navigate to="reports" replace /> },
+      { path: "reports", element: <AdminReports /> },
+      { path: "users", element: <AdminUsers /> },
+      { path: "categories", element: <AdminCategories /> },
+    ]
   },
   { path: "/login", element: <Login /> },
   { path: "/signup", element: <Signup /> },

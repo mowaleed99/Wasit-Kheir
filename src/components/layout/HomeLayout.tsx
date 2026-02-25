@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
 import { CategoryTree } from "../categories/CategoryTree";
-import { ChatList } from "../chat/ChatList";
 import { useTranslation } from "react-i18next";
 import { useSettings } from "@/context/SettingsContext";
 import { Navbar } from "./Navbar";
@@ -25,11 +24,6 @@ export const HomeLayout: React.FC = () => {
         {/* Center: Feed */}
         <div className="flex-1 overflow-y-auto p-4">
           <Outlet />
-        </div>
-        {/* Right: Chats */}
-        <div className="w-80 bg-muted/40 border-l p-4 hidden lg:flex lg:flex-col">
-          <h2 className="font-bold mb-4">{t("chat.chats")}</h2>
-          <ChatList />
         </div>
       </div>
     </div>

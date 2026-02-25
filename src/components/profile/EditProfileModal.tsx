@@ -69,14 +69,12 @@ export const EditProfileModal = ({ user, isOpen, onClose }: EditProfileModalProp
 
     const onSubmit = (data: EditProfileFormData) => {
         const formData: any = {
-            fullName: data.fullName,
+            FullName: data.fullName,
         };
 
-        if (data.phoneNumber) formData.phoneNumber = data.phoneNumber;
-        if (data.address) formData.address = data.address;
-        if (data.bio) formData.bio = data.bio;
-        if (data.dateOfBirth) formData.dateOfBirth = data.dateOfBirth;
-        if (data.gender) formData.gender = data.gender;
+        if (data.phoneNumber) formData.Phone = data.phoneNumber;
+        if (data.dateOfBirth) formData.DateOfBirth = data.dateOfBirth;
+        if (data.gender) formData.Gender = data.gender;
 
         console.log("Submitting profile update:", formData);
 
