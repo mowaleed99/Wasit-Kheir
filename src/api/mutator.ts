@@ -7,7 +7,8 @@ const getBaseURL = () => {
 
 export const apiClient = axios.create({
   baseURL: getBaseURL(),
-  withCredentials: true,
+  // Removing withCredentials because the app uses Bearer tokens. 
+  // Sending cookies (especially Vercel proxy cookies) confuses the ASP.NET Core authentication middleware causing 401s.
   timeout: 30000, // 30 seconds timeout
 });
 
