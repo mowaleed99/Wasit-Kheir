@@ -131,7 +131,7 @@ export const AdminCategories: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div className="flex items-center gap-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                                         <button
                                             onClick={() => handleCreateSubCategory(cat.id)}
                                             disabled={isMutating}
@@ -175,7 +175,7 @@ export const AdminCategories: React.FC = () => {
                                                             <span className="text-sm font-medium text-gray-700">{sub.name}</span>
                                                         </div>
 
-                                                        <div className="flex items-center gap-2 opacity-0 group-hover/sub:opacity-100 transition-opacity">
+                                                        <div className="flex items-center gap-2 opacity-100 md:opacity-0 md:group-hover/sub:opacity-100 transition-opacity">
                                                             <button
                                                                 onClick={() => handleEditSubCategory(sub.id, cat.id, sub.name)}
                                                                 disabled={isMutating}

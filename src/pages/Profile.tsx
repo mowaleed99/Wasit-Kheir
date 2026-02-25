@@ -42,8 +42,8 @@ export const Profile: React.FC = () => {
       {/* Profile Header */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
         <div className="p-8">
-          <div className="flex items-start justify-between">
-            <div className="flex items-center space-x-6">
+          <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
+            <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6 text-center md:text-left">
               {/* Avatar */}
               <img
                 src={
@@ -58,7 +58,7 @@ export const Profile: React.FC = () => {
               />
 
               {/* User Info */}
-              <div>
+              <div className="flex flex-col items-center md:items-start">
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">
                   {user?.fullName || "Unknown User"}
                 </h1>
@@ -94,7 +94,7 @@ export const Profile: React.FC = () => {
             </div>
 
             {/* Edit Button */}
-            <Button variant="outline" onClick={() => setShowEditModal(true)}>
+            <Button variant="outline" className="w-full md:w-auto" onClick={() => setShowEditModal(true)}>
               <Edit2 className="w-4 h-4 mr-2" />
               Edit Profile
             </Button>
@@ -110,7 +110,7 @@ export const Profile: React.FC = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
           <p className="text-3xl font-bold text-blue-600">{userPosts.length}</p>
           <p className="text-sm text-gray-600 mt-1">Total Posts</p>
@@ -152,7 +152,7 @@ export const Profile: React.FC = () => {
         ) : (
           <div>
             {/* Tabs */}
-            <div className="flex gap-2 mb-6 border-b border-gray-200">
+            <div className="flex flex-wrap justify-center sm:justify-start gap-2 mb-6 border-b border-gray-200">
               <button
                 onClick={() => setActiveTab('all')}
                 className={`px-4 py-2 font-medium transition-colors ${activeTab === 'all'

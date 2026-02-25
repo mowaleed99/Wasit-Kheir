@@ -67,7 +67,7 @@ export const Home = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-1">Wasit Kheir</h1>
             <p className="text-gray-500">Help your community find what matters</p>
@@ -88,9 +88,9 @@ export const Home = () => {
           </div>
           <Link
             to="/create-report"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
+            className="w-full sm:w-auto text-center justify-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
           >
-            <Plus className="w-5 h-5" />
+            <Plus className="w-5 h-5 mx-auto sm:mx-0" />
             <span>Report</span>
           </Link>
         </div>
