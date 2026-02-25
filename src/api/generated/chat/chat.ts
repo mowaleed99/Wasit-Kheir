@@ -29,39 +29,40 @@ import { customInstance } from '../../mutator';
  * @summary Get chat sessions
  */
 export const getApiChatSessions = (
-    
- signal?: AbortSignal
+
+  signal?: AbortSignal
 ) => {
-      
-      
-      return customInstance<void>(
-      {url: `/api/chat/sessions`, method: 'GET', signal
+
+
+  return customInstance<void>(
+    {
+      url: `/api/chat/sessions`, method: 'GET', signal
     },
-      );
-    }
-  
+  );
+}
+
 
 export const getGetApiChatSessionsQueryKey = () => {
-    return [`/api/chat/sessions`] as const;
-    }
+  return [`/api/chat/sessions`] as const;
+}
 
-    
-export const getGetApiChatSessionsQueryOptions = <TData = Awaited<ReturnType<typeof getApiChatSessions>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiChatSessions>>, TError, TData>>, }
+
+export const getGetApiChatSessionsQueryOptions = <TData = Awaited<ReturnType<typeof getApiChatSessions>>, TError = unknown>(options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiChatSessions>>, TError, TData>>, }
 ) => {
 
-const {query: queryOptions} = options ?? {};
+  const { query: queryOptions } = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetApiChatSessionsQueryKey();
+  const queryKey = queryOptions?.queryKey ?? getGetApiChatSessionsQueryKey();
 
-  
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiChatSessions>>> = ({ signal }) => getApiChatSessions(signal);
 
-      
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiChatSessions>>> = ({ signal }) => getApiChatSessions(signal);
 
-      
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiChatSessions>>, TError, TData> & { queryKey: QueryKey }
+
+
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<Awaited<ReturnType<typeof getApiChatSessions>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type GetApiChatSessionsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiChatSessions>>>
@@ -71,15 +72,15 @@ export type GetApiChatSessionsQueryError = unknown
  * @summary Get chat sessions
  */
 export const useGetApiChatSessions = <TData = Awaited<ReturnType<typeof getApiChatSessions>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiChatSessions>>, TError, TData>>, }
+  options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiChatSessions>>, TError, TData>>, }
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
   const queryOptions = getGetApiChatSessionsQueryOptions(options)
 
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
@@ -91,95 +92,98 @@ export const useGetApiChatSessions = <TData = Awaited<ReturnType<typeof getApiCh
  * @summary Open or create chat session
  */
 export const postApiChatSessionsOtherUserId = (
-    otherUserId: number,
- ) => {
-      
-      
-      return customInstance<void>(
-      {url: `/api/chat/sessions/${otherUserId}`, method: 'POST'
+  otherUserId: number,
+) => {
+
+
+  return customInstance<void>(
+    {
+      url: `/api/chat/sessions/${otherUserId}`, method: 'POST'
     },
-      );
-    }
-  
+  );
+}
+
 
 
 export const getPostApiChatSessionsOtherUserIdMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiChatSessionsOtherUserId>>, TError,{otherUserId: number}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof postApiChatSessionsOtherUserId>>, TError,{otherUserId: number}, TContext> => {
-const {mutation: mutationOptions} = options ?? {};
-
-      
+  TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof postApiChatSessionsOtherUserId>>, TError, { otherUserId: number }, TContext>, }
+  ): UseMutationOptions<Awaited<ReturnType<typeof postApiChatSessionsOtherUserId>>, TError, { otherUserId: number }, TContext> => {
+  const { mutation: mutationOptions } = options ?? {};
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiChatSessionsOtherUserId>>, {otherUserId: number}> = (props) => {
-          const {otherUserId} = props ?? {};
-
-          return  postApiChatSessionsOtherUserId(otherUserId,)
-        }
-
-        
 
 
-  return  { mutationFn, ...mutationOptions }}
+  const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiChatSessionsOtherUserId>>, { otherUserId: number }> = (props) => {
+    const { otherUserId } = props ?? {};
 
-    export type PostApiChatSessionsOtherUserIdMutationResult = NonNullable<Awaited<ReturnType<typeof postApiChatSessionsOtherUserId>>>
-    
-    export type PostApiChatSessionsOtherUserIdMutationError = unknown
+    return postApiChatSessionsOtherUserId(otherUserId,)
+  }
 
-    /**
- * @summary Open or create chat session
- */
+
+
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiChatSessionsOtherUserIdMutationResult = NonNullable<Awaited<ReturnType<typeof postApiChatSessionsOtherUserId>>>
+
+export type PostApiChatSessionsOtherUserIdMutationError = unknown
+
+/**
+* @summary Open or create chat session
+*/
 export const usePostApiChatSessionsOtherUserId = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiChatSessionsOtherUserId>>, TError,{otherUserId: number}, TContext>, }
-): UseMutationResult<
-        Awaited<ReturnType<typeof postApiChatSessionsOtherUserId>>,
-        TError,
-        {otherUserId: number},
-        TContext
-      > => {
+  TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof postApiChatSessionsOtherUserId>>, TError, { otherUserId: number }, TContext>, }
+  ): UseMutationResult<
+    Awaited<ReturnType<typeof postApiChatSessionsOtherUserId>>,
+    TError,
+    { otherUserId: number },
+    TContext
+  > => {
 
-      const mutationOptions = getPostApiChatSessionsOtherUserIdMutationOptions(options);
+  const mutationOptions = getPostApiChatSessionsOtherUserIdMutationOptions(options);
 
-      return useMutation(mutationOptions);
-    }
-    /**
- * Retrieves detailed information about a specific chat session including participants. Only participants can access the session. Requires authentication.
- * @summary Get chat session details
- */
+  return useMutation(mutationOptions);
+}
+/**
+* Retrieves detailed information about a specific chat session including participants. Only participants can access the session. Requires authentication.
+* @summary Get chat session details
+*/
 export const getApiChatSessionsSessionId = (
-    sessionId: number,
- signal?: AbortSignal
+  sessionId: number,
+  signal?: AbortSignal
 ) => {
-      
-      
-      return customInstance<void>(
-      {url: `/api/chat/sessions/${sessionId}`, method: 'GET', signal
+
+
+  return customInstance<void>(
+    {
+      url: `/api/chat/sessions/${sessionId}`, method: 'GET', signal
     },
-      );
-    }
-  
+  );
+}
+
 
 export const getGetApiChatSessionsSessionIdQueryKey = (sessionId: number,) => {
-    return [`/api/chat/sessions/${sessionId}`] as const;
-    }
+  return [`/api/chat/sessions/${sessionId}`] as const;
+}
 
-    
-export const getGetApiChatSessionsSessionIdQueryOptions = <TData = Awaited<ReturnType<typeof getApiChatSessionsSessionId>>, TError = unknown>(sessionId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiChatSessionsSessionId>>, TError, TData>>, }
+
+export const getGetApiChatSessionsSessionIdQueryOptions = <TData = Awaited<ReturnType<typeof getApiChatSessionsSessionId>>, TError = unknown>(sessionId: number, options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiChatSessionsSessionId>>, TError, TData>>, }
 ) => {
 
-const {query: queryOptions} = options ?? {};
+  const { query: queryOptions } = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetApiChatSessionsSessionIdQueryKey(sessionId);
+  const queryKey = queryOptions?.queryKey ?? getGetApiChatSessionsSessionIdQueryKey(sessionId);
 
-  
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiChatSessionsSessionId>>> = ({ signal }) => getApiChatSessionsSessionId(sessionId, signal);
 
-      
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiChatSessionsSessionId>>> = ({ signal }) => getApiChatSessionsSessionId(sessionId, signal);
 
-      
 
-   return  { queryKey, queryFn, enabled: !!(sessionId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiChatSessionsSessionId>>, TError, TData> & { queryKey: QueryKey }
+
+
+
+  return { queryKey, queryFn, enabled: !!(sessionId), ...queryOptions } as UseQueryOptions<Awaited<ReturnType<typeof getApiChatSessionsSessionId>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type GetApiChatSessionsSessionIdQueryResult = NonNullable<Awaited<ReturnType<typeof getApiChatSessionsSessionId>>>
@@ -189,15 +193,15 @@ export type GetApiChatSessionsSessionIdQueryError = unknown
  * @summary Get chat session details
  */
 export const useGetApiChatSessionsSessionId = <TData = Awaited<ReturnType<typeof getApiChatSessionsSessionId>>, TError = unknown>(
- sessionId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiChatSessionsSessionId>>, TError, TData>>, }
+  sessionId: number, options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiChatSessionsSessionId>>, TError, TData>>, }
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getGetApiChatSessionsSessionIdQueryOptions(sessionId,options)
+  const queryOptions = getGetApiChatSessionsSessionIdQueryOptions(sessionId, options)
 
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
@@ -209,39 +213,40 @@ export const useGetApiChatSessionsSessionId = <TData = Awaited<ReturnType<typeof
  * @summary Get chat messages
  */
 export const getApiChatSessionsSessionIdMessages = (
-    sessionId: number,
- signal?: AbortSignal
+  sessionId: number,
+  signal?: AbortSignal
 ) => {
-      
-      
-      return customInstance<void>(
-      {url: `/api/chat/sessions/${sessionId}/messages`, method: 'GET', signal
+
+
+  return customInstance<void>(
+    {
+      url: `/api/chat/sessions/${sessionId}/messages`, method: 'GET', signal
     },
-      );
-    }
-  
+  );
+}
+
 
 export const getGetApiChatSessionsSessionIdMessagesQueryKey = (sessionId: number,) => {
-    return [`/api/chat/sessions/${sessionId}/messages`] as const;
-    }
+  return [`/api/chat/sessions/${sessionId}/messages`] as const;
+}
 
-    
-export const getGetApiChatSessionsSessionIdMessagesQueryOptions = <TData = Awaited<ReturnType<typeof getApiChatSessionsSessionIdMessages>>, TError = unknown>(sessionId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiChatSessionsSessionIdMessages>>, TError, TData>>, }
+
+export const getGetApiChatSessionsSessionIdMessagesQueryOptions = <TData = Awaited<ReturnType<typeof getApiChatSessionsSessionIdMessages>>, TError = unknown>(sessionId: number, options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiChatSessionsSessionIdMessages>>, TError, TData>>, }
 ) => {
 
-const {query: queryOptions} = options ?? {};
+  const { query: queryOptions } = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetApiChatSessionsSessionIdMessagesQueryKey(sessionId);
+  const queryKey = queryOptions?.queryKey ?? getGetApiChatSessionsSessionIdMessagesQueryKey(sessionId);
 
-  
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiChatSessionsSessionIdMessages>>> = ({ signal }) => getApiChatSessionsSessionIdMessages(sessionId, signal);
 
-      
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiChatSessionsSessionIdMessages>>> = ({ signal }) => getApiChatSessionsSessionIdMessages(sessionId, signal);
 
-      
 
-   return  { queryKey, queryFn, enabled: !!(sessionId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiChatSessionsSessionIdMessages>>, TError, TData> & { queryKey: QueryKey }
+
+
+
+  return { queryKey, queryFn, enabled: !!(sessionId), ...queryOptions } as UseQueryOptions<Awaited<ReturnType<typeof getApiChatSessionsSessionIdMessages>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type GetApiChatSessionsSessionIdMessagesQueryResult = NonNullable<Awaited<ReturnType<typeof getApiChatSessionsSessionIdMessages>>>
@@ -251,15 +256,15 @@ export type GetApiChatSessionsSessionIdMessagesQueryError = unknown
  * @summary Get chat messages
  */
 export const useGetApiChatSessionsSessionIdMessages = <TData = Awaited<ReturnType<typeof getApiChatSessionsSessionIdMessages>>, TError = unknown>(
- sessionId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiChatSessionsSessionIdMessages>>, TError, TData>>, }
+  sessionId: number, options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiChatSessionsSessionIdMessages>>, TError, TData>>, }
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getGetApiChatSessionsSessionIdMessagesQueryOptions(sessionId,options)
+  const queryOptions = getGetApiChatSessionsSessionIdMessagesQueryOptions(sessionId, options)
 
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
@@ -271,114 +276,117 @@ export const useGetApiChatSessionsSessionIdMessages = <TData = Awaited<ReturnTyp
  * @summary Send chat message
  */
 export const postApiChatSessionsSessionIdMessages = (
-    sessionId: number,
-    sendChatMessageDto: SendChatMessageDto,
- ) => {
-      
-      
-      return customInstance<void>(
-      {url: `/api/chat/sessions/${sessionId}/messages`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
+  sessionId: number,
+  sendChatMessageDto: SendChatMessageDto,
+) => {
+
+
+  return customInstance<void>(
+    {
+      url: `/api/chat/sessions/${sessionId}/messages`, method: 'POST',
+      headers: { 'Content-Type': 'application/json', },
       data: sendChatMessageDto
     },
-      );
-    }
-  
+  );
+}
+
 
 
 export const getPostApiChatSessionsSessionIdMessagesMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiChatSessionsSessionIdMessages>>, TError,{sessionId: number;data: SendChatMessageDto}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof postApiChatSessionsSessionIdMessages>>, TError,{sessionId: number;data: SendChatMessageDto}, TContext> => {
-const {mutation: mutationOptions} = options ?? {};
-
-      
+  TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof postApiChatSessionsSessionIdMessages>>, TError, { sessionId: number; data: SendChatMessageDto }, TContext>, }
+  ): UseMutationOptions<Awaited<ReturnType<typeof postApiChatSessionsSessionIdMessages>>, TError, { sessionId: number; data: SendChatMessageDto }, TContext> => {
+  const { mutation: mutationOptions } = options ?? {};
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiChatSessionsSessionIdMessages>>, {sessionId: number;data: SendChatMessageDto}> = (props) => {
-          const {sessionId,data} = props ?? {};
-
-          return  postApiChatSessionsSessionIdMessages(sessionId,data,)
-        }
-
-        
 
 
-  return  { mutationFn, ...mutationOptions }}
+  const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiChatSessionsSessionIdMessages>>, { sessionId: number; data: SendChatMessageDto }> = (props) => {
+    const { sessionId, data } = props ?? {};
 
-    export type PostApiChatSessionsSessionIdMessagesMutationResult = NonNullable<Awaited<ReturnType<typeof postApiChatSessionsSessionIdMessages>>>
-    export type PostApiChatSessionsSessionIdMessagesMutationBody = SendChatMessageDto
-    export type PostApiChatSessionsSessionIdMessagesMutationError = unknown
+    return postApiChatSessionsSessionIdMessages(sessionId, data,)
+  }
 
-    /**
- * @summary Send chat message
- */
+
+
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiChatSessionsSessionIdMessagesMutationResult = NonNullable<Awaited<ReturnType<typeof postApiChatSessionsSessionIdMessages>>>
+export type PostApiChatSessionsSessionIdMessagesMutationBody = SendChatMessageDto
+export type PostApiChatSessionsSessionIdMessagesMutationError = unknown
+
+/**
+* @summary Send chat message
+*/
 export const usePostApiChatSessionsSessionIdMessages = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiChatSessionsSessionIdMessages>>, TError,{sessionId: number;data: SendChatMessageDto}, TContext>, }
-): UseMutationResult<
-        Awaited<ReturnType<typeof postApiChatSessionsSessionIdMessages>>,
-        TError,
-        {sessionId: number;data: SendChatMessageDto},
-        TContext
-      > => {
+  TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof postApiChatSessionsSessionIdMessages>>, TError, { sessionId: number; data: SendChatMessageDto }, TContext>, }
+  ): UseMutationResult<
+    Awaited<ReturnType<typeof postApiChatSessionsSessionIdMessages>>,
+    TError,
+    { sessionId: number; data: SendChatMessageDto },
+    TContext
+  > => {
 
-      const mutationOptions = getPostApiChatSessionsSessionIdMessagesMutationOptions(options);
+  const mutationOptions = getPostApiChatSessionsSessionIdMessagesMutationOptions(options);
 
-      return useMutation(mutationOptions);
-    }
-    /**
- * Marks a chat message as read. Only the message recipient can mark messages as read. Requires authentication.
- * @summary Mark message as read
- */
+  return useMutation(mutationOptions);
+}
+/**
+* Marks a chat message as read. Only the message recipient can mark messages as read. Requires authentication.
+* @summary Mark message as read
+*/
 export const putApiChatMessagesMessageIdRead = (
-    messageId: number,
- ) => {
-      
-      
-      return customInstance<void>(
-      {url: `/api/chat/messages/${messageId}/read`, method: 'PUT'
+  messageId: number,
+) => {
+
+
+  return customInstance<void>(
+    {
+      url: `/api/chat/messages/${messageId}/read`, method: 'PUT'
     },
-      );
-    }
-  
+  );
+}
+
 
 
 export const getPutApiChatMessagesMessageIdReadMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiChatMessagesMessageIdRead>>, TError,{messageId: number}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof putApiChatMessagesMessageIdRead>>, TError,{messageId: number}, TContext> => {
-const {mutation: mutationOptions} = options ?? {};
-
-      
+  TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof putApiChatMessagesMessageIdRead>>, TError, { messageId: number }, TContext>, }
+  ): UseMutationOptions<Awaited<ReturnType<typeof putApiChatMessagesMessageIdRead>>, TError, { messageId: number }, TContext> => {
+  const { mutation: mutationOptions } = options ?? {};
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putApiChatMessagesMessageIdRead>>, {messageId: number}> = (props) => {
-          const {messageId} = props ?? {};
-
-          return  putApiChatMessagesMessageIdRead(messageId,)
-        }
-
-        
 
 
-  return  { mutationFn, ...mutationOptions }}
+  const mutationFn: MutationFunction<Awaited<ReturnType<typeof putApiChatMessagesMessageIdRead>>, { messageId: number }> = (props) => {
+    const { messageId } = props ?? {};
 
-    export type PutApiChatMessagesMessageIdReadMutationResult = NonNullable<Awaited<ReturnType<typeof putApiChatMessagesMessageIdRead>>>
-    
-    export type PutApiChatMessagesMessageIdReadMutationError = unknown
+    return putApiChatMessagesMessageIdRead(messageId,)
+  }
 
-    /**
- * @summary Mark message as read
- */
+
+
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PutApiChatMessagesMessageIdReadMutationResult = NonNullable<Awaited<ReturnType<typeof putApiChatMessagesMessageIdRead>>>
+
+export type PutApiChatMessagesMessageIdReadMutationError = unknown
+
+/**
+* @summary Mark message as read
+*/
 export const usePutApiChatMessagesMessageIdRead = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiChatMessagesMessageIdRead>>, TError,{messageId: number}, TContext>, }
-): UseMutationResult<
-        Awaited<ReturnType<typeof putApiChatMessagesMessageIdRead>>,
-        TError,
-        {messageId: number},
-        TContext
-      > => {
+  TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof putApiChatMessagesMessageIdRead>>, TError, { messageId: number }, TContext>, }
+  ): UseMutationResult<
+    Awaited<ReturnType<typeof putApiChatMessagesMessageIdRead>>,
+    TError,
+    { messageId: number },
+    TContext
+  > => {
 
-      const mutationOptions = getPutApiChatMessagesMessageIdReadMutationOptions(options);
+  const mutationOptions = getPutApiChatMessagesMessageIdReadMutationOptions(options);
 
-      return useMutation(mutationOptions);
-    }
-    
+  return useMutation(mutationOptions);
+}

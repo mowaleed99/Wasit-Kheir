@@ -77,7 +77,7 @@ export const ChatWindow = ({ sessionId, onBack }: ChatWindowProps) => {
 
         sendMessage({
             sessionId,
-            data: { text: messageInput }
+            data: { Text: messageInput } as any
         }, {
             onSuccess: () => {
                 setMessageInput("");
