@@ -98,7 +98,8 @@ export const postApiChatSessionsOtherUserId = (
 
   return customInstance<void>(
     {
-      url: `/api/chat/sessions/${otherUserId}`, method: 'POST'
+      url: `/api/chat/sessions/${otherUserId}`, method: 'POST',
+      data: {} // Empty Object explicitly to bypass ASP.NET Model Binder crash
     },
   );
 }
