@@ -1,120 +1,151 @@
-import { Bell, CheckCheck, Loader2 } from "lucide-react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiClient } from "@/api";
+import { useGetApiNotifications, usePutApiNotificationsIdRead, usePostApiNotificationsMarkAllRead, useDeleteApiNotificationsId } from "@/api/generated/notifications/notifications";
+import { useAuth } from "@/context/AuthContext";
+import { Bell, Check, CheckCircle2, Trash2 } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/Button";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const Notifications: React.FC = () => {
+    const { user } = useAuth();
     const queryClient = useQueryClient();
 
-    // ── Fetch notifications via direct apiClient (generated hook uses customInstance<void>) ──
-    const { data: notificationsRaw, isLoading } = useQuery({
-        queryKey: ["notifications"],
-        queryFn: async () => {
-            const res = await apiClient.get("/api/Notifications", {
-                params: { pageSize: 50 },
-            });
-            return res.data;
-        },
+    const { data: notificationsData, isLoading } = useGetApiNotifications({
+        pageSize: 50
+    }, {
+        query: { enabled: !!user?.id }
     });
 
-    // ── Mark single notification as read ─────────────────────────────────
-    const { mutate: markRead } = useMutation({
-        mutationFn: async (id: number) => {
-            await apiClient.put(`/api/Notifications/${id}/read`);
-        },
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: ["notifications"] }),
+    const rawNotificationsList = (notificationsData as any)?.data?.data || (notificationsData as any)?.data || notificationsData;
+    const extractedArray = Array.isArray(rawNotificationsList) ? rawNotificationsList : (rawNotificationsList?.items || rawNotificationsList?.notifications || []);
+    const notifications: any[] = Array.isArray(extractedArray) ? extractedArray : [];
+
+    const { mutate: markAsRead } = usePutApiNotificationsIdRead({
+        mutation: {
+            onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ["/api/Notifications"] });
+                queryClient.invalidateQueries({ queryKey: ["/api/Notifications/unread"] });
+            }
+        }
     });
 
-    // ── Mark ALL notifications as read ───────────────────────────────────
-    const { mutate: markAllRead, isPending: markingAll } = useMutation({
-        mutationFn: async () => {
-            await apiClient.post("/api/Notifications/mark-all-read");
-        },
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: ["notifications"] }),
+    const { mutate: markAllAsRead, isPending: isMarkingAllRead } = usePostApiNotificationsMarkAllRead({
+        mutation: {
+            onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ["/api/Notifications"] });
+                queryClient.invalidateQueries({ queryKey: ["/api/Notifications/unread"] });
+            }
+        }
     });
 
-    const notifications: any[] = (() => {
-        if (!notificationsRaw) return [];
-        if (Array.isArray(notificationsRaw?.data?.data)) return notificationsRaw.data.data;
-        if (Array.isArray(notificationsRaw?.data)) return notificationsRaw.data;
-        if (Array.isArray(notificationsRaw)) return notificationsRaw;
-        return [];
-    })();
+    const { mutate: deleteNotification } = useDeleteApiNotificationsId({
+        mutation: {
+            onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ["/api/Notifications"] });
+                queryClient.invalidateQueries({ queryKey: ["/api/Notifications/unread"] });
+            }
+        }
+    });
 
-    const unreadCount = notifications.filter((n: any) => !n.isRead).length;
-
-    const formatTime = (d: string) => {
-        if (!d) return "";
-        const diff = Date.now() - new Date(d).getTime();
-        const mins = Math.floor(diff / 60000);
-        if (mins < 60) return `${mins}m ago`;
-        const hrs = Math.floor(diff / 3600000);
-        if (hrs < 24) return `${hrs}h ago`;
-        return `${Math.floor(diff / 86400000)}d ago`;
+    const formatDate = (dateString: string) => {
+        if (!dateString) return "";
+        return new Date(dateString).toLocaleDateString("en-US", {
+            month: "short", day: "numeric", hour: "numeric", minute: "numeric"
+        });
     };
 
-    if (isLoading) {
-        return (
-            <div className="flex items-center justify-center min-h-[60vh]">
-                <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
-            </div>
-        );
-    }
-
     return (
-        <div className="max-w-4xl mx-auto p-6">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-6">
-                <div>
-                    <h1 className="text-3xl font-bold">Notifications</h1>
-                    {unreadCount > 0 && (
-                        <p className="text-sm text-gray-600 mt-1">
-                            You have {unreadCount} unread notification{unreadCount > 1 ? "s" : ""}
-                        </p>
-                    )}
+        <div className="max-w-4xl mx-auto px-4 py-8">
+            <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-3">
+                    <div className="p-2.5 bg-indigo-100 rounded-xl">
+                        <Bell className="w-6 h-6 text-indigo-600" />
+                    </div>
+                    <div>
+                        <h1 className="text-2xl font-bold text-gray-900">Notifications</h1>
+                        <p className="text-sm text-gray-500">Stay updated on your reports and matches</p>
+                    </div>
                 </div>
-                {unreadCount > 0 && (
-                    <button
-                        onClick={() => markAllRead()}
-                        disabled={markingAll}
-                        className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 font-medium disabled:opacity-50"
+                {notifications.some(n => !n.isRead) && (
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => markAllAsRead()}
+                        disabled={isMarkingAllRead}
+                        className="text-indigo-600 hover:text-indigo-700"
                     >
-                        <CheckCheck className="w-5 h-5" />
-                        <span>Mark all as read</span>
-                    </button>
+                        <CheckCircle2 className="w-4 h-4 mr-2" />
+                        Mark all as read
+                    </Button>
                 )}
             </div>
 
-            {/* List */}
-            <div className="space-y-2">
-                {notifications.length === 0 ? (
-                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
-                        <Bell className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                        <p className="text-gray-600">No notifications yet</p>
-                        <p className="text-sm text-gray-500 mt-2">We'll notify you when something happens</p>
+            {isLoading ? (
+                <div className="flex flex-col items-center justify-center py-24">
+                    <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mb-4" />
+                    <p className="text-gray-500">Loading notifications…</p>
+                </div>
+            ) : notifications.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-24 text-center bg-white rounded-2xl shadow-sm border border-gray-100">
+                    <div className="p-5 bg-gray-50 rounded-full mb-4">
+                        <Bell className="w-10 h-10 text-gray-300" />
                     </div>
-                ) : (
-                    notifications.map((n: any) => (
+                    <h3 className="text-xl font-semibold text-gray-700 mb-2">You're all caught up!</h3>
+                    <p className="text-gray-500 text-sm">
+                        You have no notifications at the moment.
+                    </p>
+                </div>
+            ) : (
+                <div className="space-y-3">
+                    {notifications.map((notification: any) => (
                         <div
-                            key={n.id}
-                            onClick={() => !n.isRead && markRead(n.id)}
-                            className={`bg-white rounded-lg shadow-sm border p-4 hover:shadow-md transition-shadow cursor-pointer ${!n.isRead ? "border-blue-200 bg-blue-50" : "border-gray-200"
+                            key={notification.id}
+                            className={`p-4 rounded-xl border flex items-start gap-4 transition-colors ${notification.isRead
+                                ? "bg-white border-gray-200"
+                                : "bg-indigo-50/50 border-indigo-100 shadow-sm"
                                 }`}
                         >
-                            <div className="flex items-start gap-4">
-                                <Bell className={`w-5 h-5 mt-0.5 flex-shrink-0 ${!n.isRead ? "text-blue-500" : "text-gray-400"}`} />
-                                <div className="flex-1 min-w-0">
-                                    <p className="text-sm text-gray-900 font-medium">{n.title || n.type}</p>
-                                    {n.message && <p className="text-sm text-gray-600 mt-0.5">{n.message}</p>}
-                                    <p className="text-xs text-gray-400 mt-1">{formatTime(n.createdAt)}</p>
-                                </div>
-                                {!n.isRead && (
-                                    <div className="w-2 h-2 bg-blue-600 rounded-full flex-shrink-0 mt-2" />
+                            <div className="flex-1 min-w-0 pt-1">
+                                <p className={`text-sm ${notification.isRead ? "text-gray-900" : "font-medium text-gray-900"}`}>
+                                    {notification.message}
+                                </p>
+                                <p className="text-xs text-gray-500 mt-1.5 flex items-center gap-2">
+                                    {formatDate(notification.createdAt)}
+                                    {notification.reportId && (
+                                        <>
+                                            <span>•</span>
+                                            <Link
+                                                to={`/report/${notification.reportId}`}
+                                                className="text-indigo-600 hover:underline font-medium"
+                                                onClick={() => !notification.isRead && markAsRead({ id: notification.id })}
+                                            >
+                                                View Report
+                                            </Link>
+                                        </>
+                                    )}
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-1.5 pl-4">
+                                {!notification.isRead && (
+                                    <button
+                                        onClick={() => markAsRead({ id: notification.id })}
+                                        className="p-1.5 text-indigo-500 hover:bg-indigo-100 rounded-lg transition-colors"
+                                        title="Mark as read"
+                                    >
+                                        <Check className="w-4 h-4" />
+                                    </button>
                                 )}
+                                <button
+                                    onClick={() => deleteNotification({ id: notification.id })}
+                                    className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                    title="Delete notification"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                </button>
                             </div>
                         </div>
-                    ))
-                )}
-            </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };

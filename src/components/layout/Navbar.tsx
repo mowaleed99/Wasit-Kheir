@@ -3,6 +3,7 @@ import { useSettings } from "@/context/SettingsContext";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/Button";
 import { Search, Home, Bell, Settings, MessageCircle, ShieldCheck } from "lucide-react";
+import { useGetApiNotificationsUnread } from "@/api/generated/notifications/notifications";
 import { Link, useLocation } from "react-router-dom";
 
 export const Navbar: React.FC = () => {
@@ -10,6 +11,15 @@ export const Navbar: React.FC = () => {
   const { toggleLanguage } = useSettings();
   const { user } = useAuth();
   const location = useLocation();
+
+  const { data: unreadData } = useGetApiNotificationsUnread({
+    query: {
+      enabled: !!user?.id,
+      refetchInterval: 60000 // Poll every 60s
+    }
+  });
+
+  const unreadCount = (unreadData as any)?.data?.count ?? (unreadData as any)?.count ?? unreadData ?? 0;
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -95,6 +105,11 @@ export const Navbar: React.FC = () => {
             title="Notifications"
           >
             <Bell className={`w-6 h-6 ${isActive("/notifications") ? "fill-current" : ""}`} />
+            {unreadCount > 0 && (
+              <span className="absolute top-2 right-2 w-4 h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white shadow-sm">
+                {unreadCount > 9 ? '9+' : unreadCount}
+              </span>
+            )}
           </Link>
 
           <Link
