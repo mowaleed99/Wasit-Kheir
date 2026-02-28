@@ -19,6 +19,7 @@ import { ReportDetails } from "./pages/ReportDetails";
 import { UserProfile } from "./pages/UserProfile";
 import { SearchPage } from "./pages/SearchPage";
 import { NearbyPage } from "./pages/NearbyPage";
+import { SavedReports } from "./pages/SavedReports";
 import { AdminLayout } from "./components/layout/AdminLayout";
 import { AdminReports } from "./pages/admin/AdminReports";
 import { AdminUsers } from "./pages/admin/AdminUsers";
@@ -130,6 +131,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <NearbyPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "saved-reports",
+        element: (
+          <ProtectedRoute>
+            <SavedReports />
           </ProtectedRoute>
         ),
       },

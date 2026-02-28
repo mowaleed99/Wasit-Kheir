@@ -1,7 +1,8 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useDeleteApiReportsId } from "@/api/generated/reports/reports";
+import { useDeleteApiReportsId, usePostApiReportsIdSave, useDeleteApiReportsIdSave } from "@/api/generated/reports/reports";
 import { useDeleteApiAdminReportsId } from "@/api/generated/admin/admin";
+import { useGetApiUsersMeSavedReports } from "@/api/generated/users/users";
 import { useGetApiMatchingReportId, usePostApiMatchingRunReportId } from "@/api/generated/matching/matching";
 import { usePostApiChatSessionsOtherUserId, apiClient } from "@/api";
 import { MapPicker } from "@/components/ui/MapPicker";
@@ -9,7 +10,7 @@ import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/Button";
 import {
     ArrowLeft, MapPin, Calendar, MessageCircle, Share2, Send,
-    Trash2, CheckCircle, Tag, User, Sparkles
+    Trash2, CheckCircle, Tag, User, Sparkles, Bookmark, BookmarkCheck
 } from "lucide-react";
 import { useState } from "react";
 
@@ -62,6 +63,73 @@ export const ReportDetails: React.FC = () => {
             onError: () => alert("Failed to run AI matching.")
         }
     });
+
+    // Saved Reports
+    const { data: savedReportsResponse, refetch: refetchSaved } = useGetApiUsersMeSavedReports({
+        query: { enabled: !!user?.id }
+    });
+
+    const rawSavedList = (savedReportsResponse as any)?.data?.data || (savedReportsResponse as any)?.data || savedReportsResponse;
+    const extractedArray = Array.isArray(rawSavedList) ? rawSavedList : (rawSavedList?.reports || []);
+    const savedReportsList: any[] = Array.isArray(extractedArray) ? extractedArray : [];
+
+    // DEBUG: View exactly what the API returns so we can fix `isSaved`
+    console.log("rawSavedList:", rawSavedList);
+    console.log("savedReportsList:", savedReportsList);
+
+    // It's possible the returned array contains strings, ids, or objects like { report: { id } }
+    const backendIsSaved = savedReportsList.some(r => r === reportId || r.id === reportId || r.report?.id === reportId || r.reportId === reportId);
+
+    // BACKEND BUG WORKAROUND: The backend /api/Users/me/saved-reports is currently returning [] 
+    // even when a report is saved. We will rely on local state if the user clicks the button.
+    const [localIsSaved, setLocalIsSaved] = useState<boolean | null>(null);
+    const isSaved = localIsSaved !== null ? localIsSaved : backendIsSaved;
+
+    const { mutate: saveReport, isPending: isSaving } = usePostApiReportsIdSave({
+        mutation: {
+            onSuccess: () => {
+                setLocalIsSaved(true);
+                refetchSaved();
+            },
+            onError: (error: any) => {
+                console.error("Save Report Error:", error);
+
+                // If the backend says it's already saved, fix our local UI state!
+                if (error?.response?.status === 400 &&
+                    (error?.response?.data?.message?.includes("already saved") ||
+                        error?.response?.data?.includes("already saved"))) {
+                    setLocalIsSaved(true);
+                } else {
+                    alert("Failed to save report. Check console for details.");
+                }
+            }
+        }
+    });
+
+    const { mutate: unsaveReport, isPending: isUnsaving } = useDeleteApiReportsIdSave({
+        mutation: {
+            onSuccess: () => {
+                setLocalIsSaved(false);
+                refetchSaved();
+            },
+            onError: (error) => {
+                console.error("Unsave Report Error:", error);
+                alert("Failed to unsave report. Check console for details.");
+            }
+        }
+    });
+
+    const toggleSave = () => {
+        if (!user) {
+            alert("You must be logged in to save reports.");
+            return;
+        }
+        if (isSaved) {
+            unsaveReport({ id: reportId });
+        } else {
+            saveReport({ id: reportId });
+        }
+    };
 
     const { mutate: deleteReport, isPending: isDeleting } = useDeleteApiReportsId();
     const { mutate: deleteAdminReport, isPending: isAdminDeleting } = useDeleteApiAdminReportsId();
@@ -332,13 +400,25 @@ export const ReportDetails: React.FC = () => {
 
                             {/* Actions Bar */}
                             <div className="p-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
-                                <button
-                                    onClick={handleShare}
-                                    className="flex items-center gap-2 text-gray-500 hover:text-green-600 transition-colors"
-                                >
-                                    <Share2 className="w-5 h-5" />
-                                    <span className="text-sm">Share</span>
-                                </button>
+                                <div className="flex gap-4">
+                                    <button
+                                        onClick={handleShare}
+                                        className="flex items-center gap-2 text-gray-500 hover:text-green-600 transition-colors"
+                                    >
+                                        <Share2 className="w-5 h-5" />
+                                        <span className="text-sm">Share</span>
+                                    </button>
+
+                                    <button
+                                        onClick={toggleSave}
+                                        disabled={isSaving || isUnsaving}
+                                        className={`flex items-center gap-2 transition-colors ${isSaved ? "text-blue-600" : "text-gray-500 hover:text-blue-600"
+                                            } disabled:opacity-50`}
+                                    >
+                                        {isSaved ? <BookmarkCheck className="w-5 h-5" /> : <Bookmark className="w-5 h-5" />}
+                                        <span className="text-sm">{isSaved ? "Saved" : "Save"}</span>
+                                    </button>
+                                </div>
 
                                 {!isOwner && (
                                     <button

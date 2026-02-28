@@ -1,7 +1,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { useMyReports, extractList } from "@/api";
 import { ReportCard } from "@/components/reports/ReportCard";
-import { Mail, Phone, MapPin, Calendar, Edit2 } from "lucide-react";
+import { Mail, Phone, MapPin, Calendar, Edit2, Bookmark } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -110,7 +110,7 @@ export const Profile: React.FC = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
           <p className="text-3xl font-bold text-blue-600">{userPosts.length}</p>
           <p className="text-sm text-gray-600 mt-1">Total Posts</p>
@@ -127,6 +127,12 @@ export const Profile: React.FC = () => {
           </p>
           <p className="text-sm text-gray-600 mt-1">Lost Items</p>
         </div>
+        <Link to="/saved-reports" className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center hover:border-blue-200 hover:bg-blue-50 transition-all group">
+          <div className="flex justify-center mb-1">
+            <Bookmark className="w-7 h-7 text-blue-500 group-hover:text-blue-600 transition-colors" />
+          </div>
+          <p className="text-sm text-gray-600 mt-1 font-medium group-hover:text-blue-700 transition-colors">Saved Reports</p>
+        </Link>
       </div>
 
       {/* User's Posts */}
