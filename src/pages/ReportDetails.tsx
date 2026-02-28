@@ -2,13 +2,14 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useDeleteApiReportsId } from "@/api/generated/reports/reports";
 import { useDeleteApiAdminReportsId } from "@/api/generated/admin/admin";
+import { useGetApiMatchingReportId, usePostApiMatchingRunReportId } from "@/api/generated/matching/matching";
 import { usePostApiChatSessionsOtherUserId, apiClient } from "@/api";
 import { MapPicker } from "@/components/ui/MapPicker";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/Button";
 import {
     ArrowLeft, MapPin, Calendar, MessageCircle, Share2, Send,
-    Trash2, CheckCircle, Tag, User
+    Trash2, CheckCircle, Tag, User, Sparkles
 } from "lucide-react";
 import { useState } from "react";
 
@@ -43,6 +44,25 @@ export const ReportDetails: React.FC = () => {
         },
         enabled: !!reportId,
     });
+
+    // AI Matching
+    const isOwner = (reportResponse as any)?.data?.createdById === user?.id;
+    const isAdmin = user?.roles?.includes("Admin") || user?.email === "lost.found2026@gmail.com";
+
+    const { data: matchesResponse, isLoading: isLoadingMatches, refetch: refetchMatches } = useGetApiMatchingReportId(reportId, {
+        query: { enabled: !!reportId && (isOwner || isAdmin) }
+    });
+
+    const { mutate: runMatch, isPending: isRunningMatch } = usePostApiMatchingRunReportId({
+        mutation: {
+            onSuccess: () => {
+                alert("AI Match scan complete!");
+                refetchMatches();
+            },
+            onError: () => alert("Failed to run AI matching.")
+        }
+    });
+
     const { mutate: deleteReport, isPending: isDeleting } = useDeleteApiReportsId();
     const { mutate: deleteAdminReport, isPending: isAdminDeleting } = useDeleteApiAdminReportsId();
     const { mutate: createChatSession, isPending: isCreatingChat } = usePostApiChatSessionsOtherUserId({
@@ -133,11 +153,13 @@ export const ReportDetails: React.FC = () => {
         );
     }
 
-    const isOwner = reportData.createdById === user?.id;
-    const isAdmin = user?.roles?.includes("Admin") || user?.email === "lost.found2026@gmail.com";
     const typeClass = typeColors[reportData.type] || "bg-gray-100 text-gray-600 border-gray-200";
     const typeLabel = typeLabels[reportData.type] || reportData.type;
     const images: any[] = reportData.images || [];
+
+    // Parse matches
+    const matchesArray = (matchesResponse as any)?.data || matchesResponse || [];
+    const matchesList = Array.isArray(matchesArray) ? matchesArray : [];
 
     return (
         <div className="min-h-screen bg-gray-50 pb-12">
@@ -249,6 +271,17 @@ export const ReportDetails: React.FC = () => {
                                             </Button>
                                         )}
                                     </div>
+                                    <div className="flex gap-2">
+                                        <Button
+                                            size="sm" variant="outline"
+                                            className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 border-indigo-200"
+                                            onClick={() => runMatch({ reportId })}
+                                            disabled={isRunningMatch}
+                                        >
+                                            <Sparkles className="w-4 h-4 mr-1" />
+                                            {isRunningMatch ? "Scanning..." : "Run AI Match"}
+                                        </Button>
+                                    </div>
                                 </div>
                             )}
 
@@ -321,6 +354,68 @@ export const ReportDetails: React.FC = () => {
                                 )}
                             </div>
                         </div>
+
+                        {/* Match Results */}
+                        {(isOwner || isAdmin) && (
+                            <div className="mt-8">
+                                <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                    <Sparkles className="w-5 h-5 text-indigo-600" />
+                                    Potential AI Matches {matchesList.length > 0 ? `(${matchesList.length})` : ''}
+                                </h3>
+
+                                {isLoadingMatches ? (
+                                    <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex items-center justify-center">
+                                        <div className="w-6 h-6 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+                                        <span className="ml-3 text-gray-500">Loading matches...</span>
+                                    </div>
+                                ) : matchesList.length > 0 ? (
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        {matchesList.map((match: any, idx: number) => {
+                                            const matchedReport = match.matchedReport || match;
+                                            const score = match.matchScore || match.score || match.similarityScore;
+                                            const matchId = matchedReport.id || match.id;
+
+                                            return (
+                                                <Link
+                                                    key={idx}
+                                                    to={`/report/${matchId}`}
+                                                    className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm hover:shadow-md hover:border-indigo-100 transition-all group flex flex-col gap-3"
+                                                >
+                                                    <div className="flex justify-between items-start">
+                                                        <span className={`text-xs font-semibold px-2 py-1 rounded-full ${typeColors[matchedReport.type] || 'bg-gray-100 text-gray-600'}`}>
+                                                            {typeLabels[matchedReport.type] || matchedReport.type || 'Item'}
+                                                        </span>
+                                                        {score !== undefined && score !== null && (
+                                                            <span className="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded-full border border-indigo-100">
+                                                                {(score * (score <= 1.0 ? 100 : 1)).toFixed(0)}% Match
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <h4 className="font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors line-clamp-2">
+                                                        {matchedReport.title || "Untitled Match"}
+                                                    </h4>
+                                                    <div className="mt-auto pt-3 border-t border-gray-50 flex items-center justify-between text-xs text-gray-500">
+                                                        <span className="flex items-center gap-1">
+                                                            <MapPin className="w-3 h-3" />
+                                                            <span className="truncate max-w-[100px]">{matchedReport.locationName || 'Unknown'}</span>
+                                                        </span>
+                                                        <span className="flex items-center gap-1">
+                                                            <Calendar className="w-3 h-3" />
+                                                            {matchedReport.dateReported ? new Date(matchedReport.dateReported).toLocaleDateString() : 'N/A'}
+                                                        </span>
+                                                    </div>
+                                                </Link>
+                                            );
+                                        })}
+                                    </div>
+                                ) : (
+                                    <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex flex-col items-center justify-center text-center">
+                                        <Sparkles className="w-8 h-8 text-gray-300 mb-2" />
+                                        <p className="text-gray-500 text-sm">No matches found yet.<br />Click "Run AI Match" above to scan.</p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     {/* Sidebar */}
@@ -375,7 +470,7 @@ export const ReportDetails: React.FC = () => {
                         )}
                     </div>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
