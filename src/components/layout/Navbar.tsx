@@ -4,7 +4,6 @@ import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/Button";
 import { Search, Home, Bell, Settings, MessageCircle, ShieldCheck } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { useGetApiChatSessions } from "@/api/generated/chat/chat";
 
 export const Navbar: React.FC = () => {
   const { t } = useTranslation();
@@ -13,19 +12,6 @@ export const Navbar: React.FC = () => {
   const location = useLocation();
 
   const isActive = (path: string) => location.pathname === path;
-
-  // Poll chat sessions to look for unread messages where sender is not the current user
-  const { data: chatSessionsData } = useGetApiChatSessions({
-    query: {
-      refetchInterval: 10000 // Poll every 10 seconds for Navbar badge
-    }
-  });
-  const chatSessionsResponse = (chatSessionsData as any)?.data || chatSessionsData;
-  const sessions = Array.isArray(chatSessionsResponse) ? chatSessionsResponse : chatSessionsResponse?.data || [];
-
-  const hasUnreadChat = sessions.some((session: any) =>
-    session.unreadCount > 0 && session.lastMessage?.senderId !== user?.id
-  );
 
   return (
     <nav className="sticky top-0 z-50 px-6 py-3 bg-white/80 backdrop-blur-md border-b border-gray-200/50 shadow-sm transition-all duration-300">
@@ -96,9 +82,8 @@ export const Navbar: React.FC = () => {
             title="Chat"
           >
             <MessageCircle className={`w-6 h-6 ${isActive("/chat") ? "fill-current" : ""}`} />
-            {hasUnreadChat && (
-              <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
-            )}
+            {/* Unread Badge Placeholder */}
+            {/* <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span> */}
           </Link>
 
           <Link
