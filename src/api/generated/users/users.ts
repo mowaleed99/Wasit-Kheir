@@ -159,7 +159,7 @@ export const useGetApiUsersId = <TData = Awaited<ReturnType<typeof getApiUsersId
 
 
 /**
- * Returns the authenticated user's profile information including name, email, phone, and verification status. Requires authentication.
+ * Returns the authenticated user's profile information including name, email, phone, verification status, and roles. Requires authentication.
  * @summary Get my data
  */
 export const getApiUsersMe = (
@@ -349,62 +349,6 @@ export const usePostApiUsersAdmin = <TError = ProblemDetails,
       > => {
 
       const mutationOptions = getPostApiUsersAdminMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
- * Allows an Admin to manually verify a user's account. Sets the user's verification status to true. Requires Admin role.
- * @summary Verify a user account
- */
-export const putApiUsersIdVerify = (
-    id: number,
- ) => {
-      
-      
-      return customInstance<ObjectBaseResponse>(
-      {url: `/api/Users/${id}/verify`, method: 'PUT'
-    },
-      );
-    }
-  
-
-
-export const getPutApiUsersIdVerifyMutationOptions = <TError = ProblemDetails,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiUsersIdVerify>>, TError,{id: number}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof putApiUsersIdVerify>>, TError,{id: number}, TContext> => {
-const {mutation: mutationOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putApiUsersIdVerify>>, {id: number}> = (props) => {
-          const {id} = props ?? {};
-
-          return  putApiUsersIdVerify(id,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PutApiUsersIdVerifyMutationResult = NonNullable<Awaited<ReturnType<typeof putApiUsersIdVerify>>>
-    
-    export type PutApiUsersIdVerifyMutationError = ProblemDetails
-
-    /**
- * @summary Verify a user account
- */
-export const usePutApiUsersIdVerify = <TError = ProblemDetails,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiUsersIdVerify>>, TError,{id: number}, TContext>, }
-): UseMutationResult<
-        Awaited<ReturnType<typeof putApiUsersIdVerify>>,
-        TError,
-        {id: number},
-        TContext
-      > => {
-
-      const mutationOptions = getPutApiUsersIdVerifyMutationOptions(options);
 
       return useMutation(mutationOptions);
     }

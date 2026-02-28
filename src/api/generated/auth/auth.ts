@@ -37,7 +37,7 @@ import { customInstance } from '../../mutator';
 
 
 /**
- * Registers a new user with email, password, and personal information. A verification code will be sent to the provided email address.
+ * Registers a new user with email, password, and personal information. A verification code will be sent to the provided email address. No JWT is issued until the account is verified.
  * @summary Create a new user account
  */
 export const postApiAuthSignup = (

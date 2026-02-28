@@ -27,7 +27,8 @@ import { customInstance } from '../../mutator';
 
 /**
  * Returns the VAPID public key for web push subscription. Use this in the frontend when registering for push. No auth required.
- * @summary Get VAPID public key
+ * @summary Get VAPID public key for web push (frontend device registration).
+Safe to expose; do not expose the private key.
  */
 export const getApiNotificationsVapidPublicKey = (
     
@@ -69,7 +70,8 @@ export type GetApiNotificationsVapidPublicKeyQueryResult = NonNullable<Awaited<R
 export type GetApiNotificationsVapidPublicKeyQueryError = unknown
 
 /**
- * @summary Get VAPID public key
+ * @summary Get VAPID public key for web push (frontend device registration).
+Safe to expose; do not expose the private key.
  */
 export const useGetApiNotificationsVapidPublicKey = <TData = Awaited<ReturnType<typeof getApiNotificationsVapidPublicKey>>, TError = unknown>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiNotificationsVapidPublicKey>>, TError, TData>>, }
@@ -89,7 +91,7 @@ export const useGetApiNotificationsVapidPublicKey = <TData = Awaited<ReturnType<
 
 /**
  * Retrieves notifications for the authenticated user with optional filters. Type filter: all/unread/read. Category filter: all/general/matches. Requires authentication.
- * @summary Get notifications
+ * @summary Get user's notifications.
  */
 export const getApiNotifications = (
     params?: GetApiNotificationsParams,
@@ -132,7 +134,7 @@ export type GetApiNotificationsQueryResult = NonNullable<Awaited<ReturnType<type
 export type GetApiNotificationsQueryError = unknown
 
 /**
- * @summary Get notifications
+ * @summary Get user's notifications.
  */
 export const useGetApiNotifications = <TData = Awaited<ReturnType<typeof getApiNotifications>>, TError = unknown>(
  params?: GetApiNotificationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiNotifications>>, TError, TData>>, }
@@ -152,7 +154,7 @@ export const useGetApiNotifications = <TData = Awaited<ReturnType<typeof getApiN
 
 /**
  * Retrieves the count of unread notifications. Requires authentication.
- * @summary Get unread count
+ * @summary Get unread notification count
  */
 export const getApiNotificationsUnread = (
     
@@ -194,7 +196,7 @@ export type GetApiNotificationsUnreadQueryResult = NonNullable<Awaited<ReturnTyp
 export type GetApiNotificationsUnreadQueryError = unknown
 
 /**
- * @summary Get unread count
+ * @summary Get unread notification count
  */
 export const useGetApiNotificationsUnread = <TData = Awaited<ReturnType<typeof getApiNotificationsUnread>>, TError = unknown>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiNotificationsUnread>>, TError, TData>>, }
@@ -214,7 +216,7 @@ export const useGetApiNotificationsUnread = <TData = Awaited<ReturnType<typeof g
 
 /**
  * Marks a notification as read. Requires authentication.
- * @summary Mark as read
+ * @summary Mark notification as read
  */
 export const putApiNotificationsIdRead = (
     id: number,
@@ -253,7 +255,7 @@ const {mutation: mutationOptions} = options ?? {};
     export type PutApiNotificationsIdReadMutationError = unknown
 
     /**
- * @summary Mark as read
+ * @summary Mark notification as read
  */
 export const usePutApiNotificationsIdRead = <TError = unknown,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiNotificationsIdRead>>, TError,{id: number}, TContext>, }
@@ -270,7 +272,7 @@ export const usePutApiNotificationsIdRead = <TError = unknown,
     }
     /**
  * Marks all notifications as read for the authenticated user. Requires authentication.
- * @summary Mark all as read
+ * @summary Mark all notifications as read
  */
 export const postApiNotificationsMarkAllRead = (
     
@@ -309,7 +311,7 @@ const {mutation: mutationOptions} = options ?? {};
     export type PostApiNotificationsMarkAllReadMutationError = unknown
 
     /**
- * @summary Mark all as read
+ * @summary Mark all notifications as read
  */
 export const usePostApiNotificationsMarkAllRead = <TError = unknown,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiNotificationsMarkAllRead>>, TError,void, TContext>, }
@@ -326,7 +328,7 @@ export const usePostApiNotificationsMarkAllRead = <TError = unknown,
     }
     /**
  * Deletes a notification. Requires authentication.
- * @summary Delete notification
+ * @summary Delete a notification
  */
 export const deleteApiNotificationsId = (
     id: number,
@@ -365,7 +367,7 @@ const {mutation: mutationOptions} = options ?? {};
     export type DeleteApiNotificationsIdMutationError = unknown
 
     /**
- * @summary Delete notification
+ * @summary Delete a notification
  */
 export const useDeleteApiNotificationsId = <TError = unknown,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiNotificationsId>>, TError,{id: number}, TContext>, }
@@ -382,7 +384,7 @@ export const useDeleteApiNotificationsId = <TError = unknown,
     }
     /**
  * Registers or updates the device token for push notifications. Requires authentication.
- * @summary Register device token
+ * @summary Register device token for push notifications (FCM/APNs).
  */
 export const postApiNotificationsRegisterDevice = (
     registerDeviceTokenDto: RegisterDeviceTokenDto,
@@ -423,7 +425,7 @@ const {mutation: mutationOptions} = options ?? {};
     export type PostApiNotificationsRegisterDeviceMutationError = unknown
 
     /**
- * @summary Register device token
+ * @summary Register device token for push notifications (FCM/APNs).
  */
 export const usePostApiNotificationsRegisterDevice = <TError = unknown,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiNotificationsRegisterDevice>>, TError,{data: RegisterDeviceTokenDto}, TContext>, }

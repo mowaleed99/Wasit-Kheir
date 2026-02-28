@@ -27,12 +27,35 @@ pageSize?: number;
 searchTerm?: string;
 };
 
-export type GetApiReportsNearbyParams = {
-lat?: number;
-lng?: number;
-radius?: number;
-type?: string;
+export type GetApiSubCategoriesIdReportsParams = {
 page?: number;
+pageSize?: number;
+};
+
+export type GetApiReportsNearbyParams = {
+/**
+ * Latitude (-90 to 90)
+ */
+lat?: number;
+/**
+ * Longitude (-180 to 180)
+ */
+lng?: number;
+/**
+ * Search radius in kilometers (default: 10)
+ */
+radius?: number;
+/**
+ * Filter by type: Lost, Found, or All (default: All)
+ */
+type?: string;
+/**
+ * Page number (default: 1)
+ */
+page?: number;
+/**
+ * Page size (default: 20)
+ */
 pageSize?: number;
 };
 
@@ -71,7 +94,6 @@ export type PutApiReportsIdBody = {
 };
 
 export type GetApiReportsParams = {
-ForPublicView?: boolean;
 Type?: string;
 Status?: string;
 Search?: string;
@@ -112,10 +134,27 @@ export type PostApiReportsBody = {
 };
 
 export type GetApiNotificationsParams = {
+/**
+ * Page number (default: 1)
+ */
+page?: number;
+/**
+ * Page size (default: 20)
+ */
+pageSize?: number;
+/**
+ * Filter by read status: all (default), unread, read
+ */
+type?: string;
+/**
+ * Filter by notification category: all (default), general, matches
+ */
+category?: string;
+};
+
+export type GetApiCategoriesIdReportsParams = {
 page?: number;
 pageSize?: number;
-type?: string;
-category?: string;
 };
 
 export type GetApiAuthVerifyAccountParams = {
@@ -124,7 +163,6 @@ email?: string;
 };
 
 export type GetApiAdminReportsParams = {
-ForPublicView?: boolean;
 Type?: string;
 Status?: string;
 Search?: string;
@@ -237,6 +275,8 @@ export interface SafeUserDto {
   /** @nullable */
   profilePictureUrl?: string | null;
   /** @nullable */
+  roles?: string[] | null;
+  /** @nullable */
   updatedAt?: string | null;
 }
 
@@ -284,6 +324,61 @@ export interface ResetPasswordDto {
 export interface ResendVerificationDto {
   /** @minLength 1 */
   email: string;
+}
+
+export interface ReportImageDto {
+  id?: number;
+  /** @nullable */
+  imageUrl?: string | null;
+  reportId?: number;
+}
+
+export interface ReportDto {
+  /** @nullable */
+  categoryName?: string | null;
+  createdAt?: string;
+  createdById?: number;
+  /** @nullable */
+  createdByName?: string | null;
+  /** @nullable */
+  createdByProfilePictureUrl?: string | null;
+  /** @nullable */
+  dateReported?: string | null;
+  /** @nullable */
+  description?: string | null;
+  id?: number;
+  /** @nullable */
+  images?: ReportImageDto[] | null;
+  /** @nullable */
+  latitude?: number | null;
+  /** @nullable */
+  lifecycleStatus?: string | null;
+  /** @nullable */
+  locationName?: string | null;
+  /** @nullable */
+  longitude?: number | null;
+  /** @nullable */
+  matchPercentage?: number | null;
+  /** @nullable */
+  status?: string | null;
+  subCategoryId?: number;
+  /** @nullable */
+  subCategoryName?: string | null;
+  /** @nullable */
+  title?: string | null;
+  /** @nullable */
+  type?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+}
+
+export interface ReportDtoBaseResponse {
+  data?: ReportDto;
+  /** @nullable */
+  errors?: string[] | null;
+  /** @nullable */
+  message?: string | null;
+  success?: boolean;
 }
 
 export interface ReportAbuseDto {

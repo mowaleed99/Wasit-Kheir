@@ -19,6 +19,7 @@ import type {
 } from '@tanstack/react-query'
 import type {
   CreateCategoryDto,
+  GetApiCategoriesIdReportsParams,
   UpdateCategoryDto
 } from '../lostAndFoundAPI.schemas'
 import { customInstance } from '../../mutator';
@@ -452,32 +453,36 @@ export const useDeleteApiCategoriesId = <TError = unknown,
  */
 export const getApiCategoriesIdReports = (
     id: number,
+    params?: GetApiCategoriesIdReportsParams,
  signal?: AbortSignal
 ) => {
       
       
       return customInstance<void>(
-      {url: `/api/Categories/${id}/reports`, method: 'GET', signal
+      {url: `/api/Categories/${id}/reports`, method: 'GET',
+        params, signal
     },
       );
     }
   
 
-export const getGetApiCategoriesIdReportsQueryKey = (id: number,) => {
-    return [`/api/Categories/${id}/reports`] as const;
+export const getGetApiCategoriesIdReportsQueryKey = (id: number,
+    params?: GetApiCategoriesIdReportsParams,) => {
+    return [`/api/Categories/${id}/reports`, ...(params ? [params]: [])] as const;
     }
 
     
-export const getGetApiCategoriesIdReportsQueryOptions = <TData = Awaited<ReturnType<typeof getApiCategoriesIdReports>>, TError = unknown>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCategoriesIdReports>>, TError, TData>>, }
+export const getGetApiCategoriesIdReportsQueryOptions = <TData = Awaited<ReturnType<typeof getApiCategoriesIdReports>>, TError = unknown>(id: number,
+    params?: GetApiCategoriesIdReportsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCategoriesIdReports>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetApiCategoriesIdReportsQueryKey(id);
+  const queryKey =  queryOptions?.queryKey ?? getGetApiCategoriesIdReportsQueryKey(id,params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiCategoriesIdReports>>> = ({ signal }) => getApiCategoriesIdReports(id, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiCategoriesIdReports>>> = ({ signal }) => getApiCategoriesIdReports(id,params, signal);
 
       
 
@@ -493,11 +498,12 @@ export type GetApiCategoriesIdReportsQueryError = unknown
  * @summary Get reports by category
  */
 export const useGetApiCategoriesIdReports = <TData = Awaited<ReturnType<typeof getApiCategoriesIdReports>>, TError = unknown>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCategoriesIdReports>>, TError, TData>>, }
+ id: number,
+    params?: GetApiCategoriesIdReportsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCategoriesIdReports>>, TError, TData>>, }
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getGetApiCategoriesIdReportsQueryOptions(id,options)
+  const queryOptions = getGetApiCategoriesIdReportsQueryOptions(id,params,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 

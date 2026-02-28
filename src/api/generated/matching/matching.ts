@@ -21,6 +21,10 @@ import { customInstance } from '../../mutator';
 
 
 
+/**
+ * @summary Run matching algorithm for a specific report.
+Only the report owner or an Admin can run matching.
+ */
 export const postApiMatchingRunReportId = (
     reportId: number,
  ) => {
@@ -57,7 +61,11 @@ const {mutation: mutationOptions} = options ?? {};
     
     export type PostApiMatchingRunReportIdMutationError = unknown
 
-    export const usePostApiMatchingRunReportId = <TError = unknown,
+    /**
+ * @summary Run matching algorithm for a specific report.
+Only the report owner or an Admin can run matching.
+ */
+export const usePostApiMatchingRunReportId = <TError = unknown,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiMatchingRunReportId>>, TError,{reportId: number}, TContext>, }
 ): UseMutationResult<
         Awaited<ReturnType<typeof postApiMatchingRunReportId>>,
@@ -70,7 +78,11 @@ const {mutation: mutationOptions} = options ?? {};
 
       return useMutation(mutationOptions);
     }
-    export const getApiMatchingReportId = (
+    /**
+ * @summary Get existing matches for a report.
+Only the report owner or an Admin can view matches.
+ */
+export const getApiMatchingReportId = (
     reportId: number,
  signal?: AbortSignal
 ) => {
@@ -109,6 +121,10 @@ const {query: queryOptions} = options ?? {};
 export type GetApiMatchingReportIdQueryResult = NonNullable<Awaited<ReturnType<typeof getApiMatchingReportId>>>
 export type GetApiMatchingReportIdQueryError = unknown
 
+/**
+ * @summary Get existing matches for a report.
+Only the report owner or an Admin can view matches.
+ */
 export const useGetApiMatchingReportId = <TData = Awaited<ReturnType<typeof getApiMatchingReportId>>, TError = unknown>(
  reportId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiMatchingReportId>>, TError, TData>>, }
 

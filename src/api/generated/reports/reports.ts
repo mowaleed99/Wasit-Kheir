@@ -30,6 +30,10 @@ import { customInstance } from '../../mutator';
 
 
 
+/**
+ * Valid report types: LostItem, FoundItem, LostPerson, FoundPerson
+ * @summary Create a new report with optional images.
+ */
 export const postApiReports = (
   postApiReportsBody: PostApiReportsBody,
 ) => {
@@ -90,6 +94,9 @@ export type PostApiReportsMutationResult = NonNullable<Awaited<ReturnType<typeof
 export type PostApiReportsMutationBody = PostApiReportsBody
 export type PostApiReportsMutationError = unknown
 
+/**
+* @summary Create a new report with optional images.
+*/
 export const usePostApiReports = <TError = unknown,
   TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof postApiReports>>, TError, { data: PostApiReportsBody }, TContext>, }
   ): UseMutationResult<
@@ -103,6 +110,9 @@ export const usePostApiReports = <TError = unknown,
 
   return useMutation(mutationOptions);
 }
+/**
+* @summary Get all reports with filtering and pagination.
+*/
 export const getApiReports = (
   params?: GetApiReportsParams,
   signal?: AbortSignal
@@ -144,6 +154,9 @@ export const getGetApiReportsQueryOptions = <TData = Awaited<ReturnType<typeof g
 export type GetApiReportsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiReports>>>
 export type GetApiReportsQueryError = unknown
 
+/**
+ * @summary Get all reports with filtering and pagination.
+ */
 export const useGetApiReports = <TData = Awaited<ReturnType<typeof getApiReports>>, TError = unknown>(
   params?: GetApiReportsParams, options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiReports>>, TError, TData>>, }
 
@@ -160,6 +173,9 @@ export const useGetApiReports = <TData = Awaited<ReturnType<typeof getApiReports
 
 
 
+/**
+ * @summary Get a single report by ID.
+ */
 export const getApiReportsId = (
   id: number,
   signal?: AbortSignal
@@ -200,6 +216,9 @@ export const getGetApiReportsIdQueryOptions = <TData = Awaited<ReturnType<typeof
 export type GetApiReportsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getApiReportsId>>>
 export type GetApiReportsIdQueryError = unknown
 
+/**
+ * @summary Get a single report by ID.
+ */
 export const useGetApiReportsId = <TData = Awaited<ReturnType<typeof getApiReportsId>>, TError = unknown>(
   id: number, options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiReportsId>>, TError, TData>>, }
 
@@ -216,6 +235,9 @@ export const useGetApiReportsId = <TData = Awaited<ReturnType<typeof getApiRepor
 
 
 
+/**
+ * @summary Update a report.
+ */
 export const putApiReportsId = (
   id: number,
   putApiReportsIdBody: PutApiReportsIdBody,
@@ -288,6 +310,9 @@ export type PutApiReportsIdMutationResult = NonNullable<Awaited<ReturnType<typeo
 export type PutApiReportsIdMutationBody = PutApiReportsIdBody
 export type PutApiReportsIdMutationError = unknown
 
+/**
+* @summary Update a report.
+*/
 export const usePutApiReportsId = <TError = unknown,
   TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof putApiReportsId>>, TError, { id: number; data: PutApiReportsIdBody }, TContext>, }
   ): UseMutationResult<
@@ -301,6 +326,9 @@ export const usePutApiReportsId = <TError = unknown,
 
   return useMutation(mutationOptions);
 }
+/**
+* @summary Delete a report.
+*/
 export const deleteApiReportsId = (
   id: number,
 ) => {
@@ -339,6 +367,9 @@ export type DeleteApiReportsIdMutationResult = NonNullable<Awaited<ReturnType<ty
 
 export type DeleteApiReportsIdMutationError = unknown
 
+/**
+* @summary Delete a report.
+*/
 export const useDeleteApiReportsId = <TError = unknown,
   TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteApiReportsId>>, TError, { id: number }, TContext>, }
   ): UseMutationResult<
@@ -352,6 +383,9 @@ export const useDeleteApiReportsId = <TError = unknown,
 
   return useMutation(mutationOptions);
 }
+/**
+* @summary Express interest in a report. Notifies the report owner.
+*/
 export const postApiReportsIdInterested = (
   id: number,
 ) => {
@@ -390,6 +424,9 @@ export type PostApiReportsIdInterestedMutationResult = NonNullable<Awaited<Retur
 
 export type PostApiReportsIdInterestedMutationError = unknown
 
+/**
+* @summary Express interest in a report. Notifies the report owner.
+*/
 export const usePostApiReportsIdInterested = <TError = unknown,
   TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof postApiReportsIdInterested>>, TError, { id: number }, TContext>, }
   ): UseMutationResult<
@@ -403,6 +440,9 @@ export const usePostApiReportsIdInterested = <TError = unknown,
 
   return useMutation(mutationOptions);
 }
+/**
+* @summary Get the current user's reports.
+*/
 export const getApiReportsMyReports = (
   params?: GetApiReportsMyReportsParams,
   signal?: AbortSignal
@@ -444,6 +484,9 @@ export const getGetApiReportsMyReportsQueryOptions = <TData = Awaited<ReturnType
 export type GetApiReportsMyReportsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiReportsMyReports>>>
 export type GetApiReportsMyReportsQueryError = unknown
 
+/**
+ * @summary Get the current user's reports.
+ */
 export const useGetApiReportsMyReports = <TData = Awaited<ReturnType<typeof getApiReportsMyReports>>, TError = unknown>(
   params?: GetApiReportsMyReportsParams, options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiReportsMyReports>>, TError, TData>>, }
 
@@ -460,6 +503,9 @@ export const useGetApiReportsMyReports = <TData = Awaited<ReturnType<typeof getA
 
 
 
+/**
+ * @summary Get nearby reports using geo-coordinates.
+ */
 export const getApiReportsNearby = (
   params?: GetApiReportsNearbyParams,
   signal?: AbortSignal
@@ -501,6 +547,9 @@ export const getGetApiReportsNearbyQueryOptions = <TData = Awaited<ReturnType<ty
 export type GetApiReportsNearbyQueryResult = NonNullable<Awaited<ReturnType<typeof getApiReportsNearby>>>
 export type GetApiReportsNearbyQueryError = unknown
 
+/**
+ * @summary Get nearby reports using geo-coordinates.
+ */
 export const useGetApiReportsNearby = <TData = Awaited<ReturnType<typeof getApiReportsNearby>>, TError = unknown>(
   params?: GetApiReportsNearbyParams, options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiReportsNearby>>, TError, TData>>, }
 
@@ -517,6 +566,9 @@ export const useGetApiReportsNearby = <TData = Awaited<ReturnType<typeof getApiR
 
 
 
+/**
+ * @summary Update report status.
+ */
 export const putApiReportsIdStatus = (
   id: number,
   updateReportStatusDto: UpdateReportStatusDto,
@@ -558,6 +610,9 @@ export type PutApiReportsIdStatusMutationResult = NonNullable<Awaited<ReturnType
 export type PutApiReportsIdStatusMutationBody = UpdateReportStatusDto
 export type PutApiReportsIdStatusMutationError = unknown
 
+/**
+* @summary Update report status.
+*/
 export const usePutApiReportsIdStatus = <TError = unknown,
   TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof putApiReportsIdStatus>>, TError, { id: number; data: UpdateReportStatusDto }, TContext>, }
   ): UseMutationResult<
@@ -571,6 +626,9 @@ export const usePutApiReportsIdStatus = <TError = unknown,
 
   return useMutation(mutationOptions);
 }
+/**
+* @summary Report abuse for a specific report. Cannot report your own report and cannot create duplicates.
+*/
 export const postApiReportsIdReport = (
   id: number,
   reportAbuseDto: ReportAbuseDto,
@@ -612,6 +670,9 @@ export type PostApiReportsIdReportMutationResult = NonNullable<Awaited<ReturnTyp
 export type PostApiReportsIdReportMutationBody = ReportAbuseDto
 export type PostApiReportsIdReportMutationError = unknown
 
+/**
+* @summary Report abuse for a specific report. Cannot report your own report and cannot create duplicates.
+*/
 export const usePostApiReportsIdReport = <TError = unknown,
   TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof postApiReportsIdReport>>, TError, { id: number; data: ReportAbuseDto }, TContext>, }
   ): UseMutationResult<
@@ -625,6 +686,9 @@ export const usePostApiReportsIdReport = <TError = unknown,
 
   return useMutation(mutationOptions);
 }
+/**
+* @summary Save a report for quick access.
+*/
 export const postApiReportsIdSave = (
   id: number,
 ) => {
@@ -663,6 +727,9 @@ export type PostApiReportsIdSaveMutationResult = NonNullable<Awaited<ReturnType<
 
 export type PostApiReportsIdSaveMutationError = unknown
 
+/**
+* @summary Save a report for quick access.
+*/
 export const usePostApiReportsIdSave = <TError = unknown,
   TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof postApiReportsIdSave>>, TError, { id: number }, TContext>, }
   ): UseMutationResult<
@@ -676,6 +743,9 @@ export const usePostApiReportsIdSave = <TError = unknown,
 
   return useMutation(mutationOptions);
 }
+/**
+* @summary Remove a saved report.
+*/
 export const deleteApiReportsIdSave = (
   id: number,
 ) => {
@@ -714,6 +784,9 @@ export type DeleteApiReportsIdSaveMutationResult = NonNullable<Awaited<ReturnTyp
 
 export type DeleteApiReportsIdSaveMutationError = unknown
 
+/**
+* @summary Remove a saved report.
+*/
 export const useDeleteApiReportsIdSave = <TError = unknown,
   TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteApiReportsIdSave>>, TError, { id: number }, TContext>, }
   ): UseMutationResult<

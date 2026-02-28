@@ -18,19 +18,28 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query'
 import type {
-  GetApiAdminReportsParams
+  GetApiAdminReportsParams,
+  ObjectBaseResponse,
+  ProblemDetails,
+  ReportDtoBaseResponse
 } from '../lostAndFoundAPI.schemas'
 import { customInstance } from '../../mutator';
 
 
 
+/**
+ * Returns all reports across all lifecycle statuses (Pending, Approved, Rejected, Flagged, Matched, Closed, Archived).
+Supports filtering by type, status, category, date range, and free-text search. Results are paginated.
+Requires Admin role.
+ * @summary Get all reports for moderation
+ */
 export const getApiAdminReports = (
     params?: GetApiAdminReportsParams,
  signal?: AbortSignal
 ) => {
       
       
-      return customInstance<void>(
+      return customInstance<ObjectBaseResponse>(
       {url: `/api/Admin/reports`, method: 'GET',
         params, signal
     },
@@ -43,7 +52,7 @@ export const getGetApiAdminReportsQueryKey = (params?: GetApiAdminReportsParams,
     }
 
     
-export const getGetApiAdminReportsQueryOptions = <TData = Awaited<ReturnType<typeof getApiAdminReports>>, TError = unknown>(params?: GetApiAdminReportsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiAdminReports>>, TError, TData>>, }
+export const getGetApiAdminReportsQueryOptions = <TData = Awaited<ReturnType<typeof getApiAdminReports>>, TError = ProblemDetails>(params?: GetApiAdminReportsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiAdminReports>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -62,9 +71,12 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetApiAdminReportsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiAdminReports>>>
-export type GetApiAdminReportsQueryError = unknown
+export type GetApiAdminReportsQueryError = ProblemDetails
 
-export const useGetApiAdminReports = <TData = Awaited<ReturnType<typeof getApiAdminReports>>, TError = unknown>(
+/**
+ * @summary Get all reports for moderation
+ */
+export const useGetApiAdminReports = <TData = Awaited<ReturnType<typeof getApiAdminReports>>, TError = ProblemDetails>(
  params?: GetApiAdminReportsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiAdminReports>>, TError, TData>>, }
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
@@ -80,12 +92,17 @@ export const useGetApiAdminReports = <TData = Awaited<ReturnType<typeof getApiAd
 
 
 
+/**
+ * Sets the report lifecycle status to Approved, making it publicly visible to all users.
+The report owner is notified of the status change. Requires Admin role.
+ * @summary Approve a report
+ */
 export const putApiAdminReportsIdApprove = (
     id: number,
  ) => {
       
       
-      return customInstance<void>(
+      return customInstance<ReportDtoBaseResponse>(
       {url: `/api/Admin/reports/${id}/approve`, method: 'PUT'
     },
       );
@@ -93,7 +110,7 @@ export const putApiAdminReportsIdApprove = (
   
 
 
-export const getPutApiAdminReportsIdApproveMutationOptions = <TError = unknown,
+export const getPutApiAdminReportsIdApproveMutationOptions = <TError = ProblemDetails | ReportDtoBaseResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiAdminReportsIdApprove>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof putApiAdminReportsIdApprove>>, TError,{id: number}, TContext> => {
 const {mutation: mutationOptions} = options ?? {};
@@ -114,9 +131,12 @@ const {mutation: mutationOptions} = options ?? {};
 
     export type PutApiAdminReportsIdApproveMutationResult = NonNullable<Awaited<ReturnType<typeof putApiAdminReportsIdApprove>>>
     
-    export type PutApiAdminReportsIdApproveMutationError = unknown
+    export type PutApiAdminReportsIdApproveMutationError = ProblemDetails | ReportDtoBaseResponse
 
-    export const usePutApiAdminReportsIdApprove = <TError = unknown,
+    /**
+ * @summary Approve a report
+ */
+export const usePutApiAdminReportsIdApprove = <TError = ProblemDetails | ReportDtoBaseResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiAdminReportsIdApprove>>, TError,{id: number}, TContext>, }
 ): UseMutationResult<
         Awaited<ReturnType<typeof putApiAdminReportsIdApprove>>,
@@ -129,12 +149,17 @@ const {mutation: mutationOptions} = options ?? {};
 
       return useMutation(mutationOptions);
     }
-    export const putApiAdminReportsIdReject = (
+    /**
+ * Sets the report lifecycle status to Rejected due to policy violation or invalid data.
+The report is hidden from public view. The report owner is notified. Requires Admin role.
+ * @summary Reject a report
+ */
+export const putApiAdminReportsIdReject = (
     id: number,
  ) => {
       
       
-      return customInstance<void>(
+      return customInstance<ReportDtoBaseResponse>(
       {url: `/api/Admin/reports/${id}/reject`, method: 'PUT'
     },
       );
@@ -142,7 +167,7 @@ const {mutation: mutationOptions} = options ?? {};
   
 
 
-export const getPutApiAdminReportsIdRejectMutationOptions = <TError = unknown,
+export const getPutApiAdminReportsIdRejectMutationOptions = <TError = ProblemDetails | ReportDtoBaseResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiAdminReportsIdReject>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof putApiAdminReportsIdReject>>, TError,{id: number}, TContext> => {
 const {mutation: mutationOptions} = options ?? {};
@@ -163,9 +188,12 @@ const {mutation: mutationOptions} = options ?? {};
 
     export type PutApiAdminReportsIdRejectMutationResult = NonNullable<Awaited<ReturnType<typeof putApiAdminReportsIdReject>>>
     
-    export type PutApiAdminReportsIdRejectMutationError = unknown
+    export type PutApiAdminReportsIdRejectMutationError = ProblemDetails | ReportDtoBaseResponse
 
-    export const usePutApiAdminReportsIdReject = <TError = unknown,
+    /**
+ * @summary Reject a report
+ */
+export const usePutApiAdminReportsIdReject = <TError = ProblemDetails | ReportDtoBaseResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiAdminReportsIdReject>>, TError,{id: number}, TContext>, }
 ): UseMutationResult<
         Awaited<ReturnType<typeof putApiAdminReportsIdReject>>,
@@ -178,12 +206,17 @@ const {mutation: mutationOptions} = options ?? {};
 
       return useMutation(mutationOptions);
     }
-    export const putApiAdminReportsIdFlag = (
+    /**
+ * Sets the report lifecycle status to Flagged, marking it as suspicious or requiring further review.
+The report is hidden from public view. The report owner is notified. Requires Admin role.
+ * @summary Flag a report for review
+ */
+export const putApiAdminReportsIdFlag = (
     id: number,
  ) => {
       
       
-      return customInstance<void>(
+      return customInstance<ReportDtoBaseResponse>(
       {url: `/api/Admin/reports/${id}/flag`, method: 'PUT'
     },
       );
@@ -191,7 +224,7 @@ const {mutation: mutationOptions} = options ?? {};
   
 
 
-export const getPutApiAdminReportsIdFlagMutationOptions = <TError = unknown,
+export const getPutApiAdminReportsIdFlagMutationOptions = <TError = ProblemDetails | ReportDtoBaseResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiAdminReportsIdFlag>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof putApiAdminReportsIdFlag>>, TError,{id: number}, TContext> => {
 const {mutation: mutationOptions} = options ?? {};
@@ -212,9 +245,12 @@ const {mutation: mutationOptions} = options ?? {};
 
     export type PutApiAdminReportsIdFlagMutationResult = NonNullable<Awaited<ReturnType<typeof putApiAdminReportsIdFlag>>>
     
-    export type PutApiAdminReportsIdFlagMutationError = unknown
+    export type PutApiAdminReportsIdFlagMutationError = ProblemDetails | ReportDtoBaseResponse
 
-    export const usePutApiAdminReportsIdFlag = <TError = unknown,
+    /**
+ * @summary Flag a report for review
+ */
+export const usePutApiAdminReportsIdFlag = <TError = ProblemDetails | ReportDtoBaseResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiAdminReportsIdFlag>>, TError,{id: number}, TContext>, }
 ): UseMutationResult<
         Awaited<ReturnType<typeof putApiAdminReportsIdFlag>>,
@@ -227,12 +263,17 @@ const {mutation: mutationOptions} = options ?? {};
 
       return useMutation(mutationOptions);
     }
-    export const putApiAdminReportsIdArchive = (
+    /**
+ * Sets the report lifecycle status to Archived, soft-removing it from the active reports list.
+The report is hidden from public view but retained in the database. The report owner is notified. Requires Admin role.
+ * @summary Archive a report
+ */
+export const putApiAdminReportsIdArchive = (
     id: number,
  ) => {
       
       
-      return customInstance<void>(
+      return customInstance<ReportDtoBaseResponse>(
       {url: `/api/Admin/reports/${id}/archive`, method: 'PUT'
     },
       );
@@ -240,7 +281,7 @@ const {mutation: mutationOptions} = options ?? {};
   
 
 
-export const getPutApiAdminReportsIdArchiveMutationOptions = <TError = unknown,
+export const getPutApiAdminReportsIdArchiveMutationOptions = <TError = ProblemDetails | ReportDtoBaseResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiAdminReportsIdArchive>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof putApiAdminReportsIdArchive>>, TError,{id: number}, TContext> => {
 const {mutation: mutationOptions} = options ?? {};
@@ -261,9 +302,12 @@ const {mutation: mutationOptions} = options ?? {};
 
     export type PutApiAdminReportsIdArchiveMutationResult = NonNullable<Awaited<ReturnType<typeof putApiAdminReportsIdArchive>>>
     
-    export type PutApiAdminReportsIdArchiveMutationError = unknown
+    export type PutApiAdminReportsIdArchiveMutationError = ProblemDetails | ReportDtoBaseResponse
 
-    export const usePutApiAdminReportsIdArchive = <TError = unknown,
+    /**
+ * @summary Archive a report
+ */
+export const usePutApiAdminReportsIdArchive = <TError = ProblemDetails | ReportDtoBaseResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiAdminReportsIdArchive>>, TError,{id: number}, TContext>, }
 ): UseMutationResult<
         Awaited<ReturnType<typeof putApiAdminReportsIdArchive>>,
@@ -276,7 +320,12 @@ const {mutation: mutationOptions} = options ?? {};
 
       return useMutation(mutationOptions);
     }
-    export const deleteApiAdminReportsId = (
+    /**
+ * Permanently deletes a report and its associated images from the system.
+This action cannot be undone. Requires Admin role.
+ * @summary Delete a report permanently
+ */
+export const deleteApiAdminReportsId = (
     id: number,
  ) => {
       
@@ -289,7 +338,7 @@ const {mutation: mutationOptions} = options ?? {};
   
 
 
-export const getDeleteApiAdminReportsIdMutationOptions = <TError = unknown,
+export const getDeleteApiAdminReportsIdMutationOptions = <TError = ProblemDetails | ObjectBaseResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiAdminReportsId>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteApiAdminReportsId>>, TError,{id: number}, TContext> => {
 const {mutation: mutationOptions} = options ?? {};
@@ -310,9 +359,12 @@ const {mutation: mutationOptions} = options ?? {};
 
     export type DeleteApiAdminReportsIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteApiAdminReportsId>>>
     
-    export type DeleteApiAdminReportsIdMutationError = unknown
+    export type DeleteApiAdminReportsIdMutationError = ProblemDetails | ObjectBaseResponse
 
-    export const useDeleteApiAdminReportsId = <TError = unknown,
+    /**
+ * @summary Delete a report permanently
+ */
+export const useDeleteApiAdminReportsId = <TError = ProblemDetails | ObjectBaseResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiAdminReportsId>>, TError,{id: number}, TContext>, }
 ): UseMutationResult<
         Awaited<ReturnType<typeof deleteApiAdminReportsId>>,
@@ -325,12 +377,17 @@ const {mutation: mutationOptions} = options ?? {};
 
       return useMutation(mutationOptions);
     }
-    export const putApiAdminUsersIdVerify = (
+    /**
+ * Manually verifies a user account by setting IsVerified to true and clearing any pending verification codes.
+Use this when a user cannot complete email verification. Requires Admin role.
+ * @summary Verify a user account manually
+ */
+export const putApiAdminUsersIdVerify = (
     id: number,
  ) => {
       
       
-      return customInstance<void>(
+      return customInstance<ObjectBaseResponse>(
       {url: `/api/Admin/users/${id}/verify`, method: 'PUT'
     },
       );
@@ -338,7 +395,7 @@ const {mutation: mutationOptions} = options ?? {};
   
 
 
-export const getPutApiAdminUsersIdVerifyMutationOptions = <TError = unknown,
+export const getPutApiAdminUsersIdVerifyMutationOptions = <TError = ProblemDetails | ObjectBaseResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiAdminUsersIdVerify>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof putApiAdminUsersIdVerify>>, TError,{id: number}, TContext> => {
 const {mutation: mutationOptions} = options ?? {};
@@ -359,9 +416,12 @@ const {mutation: mutationOptions} = options ?? {};
 
     export type PutApiAdminUsersIdVerifyMutationResult = NonNullable<Awaited<ReturnType<typeof putApiAdminUsersIdVerify>>>
     
-    export type PutApiAdminUsersIdVerifyMutationError = unknown
+    export type PutApiAdminUsersIdVerifyMutationError = ProblemDetails | ObjectBaseResponse
 
-    export const usePutApiAdminUsersIdVerify = <TError = unknown,
+    /**
+ * @summary Verify a user account manually
+ */
+export const usePutApiAdminUsersIdVerify = <TError = ProblemDetails | ObjectBaseResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiAdminUsersIdVerify>>, TError,{id: number}, TContext>, }
 ): UseMutationResult<
         Awaited<ReturnType<typeof putApiAdminUsersIdVerify>>,
