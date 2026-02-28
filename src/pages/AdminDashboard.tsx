@@ -6,8 +6,9 @@ import {
     usePutApiAdminReportsIdApprove,
     usePutApiAdminReportsIdReject,
 } from "@/api/generated/admin/admin";
+import { useGetApiHomeDashboard } from "@/api/generated/home/home";
 import { queryClient } from "@/api";
-import { CheckCircle, XCircle, Search, Clock } from "lucide-react";
+import { CheckCircle, XCircle, Search, Clock, Activity } from "lucide-react";
 
 export const AdminDashboard: React.FC = () => {
     const { user, isAuthenticated, isLoading: authLoading } = useAuth();
@@ -23,6 +24,17 @@ export const AdminDashboard: React.FC = () => {
         PageSize: 100,
         Page: 1,
     });
+
+    // Fetch Dashboard Stats
+    const { data: dashboardRaw, isLoading: dashboardLoading } = useGetApiHomeDashboard({
+        query: {
+            enabled: isAuthenticated && (user?.roles?.includes("Admin") || user?.email === "lost.found2026@gmail.com")
+        }
+    });
+
+    const dashboardData = (dashboardRaw as any)?.data?.data || (dashboardRaw as any)?.data || dashboardRaw || {};
+    console.log("Admin Dashboard Stats raw:", dashboardRaw);
+    console.log("Admin Dashboard Stats parsed:", dashboardData);
 
     const { mutate: approveReport, isPending: isApproving } = usePutApiAdminReportsIdApprove();
     const { mutate: rejectReport, isPending: isRejecting } = usePutApiAdminReportsIdReject();
@@ -71,6 +83,31 @@ export const AdminDashboard: React.FC = () => {
                 <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
                 <p className="text-gray-500 mt-2">Manage and review incoming reports.</p>
             </div>
+
+            {/* Dashboard Stats */}
+            {!dashboardLoading && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-5">
+                        <div className="p-4 bg-blue-50 text-blue-600 rounded-2xl">
+                            <Activity className="w-8 h-8" />
+                        </div>
+                        <div>
+                            <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Total Reports</p>
+                            <p className="text-3xl font-bold text-gray-900 mt-1">{dashboardData.totalReportsCount ?? 0}</p>
+                        </div>
+                    </div>
+
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-5">
+                        <div className="p-4 bg-indigo-50 text-indigo-600 rounded-2xl">
+                            <Activity className="w-8 h-8" />
+                        </div>
+                        <div>
+                            <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Platform Categories</p>
+                            <p className="text-3xl font-bold text-gray-900 mt-1">{dashboardData.categoriesCount ?? 0}</p>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Tabs */}
             <div className="flex gap-4 mb-6 border-b border-gray-200">

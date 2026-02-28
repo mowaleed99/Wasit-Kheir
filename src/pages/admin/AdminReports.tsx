@@ -9,9 +9,12 @@ import {
     useDeleteApiAdminReportsId,
 } from "@/api/generated/admin/admin";
 import { queryClient } from "@/api";
-import { CheckCircle, XCircle, Search, Clock, Flag, Archive, Trash2 } from "lucide-react";
+import { CheckCircle, XCircle, Search, Clock, Flag, Archive, Trash2, Activity } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { useGetApiHomeDashboard } from "@/api/generated/home/home";
 
 export const AdminReports: React.FC = () => {
+    const { user, isAuthenticated } = useAuth();
     const [activeTab, setActiveTab] = useState<"Pending" | "Approved" | "Rejected" | "Flagged" | "Archived">("Pending");
 
     // Fetch reports using the Admin endpoint
@@ -30,6 +33,14 @@ export const AdminReports: React.FC = () => {
     const { mutate: flagReport, isPending: isFlagging } = usePutApiAdminReportsIdFlag();
     const { mutate: archiveReport, isPending: isArchiving } = usePutApiAdminReportsIdArchive();
     const { mutate: deleteReport, isPending: isDeleting } = useDeleteApiAdminReportsId();
+
+    // Fetch Dashboard Stats
+    const { data: dashboardRaw, isLoading: dashboardLoading } = useGetApiHomeDashboard({
+        query: {
+            enabled: isAuthenticated && (user?.roles?.includes("Admin") || user?.email === "lost.found2026@gmail.com")
+        }
+    });
+    const dashboardData = (dashboardRaw as any)?.data?.data || (dashboardRaw as any)?.data || dashboardRaw || {};
 
     // Extract the list of reports
     const rawData: any = (reportsData as any)?.data || reportsData;
@@ -53,6 +64,31 @@ export const AdminReports: React.FC = () => {
                     <p className="text-gray-500 mt-1 text-sm">Review, approve, flag, or delete user-submitted reports.</p>
                 </div>
             </div>
+
+            {/* Dashboard Stats */}
+            {!dashboardLoading && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-5">
+                        <div className="p-4 bg-blue-50 text-blue-600 rounded-2xl">
+                            <Activity className="w-8 h-8" />
+                        </div>
+                        <div>
+                            <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Total Reports</p>
+                            <p className="text-3xl font-bold text-gray-900 mt-1">{dashboardData.totalReportsCount ?? 0}</p>
+                        </div>
+                    </div>
+
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-5">
+                        <div className="p-4 bg-indigo-50 text-indigo-600 rounded-2xl">
+                            <Activity className="w-8 h-8" />
+                        </div>
+                        <div>
+                            <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Platform Categories</p>
+                            <p className="text-3xl font-bold text-gray-900 mt-1">{dashboardData.categoriesCount ?? 0}</p>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Tabs */}
             <div className="flex gap-4 mb-6 border-b border-gray-200 overflow-x-auto pb-1">
