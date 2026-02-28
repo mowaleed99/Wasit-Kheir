@@ -1,6 +1,7 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useDeleteApiReportsId } from "@/api/generated/reports/reports";
+import { useDeleteApiAdminReportsId } from "@/api/generated/admin/admin";
 import { usePostApiChatSessionsOtherUserId, apiClient } from "@/api";
 import { MapPicker } from "@/components/ui/MapPicker";
 import { useAuth } from "@/context/AuthContext";
@@ -43,6 +44,7 @@ export const ReportDetails: React.FC = () => {
         enabled: !!reportId,
     });
     const { mutate: deleteReport, isPending: isDeleting } = useDeleteApiReportsId();
+    const { mutate: deleteAdminReport, isPending: isAdminDeleting } = useDeleteApiAdminReportsId();
     const { mutate: createChatSession, isPending: isCreatingChat } = usePostApiChatSessionsOtherUserId({
         mutation: {
             onSuccess: (response: any) => {
@@ -88,14 +90,19 @@ export const ReportDetails: React.FC = () => {
     };
 
     const handleDelete = () => {
-        deleteReport({ id: reportId }, {
-            onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: ["reports-feed"] });
-                queryClient.invalidateQueries({ queryKey: ["reports-mine"] });
-                navigate("/");
-            },
-            onError: () => alert("Failed to delete report."),
-        });
+        const onSuccessAction = () => {
+            queryClient.invalidateQueries({ queryKey: ["reports-feed"] });
+            queryClient.invalidateQueries({ queryKey: ["reports-mine"] });
+            queryClient.invalidateQueries({ queryKey: ["/api/Admin/reports"] });
+            navigate("/");
+        };
+        const onErrorAction = () => alert("Failed to delete report.");
+
+        if (!isOwner && isAdmin) {
+            deleteAdminReport({ id: reportId }, { onSuccess: onSuccessAction, onError: onErrorAction });
+        } else {
+            deleteReport({ id: reportId }, { onSuccess: onSuccessAction, onError: onErrorAction });
+        }
     };
 
     const handleContact = () => {
@@ -127,6 +134,7 @@ export const ReportDetails: React.FC = () => {
     }
 
     const isOwner = reportData.createdById === user?.id;
+    const isAdmin = user?.roles?.includes("Admin") || user?.email === "lost.found2026@gmail.com";
     const typeClass = typeColors[reportData.type] || "bg-gray-100 text-gray-600 border-gray-200";
     const typeLabel = typeLabels[reportData.type] || reportData.type;
     const images: any[] = reportData.images || [];
@@ -215,15 +223,15 @@ export const ReportDetails: React.FC = () => {
                                 </Link>
                             </div>
 
-                            {/* Owner Actions */}
-                            {isOwner && (
+                            {/* Owner or Admin Actions */}
+                            {(isOwner || isAdmin) && (
                                 <div className="px-6 py-3 bg-gray-50 border-b border-gray-100 flex flex-wrap gap-2 items-center">
                                     <span className="text-sm font-medium text-gray-500 mr-2">Manage:</span>
                                     <div className="ml-auto flex gap-2">
                                         {showDeleteConfirm ? (
                                             <div className="flex items-center gap-2">
                                                 <span className="text-xs text-red-600 font-medium">Sure?</span>
-                                                <Button size="sm" variant="destructive" onClick={handleDelete} disabled={isDeleting}>
+                                                <Button size="sm" variant="destructive" onClick={handleDelete} disabled={isDeleting || isAdminDeleting}>
                                                     Yes, Delete
                                                 </Button>
                                                 <Button size="sm" variant="ghost" onClick={() => setShowDeleteConfirm(false)}>
