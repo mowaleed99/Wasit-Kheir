@@ -95,7 +95,6 @@ export const Navbar: React.FC = () => {
             title="Notifications"
           >
             <Bell className={`w-6 h-6 ${isActive("/notifications") ? "fill-current" : ""}`} />
-            <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
           </Link>
 
           <Link
