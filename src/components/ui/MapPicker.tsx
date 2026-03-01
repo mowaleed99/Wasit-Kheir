@@ -111,11 +111,19 @@ export const MapPicker: React.FC<MapPickerProps> = ({
       if (marker.current) {
         marker.current.remove();
       }
-      if (map.current) {
-        map.current.remove();
-      }
     };
-  }, [onLocationSelect, initialLocation]);
+  }, []); // Run only once
+
+  // Separate effect to handle updates to initialLocation
+  useEffect(() => {
+    if (map.current && initialLocation) {
+      map.current.setView([initialLocation.lat, initialLocation.lng], 13);
+      if (marker.current) {
+        marker.current.remove();
+      }
+      marker.current = L.marker([initialLocation.lat, initialLocation.lng]).addTo(map.current);
+    }
+  }, [initialLocation]);
 
   // Get current location
   const getCurrentLocation = () => {
