@@ -29,7 +29,7 @@ export const Login: React.FC = () => {
         <div className="text-center mb-8 animate-fade-in">
           <div className="inline-flex items-center justify-center w-24 h-24 mb-4 rounded-full bg-white/20 backdrop-blur-sm shadow-2xl overflow-hidden p-1">
             <img
-              src="/logo1.png"
+              src="/logo2.png"
               alt="Waseet Kheir Logo"
               className="w-full h-full object-cover rounded-full bg-white"
             />
