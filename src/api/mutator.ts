@@ -93,8 +93,13 @@ apiClient.interceptors.response.use(
 export const customInstance = <T>(config: AxiosRequestConfig): Promise<T> => {
   const source = axios.CancelToken.source();
 
-  // Handle FormData for file uploads
-  if (config.data && typeof config.data === 'object') {
+  // If the payload is already FormData, strip the hardcoded Content-Type header so Axios can inject the boundary string.
+  if (config.data instanceof FormData) {
+    if (config.headers) {
+      delete config.headers['Content-Type'];
+      delete config.headers['content-type'];
+    }
+  } else if (config.data && typeof config.data === 'object') {
     const hasFiles = Object.values(config.data).some(value => {
       if (Array.isArray(value)) {
         return value.some(item => item instanceof File || item instanceof Blob);
