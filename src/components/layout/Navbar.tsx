@@ -148,6 +148,15 @@ export const Navbar: React.FC = () => {
             EN/AR
           </Button>
 
+          {/* Mobile-only Search Icon */}
+          <Link
+            to="/search"
+            className="md:hidden p-2 rounded-xl text-gray-500 hover:text-blue-600 hover:bg-gray-50 transition-all"
+            title="Search"
+          >
+            <Search className="w-5 h-5" />
+          </Link>
+
           <Link to="/profile" className="flex items-center space-x-2 group">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 to-purple-500 rounded-full blur opacity-0 group-hover:opacity-50 transition-opacity"></div>

@@ -1,7 +1,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { useMyReports, extractList } from "@/api";
 import { ReportCard } from "@/components/reports/ReportCard";
-import { Mail, Phone, MapPin, Calendar, Edit2, Bookmark } from "lucide-react";
+import { Mail, Phone, MapPin, Calendar, Edit2, Bookmark, Settings } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -95,11 +95,19 @@ export const Profile: React.FC = () => {
               </div>
             </div>
 
-            {/* Edit Button */}
-            <Button variant="outline" className="w-full md:w-auto" onClick={() => setShowEditModal(true)}>
-              <Edit2 className="w-4 h-4 mr-2" />
-              Edit Profile
-            </Button>
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+              <Button variant="outline" className="w-full sm:w-auto" onClick={() => setShowEditModal(true)}>
+                <Edit2 className="w-4 h-4 mr-2" />
+                Edit Profile
+              </Button>
+              <Link to="/settings">
+                <Button variant="ghost" className="w-full sm:w-auto text-gray-600 hover:text-gray-900">
+                  <Settings className="w-4 h-4 mr-2" />
+                  Settings
+                </Button>
+              </Link>
+            </div>
           </div>
 
           {/* Bio */}
