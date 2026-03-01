@@ -44,13 +44,13 @@ export const ChatList = ({ selectedSessionId = null, onSelectSession }: ChatList
             {/* Search */}
             <div className="p-4">
                 <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <input
                         type="text"
                         placeholder="Search chats..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-9 pr-4 py-2 bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-0 rounded-xl text-sm transition-all"
+                        className="w-full pl-9 pr-4 py-2 bg-muted border-transparent focus:bg-card focus:border-blue-500 focus:ring-0 rounded-xl text-sm transition-all text-foreground placeholder:text-muted-foreground shadow-sm"
                     />
                 </div>
             </div>
@@ -58,11 +58,11 @@ export const ChatList = ({ selectedSessionId = null, onSelectSession }: ChatList
             {/* List */}
             <div className="flex-1 overflow-y-auto">
                 {filteredSessions.length === 0 ? (
-                    <div className="text-center py-8 text-gray-500 text-sm">
+                    <div className="text-center py-8 text-muted-foreground text-sm">
                         No conversations found
                     </div>
                 ) : (
-                    <div className="divide-y divide-gray-50">
+                    <div className="divide-y divide-border">
                         {filteredSessions.map((session: any) => {
                             const otherUser = session.otherUser;
                             const isSelected = selectedSessionId === session.id;
@@ -71,14 +71,14 @@ export const ChatList = ({ selectedSessionId = null, onSelectSession }: ChatList
                                 <button
                                     key={session.id}
                                     onClick={() => handleSelectSession(session.id)}
-                                    className={`w-full p-4 flex items-center gap-3 hover:bg-gray-50 transition-colors text-left ${isSelected ? "bg-blue-50 hover:bg-blue-50" : ""
+                                    className={`w-full p-4 flex items-center gap-3 hover:bg-muted/50 transition-colors text-left ${isSelected ? "bg-blue-50/50 dark:bg-blue-900/10 hover:bg-blue-50/50 dark:hover:bg-blue-900/10" : ""
                                         }`}
                                 >
                                     <div className="relative">
                                         <img
                                             src={otherUser?.avatar || otherUser?.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(otherUser?.fullName || 'User')}&background=random&color=fff`}
                                             alt={otherUser?.fullName}
-                                            className="w-12 h-12 rounded-full object-cover border border-gray-200"
+                                            className="w-12 h-12 rounded-full object-cover border border-border"
                                         />
                                         {/* Online indicator placeholder */}
                                         {/* <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div> */}
@@ -86,16 +86,16 @@ export const ChatList = ({ selectedSessionId = null, onSelectSession }: ChatList
 
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center justify-between mb-1">
-                                            <h3 className={`font-semibold truncate ${isSelected ? "text-blue-900" : "text-gray-900"}`}>
+                                            <h3 className={`font-semibold truncate ${isSelected ? "text-blue-900 dark:text-blue-400" : "text-foreground"}`}>
                                                 {otherUser?.fullName || "Unknown User"}
                                             </h3>
                                             {session.lastMessage && (
-                                                <span className="text-xs text-gray-400 whitespace-nowrap ml-2">
+                                                <span className="text-xs text-muted-foreground whitespace-nowrap ml-2">
                                                     {new Date(session.lastMessage.createdAt).toLocaleDateString()}
                                                 </span>
                                             )}
                                         </div>
-                                        <p className={`text-sm truncate ${isSelected ? "text-blue-700" : "text-gray-500"}`}>
+                                        <p className={`text-sm truncate ${isSelected ? "text-blue-700 dark:text-blue-300" : "text-muted-foreground"}`}>
                                             {session.lastMessage?.content || session.lastMessage?.text || "No messages yet"}
                                         </p>
                                     </div>

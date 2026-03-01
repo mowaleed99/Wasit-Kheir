@@ -3,6 +3,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { SettingsProvider } from "./context/SettingsContext";
 import { CategoryFilterProvider } from "./context/CategoryFilterContext";
+import { ThemeProvider } from "./context/ThemeContext";
 
 import { HomeLayout } from "./components/layout/HomeLayout";
 import { ProtectedRoute } from "./components/layout/ProtectedRoute";
@@ -166,15 +167,17 @@ const router = createBrowserRouter([
 function App() {
   return (
     <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <SettingsProvider>
-            <CategoryFilterProvider>
-              <RouterProvider router={router} />
-            </CategoryFilterProvider>
-          </SettingsProvider>
-        </AuthProvider>
-      </QueryClientProvider>
+      <ThemeProvider defaultTheme="system" storageKey="wasit-kheir-theme">
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <SettingsProvider>
+              <CategoryFilterProvider>
+                <RouterProvider router={router} />
+              </CategoryFilterProvider>
+            </SettingsProvider>
+          </AuthProvider>
+        </QueryClientProvider>
+      </ThemeProvider>
     </ErrorBoundary>
   );
 

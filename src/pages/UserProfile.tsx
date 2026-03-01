@@ -70,10 +70,10 @@ export const UserProfile: React.FC = () => {
 
     if (isLoadingUser) {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            <div className="min-h-screen bg-background flex items-center justify-center">
                 <div className="text-center">
                     <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-gray-500 text-lg">Loading profile...</p>
+                    <p className="text-muted-foreground text-lg">Loading profile...</p>
                 </div>
             </div>
         );
@@ -85,30 +85,30 @@ export const UserProfile: React.FC = () => {
         const isAuthError = status === 401 || status === 403;
 
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            <div className="min-h-screen bg-background flex items-center justify-center">
                 <div className="text-center max-w-md px-4">
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+                    <div className="bg-card rounded-2xl shadow-sm border border-border p-8">
                         {isAuthError ? (
                             <>
-                                <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <svg className="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div className="w-16 h-16 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <svg className="w-8 h-8 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                                     </svg>
                                 </div>
-                                <h2 className="text-2xl font-bold text-gray-900 mb-2">Access Restricted</h2>
-                                <p className="text-gray-600 mb-6">
+                                <h2 className="text-2xl font-bold text-foreground mb-2">Access Restricted</h2>
+                                <p className="text-muted-foreground mb-6">
                                     You don't have permission to view this user's profile.
                                 </p>
                             </>
                         ) : (
                             <>
-                                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <svg className="w-8 h-8 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                     </svg>
                                 </div>
-                                <h2 className="text-2xl font-bold text-gray-900 mb-2">User Not Found</h2>
-                                <p className="text-gray-600 mb-6">The user you're looking for doesn't exist or has been removed.</p>
+                                <h2 className="text-2xl font-bold text-foreground mb-2">User Not Found</h2>
+                                <p className="text-muted-foreground mb-6">The user you're looking for doesn't exist or has been removed.</p>
                             </>
                         )}
                         <Link to="/"><Button className="w-full">Go Home</Button></Link>
@@ -120,9 +120,9 @@ export const UserProfile: React.FC = () => {
 
     if (!user) {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            <div className="min-h-screen bg-background flex items-center justify-center">
                 <div className="text-center">
-                    <p className="text-gray-500 text-lg">User not found</p>
+                    <p className="text-muted-foreground text-lg">User not found</p>
                     <Link to="/"><Button className="mt-4">Go Home</Button></Link>
                 </div>
             </div>
@@ -132,21 +132,21 @@ export const UserProfile: React.FC = () => {
     const isOwnProfile = currentUser?.id === userIdNum;
 
     return (
-        <div className="min-h-screen bg-gray-50 pb-12">
+        <div className="min-h-screen bg-background pb-12">
             <div className="max-w-5xl mx-auto px-4 py-8">
                 {/* Back Button */}
                 <Link
                     to="/"
-                    className="inline-flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors mb-6 group"
+                    className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-6 group"
                 >
-                    <div className="p-2 rounded-full bg-white border border-gray-200 group-hover:border-blue-200 group-hover:bg-blue-50 transition-all shadow-sm">
+                    <div className="p-2 rounded-full bg-card border border-border group-hover:border-blue-200/50 group-hover:bg-blue-50/50 dark:group-hover:bg-blue-900/10 transition-all shadow-sm">
                         <ArrowLeft className="w-5 h-5" />
                     </div>
                     <span className="font-medium">Back</span>
                 </Link>
 
                 {/* Profile Header */}
-                <div className="bg-white rounded-3xl shadow-sm border border-gray-100 mb-6">
+                <div className="bg-card rounded-3xl shadow-sm border border-border mb-6">
                     <div className="p-8">
                         <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
                             <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6 text-center md:text-left">
@@ -159,29 +159,29 @@ export const UserProfile: React.FC = () => {
                                         )}&background=3b82f6&color=fff&size=128`
                                     }
                                     alt={user?.fullName || "User"}
-                                    className="w-24 h-24 rounded-full object-cover border-4 border-gray-200"
+                                    className="w-24 h-24 rounded-full object-cover border-4 border-border"
                                 />
 
                                 {/* User Info */}
                                 <div className="flex flex-col items-center md:items-start">
-                                    <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                                    <h1 className="text-3xl font-bold text-foreground mb-2">
                                         {user?.fullName || "Unknown User"}
                                     </h1>
                                     <div className="space-y-2">
                                         {user?.email && (
-                                            <div className="flex items-center space-x-2 text-gray-600">
+                                            <div className="flex items-center space-x-2 text-muted-foreground">
                                                 <Mail className="w-4 h-4" />
                                                 <span className="text-sm">{user.email}</span>
                                             </div>
                                         )}
                                         {user?.phone && (
-                                            <div className="flex items-center space-x-2 text-gray-600">
+                                            <div className="flex items-center space-x-2 text-muted-foreground">
                                                 <Phone className="w-4 h-4" />
                                                 <span className="text-sm">{user.phone}</span>
                                             </div>
                                         )}
                                         {user?.createdAt && (
-                                            <div className="flex items-center space-x-2 text-gray-600">
+                                            <div className="flex items-center space-x-2 text-muted-foreground">
                                                 <Calendar className="w-4 h-4" />
                                                 <span className="text-sm">Joined {formatDate(user.createdAt)}</span>
                                             </div>
@@ -207,37 +207,37 @@ export const UserProfile: React.FC = () => {
 
                 {/* Stats */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center">
-                        <p className="text-3xl font-bold text-blue-600">{userPosts.length}</p>
-                        <p className="text-sm text-gray-600 mt-1">Reports</p>
+                    <div className="bg-card rounded-2xl shadow-sm border border-border p-6 text-center">
+                        <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{userPosts.length}</p>
+                        <p className="text-sm text-muted-foreground mt-1">Reports</p>
                     </div>
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center">
-                        <p className="text-3xl font-bold text-green-600">
+                    <div className="bg-card rounded-2xl shadow-sm border border-border p-6 text-center">
+                        <p className="text-3xl font-bold text-green-600 dark:text-green-400">
                             {/* lifecycleStatus field from backend */}
                             {userPosts.filter((p: any) => p.lifecycleStatus === "Resolved").length}
                         </p>
-                        <p className="text-sm text-gray-600 mt-1">Resolved</p>
+                        <p className="text-sm text-muted-foreground mt-1">Resolved</p>
                     </div>
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center">
-                        <p className="text-3xl font-bold text-orange-600">
+                    <div className="bg-card rounded-2xl shadow-sm border border-border p-6 text-center">
+                        <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">
                             {userPosts.filter((p: any) => p.lifecycleStatus === "Active" || p.lifecycleStatus === "Pending").length}
                         </p>
-                        <p className="text-sm text-gray-600 mt-1">Active</p>
+                        <p className="text-sm text-muted-foreground mt-1">Active</p>
                     </div>
                 </div>
 
                 {/* User's Reports */}
-                <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
-                    <h2 className="text-2xl font-bold mb-6">Reports by {user?.fullName}</h2>
+                <div className="bg-card rounded-3xl shadow-sm border border-border p-6">
+                    <h2 className="text-2xl font-bold mb-6 text-foreground">Reports by {user?.fullName}</h2>
 
                     {isLoadingPosts ? (
                         <div className="text-center py-12">
                             <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                            <p className="text-gray-500">Loading reports...</p>
+                            <p className="text-muted-foreground">Loading reports...</p>
                         </div>
                     ) : userPosts.length === 0 ? (
                         <div className="text-center py-12">
-                            <p className="text-gray-500">This user hasn't created any reports yet</p>
+                            <p className="text-muted-foreground">This user hasn't created any reports yet</p>
                         </div>
                     ) : (
                         <div className="space-y-4">

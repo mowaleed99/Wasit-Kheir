@@ -15,10 +15,10 @@ import {
 import { useState } from "react";
 
 const typeColors: Record<string, string> = {
-    LostItem: "bg-red-100 text-red-700 border-red-200",
-    FoundItem: "bg-green-100 text-green-700 border-green-200",
-    LostPerson: "bg-orange-100 text-orange-700 border-orange-200",
-    FoundPerson: "bg-blue-100 text-blue-700 border-blue-200",
+    LostItem: "bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-900/50",
+    FoundItem: "bg-green-100 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-900/50",
+    LostPerson: "bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-400 dark:border-orange-900/50",
+    FoundPerson: "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-900/50",
 };
 const typeLabels: Record<string, string> = {
     LostItem: "Lost Item",
@@ -201,10 +201,10 @@ export const ReportDetails: React.FC = () => {
 
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            <div className="min-h-screen bg-background flex items-center justify-center">
                 <div className="text-center">
                     <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-gray-500 text-lg">Loading report...</p>
+                    <p className="text-muted-foreground text-lg">Loading report...</p>
                 </div>
             </div>
         );
@@ -212,16 +212,16 @@ export const ReportDetails: React.FC = () => {
 
     if (!reportData) {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            <div className="min-h-screen bg-background flex items-center justify-center">
                 <div className="text-center">
-                    <p className="text-gray-500 text-lg">Report not found.</p>
+                    <p className="text-muted-foreground text-lg">Report not found.</p>
                     <Link to="/" className="mt-4 text-blue-600 hover:underline inline-block">← Back to Home</Link>
                 </div>
             </div>
         );
     }
 
-    const typeClass = typeColors[reportData.type] || "bg-gray-100 text-gray-600 border-gray-200";
+    const typeClass = typeColors[reportData.type] || "bg-muted text-muted-foreground border-border";
     const typeLabel = typeLabels[reportData.type] || reportData.type;
     const images: any[] = reportData.images || [];
 
@@ -230,14 +230,14 @@ export const ReportDetails: React.FC = () => {
     const matchesList = Array.isArray(matchesArray) ? matchesArray : [];
 
     return (
-        <div className="min-h-screen bg-gray-50 pb-12">
+        <div className="min-h-screen bg-background pb-12">
             <div className="max-w-5xl mx-auto px-4 py-8">
                 {/* Back */}
                 <button
                     onClick={() => navigate(-1)}
-                    className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors group mb-6"
+                    className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors group mb-6"
                 >
-                    <div className="p-2 rounded-full bg-white border border-gray-200 group-hover:border-blue-200 group-hover:bg-blue-50 transition-all shadow-sm">
+                    <div className="p-2 rounded-full bg-card border border-border group-hover:border-blue-200/50 group-hover:bg-blue-50/50 dark:group-hover:bg-blue-900/10 transition-all shadow-sm">
                         <ArrowLeft className="w-5 h-5" />
                     </div>
                     <span className="font-medium">Back to Feed</span>
@@ -246,7 +246,7 @@ export const ReportDetails: React.FC = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Main Content */}
                     <div className="lg:col-span-2 space-y-6">
-                        <div className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100">
+                        <div className="bg-card text-card-foreground rounded-3xl overflow-hidden shadow-sm border border-border">
 
                             {/* Image Gallery */}
                             {images.length > 0 && (
@@ -274,18 +274,18 @@ export const ReportDetails: React.FC = () => {
                             )}
 
                             {/* Type & Status badges */}
-                            <div className="p-6 border-b border-gray-100">
+                            <div className="p-6 border-b border-border">
                                 <div className="flex flex-wrap gap-2 mb-4">
                                     <span className={`px-3 py-1 rounded-full text-sm font-semibold border ${typeClass}`}>
                                         {typeLabel}
                                     </span>
                                     {reportData.lifecycleStatus && (
-                                        <span className="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-600 border border-gray-200">
+                                        <span className="px-3 py-1 rounded-full text-sm font-medium bg-muted text-muted-foreground border border-border">
                                             {reportData.lifecycleStatus}
                                         </span>
                                     )}
                                 </div>
-                                <h1 className="text-2xl font-bold text-gray-900 mb-2">{reportData.title}</h1>
+                                <h1 className="text-2xl font-bold text-foreground mb-2">{reportData.title}</h1>
 
                                 {/* Creator */}
                                 <Link
@@ -299,11 +299,11 @@ export const ReportDetails: React.FC = () => {
                                                 : `https://ui-avatars.com/api/?name=${encodeURIComponent(reportData.createdByName || "User")}&background=random&color=fff`
                                         }
                                         alt={reportData.createdByName}
-                                        className="w-10 h-10 rounded-full object-cover border border-gray-200"
+                                        className="w-10 h-10 rounded-full object-cover border border-border"
                                     />
                                     <div>
-                                        <p className="font-semibold text-gray-900 text-sm">{reportData.createdByName || "Unknown User"}</p>
-                                        <div className="flex items-center gap-3 text-xs text-gray-400">
+                                        <p className="font-semibold text-foreground text-sm">{reportData.createdByName || "Unknown User"}</p>
+                                        <div className="flex items-center gap-3 text-xs text-muted-foreground">
                                             <span className="flex items-center gap-1">
                                                 <Calendar className="w-3 h-3" />
                                                 {formatDate(reportData.createdAt)}
@@ -315,8 +315,8 @@ export const ReportDetails: React.FC = () => {
 
                             {/* Owner or Admin Actions */}
                             {(isOwner || isAdmin) && (
-                                <div className="px-6 py-3 bg-gray-50 border-b border-gray-100 flex flex-wrap gap-2 items-center">
-                                    <span className="text-sm font-medium text-gray-500 mr-2">Manage:</span>
+                                <div className="px-6 py-3 bg-muted/30 border-b border-border flex flex-wrap gap-2 items-center">
+                                    <span className="text-sm font-medium text-muted-foreground mr-2">Manage:</span>
                                     <div className="ml-auto flex gap-2">
                                         {showDeleteConfirm ? (
                                             <div className="flex items-center gap-2">
@@ -355,26 +355,26 @@ export const ReportDetails: React.FC = () => {
 
                             {/* Content */}
                             <div className="p-6 space-y-5">
-                                <p className="text-gray-700 text-base leading-relaxed whitespace-pre-wrap">
+                                <p className="text-foreground text-base leading-relaxed whitespace-pre-wrap">
                                     {reportData.description}
                                 </p>
 
                                 {/* Meta pills */}
                                 <div className="flex flex-wrap gap-3 text-sm">
                                     {reportData.subCategoryName && (
-                                        <span className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-600 rounded-full">
+                                        <span className="flex items-center gap-1.5 px-3 py-1.5 bg-muted text-muted-foreground rounded-full border border-border">
                                             <Tag className="w-3.5 h-3.5" />
                                             {reportData.subCategoryName}
                                         </span>
                                     )}
                                     {reportData.locationName && (
-                                        <span className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-600 rounded-full">
+                                        <span className="flex items-center gap-1.5 px-3 py-1.5 bg-muted text-muted-foreground rounded-full border border-border">
                                             <MapPin className="w-3.5 h-3.5" />
                                             {reportData.locationName}
                                         </span>
                                     )}
                                     {reportData.dateReported && (
-                                        <span className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-600 rounded-full">
+                                        <span className="flex items-center gap-1.5 px-3 py-1.5 bg-muted text-muted-foreground rounded-full border border-border">
                                             <Calendar className="w-3.5 h-3.5" />
                                             Reported: {new Date(reportData.dateReported).toLocaleDateString()}
                                         </span>
@@ -384,11 +384,11 @@ export const ReportDetails: React.FC = () => {
                                 {/* Map */}
                                 {reportData.latitude && reportData.longitude && (
                                     <div className="space-y-2">
-                                        <h4 className="text-gray-900 font-medium flex items-center gap-2">
+                                        <h4 className="text-foreground font-medium flex items-center gap-2">
                                             <MapPin className="w-4 h-4 text-blue-600" />
                                             Location
                                         </h4>
-                                        <div className="rounded-2xl overflow-hidden border border-gray-200 h-64 shadow-sm">
+                                        <div className="rounded-2xl overflow-hidden border border-border h-64 shadow-sm">
                                             <MapPicker
                                                 initialLocation={{ lat: reportData.latitude, lng: reportData.longitude }}
                                                 onLocationSelect={() => { }}
@@ -399,11 +399,11 @@ export const ReportDetails: React.FC = () => {
                             </div>
 
                             {/* Actions Bar */}
-                            <div className="p-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
+                            <div className="p-4 bg-muted/30 border-t border-border flex items-center justify-between">
                                 <div className="flex gap-4">
                                     <button
                                         onClick={handleShare}
-                                        className="flex items-center gap-2 text-gray-500 hover:text-green-600 transition-colors"
+                                        className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
                                     >
                                         <Share2 className="w-5 h-5" />
                                         <span className="text-sm">Share</span>
@@ -412,7 +412,7 @@ export const ReportDetails: React.FC = () => {
                                     <button
                                         onClick={toggleSave}
                                         disabled={isSaving || isUnsaving}
-                                        className={`flex items-center gap-2 transition-colors ${isSaved ? "text-blue-600" : "text-gray-500 hover:text-blue-600"
+                                        className={`flex items-center gap-2 transition-colors ${isSaved ? "text-blue-600" : "text-muted-foreground hover:text-foreground"
                                             } disabled:opacity-50`}
                                     >
                                         {isSaved ? <BookmarkCheck className="w-5 h-5" /> : <Bookmark className="w-5 h-5" />}
@@ -438,15 +438,15 @@ export const ReportDetails: React.FC = () => {
                         {/* Match Results */}
                         {(isOwner || isAdmin) && (
                             <div className="mt-8">
-                                <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
                                     <Sparkles className="w-5 h-5 text-indigo-600" />
                                     Potential AI Matches {matchesList.length > 0 ? `(${matchesList.length})` : ''}
                                 </h3>
 
                                 {isLoadingMatches ? (
-                                    <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex items-center justify-center">
+                                    <div className="bg-card rounded-2xl p-6 border border-border shadow-sm flex items-center justify-center">
                                         <div className="w-6 h-6 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
-                                        <span className="ml-3 text-gray-500">Loading matches...</span>
+                                        <span className="ml-3 text-muted-foreground">Loading matches...</span>
                                     </div>
                                 ) : matchesList.length > 0 ? (
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -459,22 +459,22 @@ export const ReportDetails: React.FC = () => {
                                                 <Link
                                                     key={idx}
                                                     to={`/report/${matchId}`}
-                                                    className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm hover:shadow-md hover:border-indigo-100 transition-all group flex flex-col gap-3"
+                                                    className="bg-card rounded-2xl p-4 border border-border shadow-sm hover:shadow-md hover:border-indigo-500/50 transition-all group flex flex-col gap-3"
                                                 >
                                                     <div className="flex justify-between items-start">
-                                                        <span className={`text-xs font-semibold px-2 py-1 rounded-full ${typeColors[matchedReport.type] || 'bg-gray-100 text-gray-600'}`}>
+                                                        <span className={`text-xs font-semibold px-2 py-1 rounded-full ${typeColors[matchedReport.type] || 'bg-muted text-muted-foreground border-border border'}`}>
                                                             {typeLabels[matchedReport.type] || matchedReport.type || 'Item'}
                                                         </span>
                                                         {score !== undefined && score !== null && (
-                                                            <span className="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded-full border border-indigo-100">
+                                                            <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-1 rounded-full border border-indigo-100 dark:border-indigo-900/50">
                                                                 {(score * (score <= 1.0 ? 100 : 1)).toFixed(0)}% Match
                                                             </span>
                                                         )}
                                                     </div>
-                                                    <h4 className="font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors line-clamp-2">
+                                                    <h4 className="font-semibold text-foreground group-hover:text-indigo-600 transition-colors line-clamp-2">
                                                         {matchedReport.title || "Untitled Match"}
                                                     </h4>
-                                                    <div className="mt-auto pt-3 border-t border-gray-50 flex items-center justify-between text-xs text-gray-500">
+                                                    <div className="mt-auto pt-3 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
                                                         <span className="flex items-center gap-1">
                                                             <MapPin className="w-3 h-3" />
                                                             <span className="truncate max-w-[100px]">{matchedReport.locationName || 'Unknown'}</span>
@@ -489,9 +489,9 @@ export const ReportDetails: React.FC = () => {
                                         })}
                                     </div>
                                 ) : (
-                                    <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex flex-col items-center justify-center text-center">
-                                        <Sparkles className="w-8 h-8 text-gray-300 mb-2" />
-                                        <p className="text-gray-500 text-sm">No matches found yet.<br />Click "Run AI Match" above to scan.</p>
+                                    <div className="bg-card rounded-2xl p-6 border border-border shadow-sm flex flex-col items-center justify-center text-center">
+                                        <Sparkles className="w-8 h-8 text-muted-foreground mb-2" />
+                                        <p className="text-muted-foreground text-sm">No matches found yet.<br />Click "Run AI Match" above to scan.</p>
                                     </div>
                                 )}
                             </div>
@@ -500,8 +500,8 @@ export const ReportDetails: React.FC = () => {
 
                     {/* Sidebar */}
                     <div className="space-y-6">
-                        <div className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 p-6">
-                            <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <div className="bg-card text-card-foreground rounded-3xl overflow-hidden shadow-sm border border-border p-6">
+                            <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
                                 <User className="w-5 h-5 text-blue-600" />
                                 Reporter Info
                             </h3>
@@ -513,10 +513,10 @@ export const ReportDetails: React.FC = () => {
                                             : `https://ui-avatars.com/api/?name=${encodeURIComponent(reportData.createdByName || "User")}&background=random&color=fff`
                                     }
                                     alt={reportData.createdByName}
-                                    className="w-14 h-14 rounded-full object-cover border border-gray-200"
+                                    className="w-14 h-14 rounded-full object-cover border border-border"
                                 />
                                 <div>
-                                    <p className="font-semibold text-gray-900">{reportData.createdByName || "Unknown"}</p>
+                                    <p className="font-semibold text-foreground">{reportData.createdByName || "Unknown"}</p>
                                     <Link
                                         to={`/profile/${reportData.createdById}`}
                                         className="text-sm text-blue-600 hover:underline"
@@ -540,9 +540,9 @@ export const ReportDetails: React.FC = () => {
 
                         {/* Interested count */}
                         {reportData.interestedCount !== undefined && (
-                            <div className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 p-6">
-                                <h3 className="text-lg font-bold text-gray-900 mb-3">Engagement</h3>
-                                <div className="flex items-center gap-2 text-gray-600">
+                            <div className="bg-card text-card-foreground rounded-3xl overflow-hidden shadow-sm border border-border p-6">
+                                <h3 className="text-lg font-bold text-foreground mb-3">Engagement</h3>
+                                <div className="flex items-center gap-2 text-muted-foreground">
                                     <CheckCircle className="w-5 h-5 text-green-500" />
                                     <span>{reportData.interestedCount} people marked as interested</span>
                                 </div>

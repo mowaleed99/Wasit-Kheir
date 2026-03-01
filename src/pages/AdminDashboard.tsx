@@ -80,44 +80,44 @@ export const AdminDashboard: React.FC = () => {
     return (
         <div className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-6">
             <div className="mb-6">
-                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-                <p className="text-gray-500 mt-2 text-sm">Manage and review incoming reports.</p>
+                <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Admin Dashboard</h1>
+                <p className="text-muted-foreground mt-2 text-sm">Manage and review incoming reports.</p>
             </div>
 
             {/* Dashboard Stats */}
             {!dashboardLoading && (
                 <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-8">
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-5">
-                        <div className="p-4 bg-blue-50 text-blue-600 rounded-2xl">
+                    <div className="bg-card p-6 rounded-2xl shadow-sm border border-border flex items-center gap-5">
+                        <div className="p-4 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl">
                             <Activity className="w-8 h-8" />
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Total Reports</p>
-                            <p className="text-3xl font-bold text-gray-900 mt-1">{dashboardData.totalReportsCount ?? 0}</p>
+                            <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Total Reports</p>
+                            <p className="text-3xl font-bold text-foreground mt-1">{dashboardData.totalReportsCount ?? 0}</p>
                         </div>
                     </div>
 
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-5">
-                        <div className="p-4 bg-indigo-50 text-indigo-600 rounded-2xl">
+                    <div className="bg-card p-6 rounded-2xl shadow-sm border border-border flex items-center gap-5">
+                        <div className="p-4 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-2xl">
                             <Activity className="w-8 h-8" />
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Platform Categories</p>
-                            <p className="text-3xl font-bold text-gray-900 mt-1">{dashboardData.categoriesCount ?? 0}</p>
+                            <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Platform Categories</p>
+                            <p className="text-3xl font-bold text-foreground mt-1">{dashboardData.categoriesCount ?? 0}</p>
                         </div>
                     </div>
                 </div>
             )}
 
             {/* Tabs */}
-            <div className="flex gap-4 mb-6 border-b border-gray-200">
+            <div className="flex gap-4 mb-6 border-b border-border">
                 {(["Pending", "Approved", "Rejected"] as const).map((tab) => (
                     <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
                         className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 ${activeTab === tab
-                            ? "text-blue-600 border-blue-600"
-                            : "text-gray-500 border-transparent hover:text-gray-900 hover:border-gray-300"
+                            ? "text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400"
+                            : "text-muted-foreground border-transparent hover:text-foreground hover:border-border"
                             }`}
                     >
                         {tab}
@@ -126,42 +126,42 @@ export const AdminDashboard: React.FC = () => {
             </div>
 
             {/* Content */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
                 {reportsLoading ? (
                     <div className="text-center py-12">
                         <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                        <p className="text-gray-500">Loading reports...</p>
+                        <p className="text-muted-foreground">Loading reports...</p>
                     </div>
                 ) : reportsError ? (
-                    <div className="text-center py-12 bg-red-50">
-                        <p className="text-red-600">Failed to load reports.</p>
+                    <div className="text-center py-12 bg-red-50 dark:bg-red-900/20">
+                        <p className="text-red-600 dark:text-red-400">Failed to load reports.</p>
                     </div>
                 ) : reportsList.length === 0 ? (
                     <div className="text-center py-16">
-                        <div className="bg-gray-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                            <Search className="w-8 h-8 text-gray-400" />
+                        <div className="bg-muted rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                            <Search className="w-8 h-8 text-muted-foreground" />
                         </div>
-                        <h3 className="text-lg font-medium text-gray-900">No {activeTab.toLowerCase()} reports</h3>
-                        <p className="text-gray-500 mt-1">There are currently no reports in this category.</p>
+                        <h3 className="text-lg font-medium text-foreground">No {activeTab.toLowerCase()} reports</h3>
+                        <p className="text-muted-foreground mt-1">There are currently no reports in this category.</p>
                     </div>
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="bg-gray-50 border-b border-gray-200 text-xs uppercase text-gray-500">
+                                <tr className="bg-muted border-b border-border text-xs uppercase text-muted-foreground">
                                     <th className="px-6 py-4 font-semibold">Report Details</th>
                                     <th className="px-6 py-4 font-semibold">Creator</th>
                                     <th className="px-6 py-4 font-semibold">Date</th>
                                     <th className="px-6 py-4 font-semibold text-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-200">
+                            <tbody className="divide-y divide-border">
                                 {reportsList.map((report: any) => (
-                                    <tr key={report.id} className="hover:bg-gray-50 transition-colors">
+                                    <tr key={report.id} className="hover:bg-muted/50 transition-colors">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-4">
                                                 {/* Thumbnail */}
-                                                <div className="w-16 h-16 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0">
+                                                <div className="w-16 h-16 rounded-lg bg-muted overflow-hidden flex-shrink-0">
                                                     {report.images?.[0]?.imageUrl ? (
                                                         <img
                                                             src={`https://wasitkheir.runasp.net${report.images[0].imageUrl}`}
@@ -169,7 +169,7 @@ export const AdminDashboard: React.FC = () => {
                                                             className="w-full h-full object-cover"
                                                         />
                                                     ) : (
-                                                        <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+                                                        <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs">
                                                             No Image
                                                         </div>
                                                     )}
@@ -178,12 +178,12 @@ export const AdminDashboard: React.FC = () => {
                                                 <div>
                                                     <Link
                                                         to={`/report/${report.id}`}
-                                                        className="text-sm font-semibold text-gray-900 hover:text-blue-600"
+                                                        className="text-sm font-semibold text-foreground hover:text-blue-600 dark:hover:text-blue-400"
                                                     >
                                                         {report.title}
                                                     </Link>
-                                                    <div className="text-xs text-gray-500 mt-1 flex items-center gap-2">
-                                                        <span className="px-2 py-0.5 rounded border border-gray-200 bg-white">
+                                                    <div className="text-xs text-muted-foreground mt-1 flex items-center gap-2">
+                                                        <span className="px-2 py-0.5 rounded border border-border bg-card">
                                                             {report.type}
                                                         </span>
                                                         <span>{report.locationName}</span>
@@ -202,15 +202,15 @@ export const AdminDashboard: React.FC = () => {
                                                             )}&background=random&color=fff`
                                                     }
                                                     alt={report.createdByName}
-                                                    className="w-8 h-8 rounded-full border border-gray-200"
+                                                    className="w-8 h-8 rounded-full border border-border"
                                                 />
-                                                <span className="text-sm text-gray-700 font-medium">
+                                                <span className="text-sm text-foreground font-medium">
                                                     {report.createdByName || "Unknown User"}
                                                 </span>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <div className="flex items-center gap-1 text-sm text-gray-500">
+                                            <div className="flex items-center gap-1 text-sm text-muted-foreground">
                                                 <Clock className="w-4 h-4" />
                                                 {new Date(report.createdAt).toLocaleDateString()}
                                             </div>
@@ -221,7 +221,7 @@ export const AdminDashboard: React.FC = () => {
                                                     <button
                                                         onClick={() => handleApprove(report.id)}
                                                         disabled={isApproving || isRejecting}
-                                                        className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors border border-transparent hover:border-green-200 disabled:opacity-50"
+                                                        className="p-2 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-colors border border-transparent hover:border-green-200 dark:hover:border-green-800 disabled:opacity-50"
                                                         title="Approve"
                                                     >
                                                         <CheckCircle className="w-5 h-5" />
@@ -229,14 +229,14 @@ export const AdminDashboard: React.FC = () => {
                                                     <button
                                                         onClick={() => handleReject(report.id)}
                                                         disabled={isApproving || isRejecting}
-                                                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-200 disabled:opacity-50"
+                                                        className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors border border-transparent hover:border-red-200 dark:hover:border-red-800 disabled:opacity-50"
                                                         title="Reject"
                                                     >
                                                         <XCircle className="w-5 h-5" />
                                                     </button>
                                                 </div>
                                             ) : (
-                                                <span className="text-sm text-gray-500 italic">
+                                                <span className="text-sm text-muted-foreground italic">
                                                     {activeTab}
                                                 </span>
                                             )}

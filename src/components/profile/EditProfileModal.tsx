@@ -128,15 +128,15 @@ export const EditProfileModal = ({ user, isOpen, onClose }: EditProfileModalProp
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-            <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-card text-card-foreground rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
                 {/* Header */}
-                <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between rounded-t-3xl">
-                    <h2 className="text-2xl font-bold text-gray-900">Edit Profile</h2>
+                <div className="sticky top-0 bg-card border-b border-border p-6 flex items-center justify-between rounded-t-3xl z-10">
+                    <h2 className="text-2xl font-bold text-foreground">Edit Profile</h2>
                     <button
                         onClick={onClose}
-                        className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                        className="p-2 hover:bg-muted rounded-full transition-colors"
                     >
-                        <X className="w-6 h-6 text-gray-500" />
+                        <X className="w-6 h-6 text-muted-foreground" />
                     </button>
                 </div>
 
@@ -145,7 +145,7 @@ export const EditProfileModal = ({ user, isOpen, onClose }: EditProfileModalProp
                     {/* Profile Photo */}
                     <div className="flex flex-col items-center space-y-4">
                         <div className="relative">
-                            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-200 bg-gray-100">
+                            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-border bg-muted">
                                 {currentPhoto ? (
                                     <img
                                         src={currentPhoto}
@@ -181,13 +181,13 @@ export const EditProfileModal = ({ user, isOpen, onClose }: EditProfileModalProp
 
                     {/* Full Name */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-foreground mb-2">
                             Full Name *
                         </label>
                         <input
                             {...register("fullName")}
                             type="text"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="w-full px-4 py-3 bg-background text-foreground border border-input rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-muted-foreground"
                             placeholder="Enter your full name"
                         />
                         {errors.fullName && (
@@ -197,50 +197,50 @@ export const EditProfileModal = ({ user, isOpen, onClose }: EditProfileModalProp
 
                     {/* Phone Number */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-foreground mb-2">
                             Phone Number
                         </label>
                         <input
                             {...register("phoneNumber")}
                             type="tel"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="w-full px-4 py-3 bg-background text-foreground border border-input rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-muted-foreground"
                             placeholder="Enter your phone number"
                         />
                     </div>
 
                     {/* Address */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-foreground mb-2">
                             Address
                         </label>
                         <input
                             {...register("address")}
                             type="text"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="w-full px-4 py-3 bg-background text-foreground border border-input rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-muted-foreground"
                             placeholder="Enter your address"
                         />
                     </div>
 
                     {/* Date of Birth */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-foreground mb-2">
                             Date of Birth
                         </label>
                         <input
                             {...register("dateOfBirth")}
                             type="date"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="w-full px-4 py-3 bg-background text-foreground border border-input rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                     </div>
 
                     {/* Gender */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-foreground mb-2">
                             Gender
                         </label>
                         <select
                             {...register("gender")}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="w-full px-4 py-3 bg-background text-foreground border border-input rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         >
                             <option value="">Select gender</option>
                             <option value="Male">Male</option>
@@ -251,13 +251,13 @@ export const EditProfileModal = ({ user, isOpen, onClose }: EditProfileModalProp
 
                     {/* Bio */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-foreground mb-2">
                             Bio
                         </label>
                         <textarea
                             {...register("bio")}
                             rows={4}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                            className="w-full px-4 py-3 bg-background text-foreground border border-input rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none placeholder:text-muted-foreground"
                             placeholder="Tell us about yourself..."
                         />
                     </div>

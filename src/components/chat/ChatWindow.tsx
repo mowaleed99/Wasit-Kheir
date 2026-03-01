@@ -101,12 +101,12 @@ export const ChatWindow = ({ sessionId, onBack }: ChatWindowProps) => {
     return (
         <div className="flex-1 flex flex-col h-full">
             {/* Header */}
-            <div className="p-4 bg-white border-b border-gray-200 flex items-center gap-3 shadow-sm z-10">
+            <div className="p-4 bg-card border-b border-border flex items-center gap-3 shadow-sm z-10">
                 <button
                     onClick={onBack}
-                    className="md:hidden p-2 hover:bg-gray-100 rounded-full transition-colors"
+                    className="md:hidden p-2 hover:bg-muted rounded-full transition-colors"
                 >
-                    <ArrowLeft className="w-5 h-5 text-gray-600" />
+                    <ArrowLeft className="w-5 h-5 text-muted-foreground" />
                 </button>
 
                 {/* We could show the other user's name here if we passed it down or fetched session details */}
@@ -116,10 +116,10 @@ export const ChatWindow = ({ sessionId, onBack }: ChatWindowProps) => {
                             <img
                                 src={otherUser.avatar || otherUser.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(otherUser.fullName || 'User')}&background=random&color=fff`}
                                 alt={otherUser.fullName}
-                                className="w-10 h-10 rounded-full object-cover border border-gray-200"
+                                className="w-10 h-10 rounded-full object-cover border border-border"
                             />
                             <div>
-                                <h3 className="font-bold text-gray-900">{otherUser.fullName}</h3>
+                                <h3 className="font-bold text-foreground">{otherUser.fullName}</h3>
                                 {otherUser.isOnline && (
                                     <span className="text-xs text-green-500 flex items-center gap-1">
                                         <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
@@ -130,11 +130,11 @@ export const ChatWindow = ({ sessionId, onBack }: ChatWindowProps) => {
                         </>
                     ) : (
                         <>
-                            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
+                            <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold border border-border">
                                 #
                             </div>
                             <div>
-                                <h3 className="font-bold text-gray-900">Chat Session</h3>
+                                <h3 className="font-bold text-foreground">Chat Session</h3>
                                 <span className="text-xs text-green-500 flex items-center gap-1">
                                     <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
                                     Active
@@ -146,9 +146,9 @@ export const ChatWindow = ({ sessionId, onBack }: ChatWindowProps) => {
             </div>
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50/50">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-muted/30">
                 {messages.length === 0 ? (
-                    <div className="text-center py-12 text-gray-400">
+                    <div className="text-center py-12 text-muted-foreground">
                         <p>No messages yet. Say hello! 👋</p>
                     </div>
                 ) : (
@@ -162,11 +162,11 @@ export const ChatWindow = ({ sessionId, onBack }: ChatWindowProps) => {
                                 <div
                                     className={`max-w-[75%] rounded-2xl px-4 py-3 shadow-sm ${isMe
                                         ? 'bg-blue-600 text-white rounded-br-none'
-                                        : 'bg-white text-gray-900 border border-gray-100 rounded-bl-none'
+                                        : 'bg-card text-foreground border border-border rounded-bl-none'
                                         }`}
                                 >
                                     <p className="text-sm leading-relaxed">{msg.content || msg.text || ''}</p>
-                                    <span className={`text-[10px] mt-1 block ${isMe ? 'text-blue-100' : 'text-gray-400'}`}>
+                                    <span className={`text-[10px] mt-1 block ${isMe ? 'text-blue-100' : 'text-muted-foreground'}`}>
                                         {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </span>
                                 </div>
@@ -178,14 +178,14 @@ export const ChatWindow = ({ sessionId, onBack }: ChatWindowProps) => {
             </div>
 
             {/* Input Area */}
-            <div className="p-4 bg-white border-t border-gray-200">
+            <div className="p-4 bg-card border-t border-border">
                 <form onSubmit={handleSend} className="flex items-center gap-2">
                     <input
                         type="text"
                         value={messageInput}
                         onChange={(e) => setMessageInput(e.target.value)}
                         placeholder="Type a message..."
-                        className="flex-1 bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-0 rounded-xl py-3 px-4 transition-all"
+                        className="flex-1 bg-muted border-transparent focus:bg-background focus:border-blue-500 focus:ring-0 rounded-xl py-3 px-4 transition-all text-foreground placeholder:text-muted-foreground"
                     />
                     <button
                         type="submit"

@@ -11,12 +11,12 @@ export const HomeLayout: React.FC = () => {
 
   return (
     <div
-      className={`flex h-screen flex-col ${direction === "rtl" ? "rtl" : ""}`}
+      className={`flex h-screen flex-col bg-background text-foreground ${direction === "rtl" ? "rtl" : ""}`}
     >
       <Navbar />
       <div className="flex flex-1 overflow-hidden">
         {/* Left: Categories */}
-        <div className="w-64 bg-muted/40 border-r p-4 overflow-y-auto hidden md:block">
+        <div className="w-64 bg-muted/20 dark:bg-muted/10 border-r border-border p-4 overflow-y-auto hidden md:block">
           <h2 className="font-bold mb-4">
             {t("categories.title") || "Categories"}
           </h2>

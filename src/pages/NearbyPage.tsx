@@ -50,24 +50,24 @@ export const NearbyPage: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 pb-12">
+        <div className="min-h-screen bg-background pb-12">
             <div className="max-w-7xl mx-auto px-4 py-8">
                 {/* Header */}
                 <div className="mb-6">
-                    <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-2">Nearby Posts</h1>
-                    <p className="text-gray-600 text-sm">Find lost or found items near your location</p>
+                    <h1 className="text-2xl sm:text-4xl font-bold text-foreground mb-2">Nearby Posts</h1>
+                    <p className="text-muted-foreground text-sm">Find lost or found items near your location</p>
                 </div>
 
                 {/* Search Controls */}
-                <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 mb-6">
+                <div className="bg-card text-card-foreground rounded-3xl shadow-sm border border-border p-6 mb-6">
                     <div className="space-y-6">
                         {/* Map */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-3">
+                            <label className="block text-sm font-medium text-foreground mb-3">
                                 <MapPin className="w-4 h-4 inline mr-1" />
                                 Select Location
                             </label>
-                            <div className="rounded-2xl overflow-hidden border border-gray-200 h-96 mb-4">
+                            <div className="rounded-2xl overflow-hidden border border-border h-96 mb-4">
                                 <MapPicker
                                     initialLocation={location || undefined}
                                     onLocationSelect={(lat, lng) => setLocation({ lat, lng })}
@@ -86,7 +86,7 @@ export const NearbyPage: React.FC = () => {
 
                         {/* Radius */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-sm font-medium text-foreground mb-2">
                                 Search Radius: {radius} km
                             </label>
                             <input
@@ -95,9 +95,9 @@ export const NearbyPage: React.FC = () => {
                                 max="50"
                                 value={radius}
                                 onChange={(e) => setRadius(Number(e.target.value))}
-                                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                                className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-blue-600"
                             />
-                            <div className="flex justify-between text-xs text-gray-500 mt-1">
+                            <div className="flex justify-between text-xs text-muted-foreground mt-1">
                                 <span>1 km</span>
                                 <span>50 km</span>
                             </div>
@@ -127,35 +127,35 @@ export const NearbyPage: React.FC = () => {
                 {/* Results */}
                 <div>
                     {!hasSearched ? (
-                        <div className="text-center py-12 bg-white rounded-3xl border border-gray-100">
-                            <MapPin className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                        <div className="text-center py-12 bg-card rounded-3xl border border-border">
+                            <MapPin className="w-16 h-16 text-muted mx-auto mb-4" />
+                            <h3 className="text-xl font-semibold text-foreground mb-2">
                                 Select a Location
                             </h3>
-                            <p className="text-gray-500">
+                            <p className="text-muted-foreground">
                                 Choose a location on the map and search for nearby posts
                             </p>
                         </div>
                     ) : isLoading ? (
                         <div className="text-center py-12">
                             <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                            <p className="text-gray-500">Searching nearby...</p>
+                            <p className="text-muted-foreground">Searching nearby...</p>
                         </div>
                     ) : results.length === 0 ? (
-                        <div className="text-center py-12 bg-white rounded-3xl border border-gray-100">
-                            <MapPin className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                        <div className="text-center py-12 bg-card rounded-3xl border border-border">
+                            <MapPin className="w-16 h-16 text-muted mx-auto mb-4" />
+                            <h3 className="text-xl font-semibold text-foreground mb-2">
                                 No Nearby Posts
                             </h3>
-                            <p className="text-gray-500">
+                            <p className="text-muted-foreground">
                                 Try increasing the search radius or selecting a different location
                             </p>
                         </div>
                     ) : (
                         <div>
                             <div className="mb-4 flex items-center justify-between">
-                                <p className="text-gray-600">
-                                    Found <span className="font-semibold text-gray-900">{results.length}</span> posts
+                                <p className="text-muted-foreground">
+                                    Found <span className="font-semibold text-foreground">{results.length}</span> posts
                                     within {radius} km
                                 </p>
                             </div>

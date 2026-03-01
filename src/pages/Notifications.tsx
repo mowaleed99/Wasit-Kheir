@@ -57,12 +57,12 @@ export const Notifications: React.FC = () => {
         <div className="max-w-4xl mx-auto px-4 py-8">
             <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
-                    <div className="p-2.5 bg-indigo-100 rounded-xl">
-                        <Bell className="w-6 h-6 text-indigo-600" />
+                    <div className="p-2.5 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl">
+                        <Bell className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                     </div>
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-900">Notifications</h1>
-                        <p className="text-sm text-gray-500">Stay updated on your reports and matches</p>
+                        <h1 className="text-2xl font-bold text-foreground">Notifications</h1>
+                        <p className="text-sm text-muted-foreground">Stay updated on your reports and matches</p>
                     </div>
                 </div>
                 {notifications.some(n => !n.isRead) && (
@@ -71,7 +71,7 @@ export const Notifications: React.FC = () => {
                         size="sm"
                         onClick={() => markAllAsRead()}
                         disabled={isMarkingAllRead}
-                        className="text-indigo-600 hover:text-indigo-700"
+                        className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300"
                     >
                         <CheckCircle2 className="w-4 h-4 mr-2" />
                         Mark all as read
@@ -82,15 +82,15 @@ export const Notifications: React.FC = () => {
             {isLoading ? (
                 <div className="flex flex-col items-center justify-center py-24">
                     <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mb-4" />
-                    <p className="text-gray-500">Loading notifications…</p>
+                    <p className="text-muted-foreground">Loading notifications…</p>
                 </div>
             ) : notifications.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-24 text-center bg-white rounded-2xl shadow-sm border border-gray-100">
-                    <div className="p-5 bg-gray-50 rounded-full mb-4">
-                        <Bell className="w-10 h-10 text-gray-300" />
+                <div className="flex flex-col items-center justify-center py-24 text-center bg-card rounded-2xl shadow-sm border border-border">
+                    <div className="p-5 bg-muted rounded-full mb-4">
+                        <Bell className="w-10 h-10 text-muted-foreground" />
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-700 mb-2">You're all caught up!</h3>
-                    <p className="text-gray-500 text-sm">
+                    <h3 className="text-xl font-semibold text-foreground mb-2">You're all caught up!</h3>
+                    <p className="text-muted-foreground text-sm">
                         You have no notifications at the moment.
                     </p>
                 </div>
@@ -100,22 +100,22 @@ export const Notifications: React.FC = () => {
                         <div
                             key={notification.id}
                             className={`p-4 rounded-xl border flex items-start gap-4 transition-colors ${notification.isRead
-                                ? "bg-white border-gray-200"
-                                : "bg-indigo-50/50 border-indigo-100 shadow-sm"
+                                ? "bg-card border-border"
+                                : "bg-indigo-50/50 dark:bg-indigo-900/10 border-indigo-100 dark:border-indigo-900/50 shadow-sm"
                                 }`}
                         >
                             <div className="flex-1 min-w-0 pt-1">
-                                <p className={`text-sm ${notification.isRead ? "text-gray-900" : "font-medium text-gray-900"}`}>
+                                <p className={`text-sm ${notification.isRead ? "text-foreground" : "font-medium text-foreground"}`}>
                                     {notification.message}
                                 </p>
-                                <p className="text-xs text-gray-500 mt-1.5 flex items-center gap-2">
+                                <p className="text-xs text-muted-foreground mt-1.5 flex items-center gap-2">
                                     {formatDate(notification.createdAt)}
                                     {notification.reportId && (
                                         <>
                                             <span>•</span>
                                             <Link
                                                 to={`/report/${notification.reportId}`}
-                                                className="text-indigo-600 hover:underline font-medium"
+                                                className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium"
                                                 onClick={() => !notification.isRead && markAsRead({ id: notification.id })}
                                             >
                                                 View Report
@@ -128,7 +128,7 @@ export const Notifications: React.FC = () => {
                                 {!notification.isRead && (
                                     <button
                                         onClick={() => markAsRead({ id: notification.id })}
-                                        className="p-1.5 text-indigo-500 hover:bg-indigo-100 rounded-lg transition-colors"
+                                        className="p-1.5 text-indigo-500 hover:bg-indigo-100 dark:hover:bg-indigo-900/30 rounded-lg transition-colors"
                                         title="Mark as read"
                                     >
                                         <Check className="w-4 h-4" />
@@ -136,7 +136,7 @@ export const Notifications: React.FC = () => {
                                 )}
                                 <button
                                     onClick={() => deleteNotification({ id: notification.id })}
-                                    className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                    className="p-1.5 text-muted-foreground hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                                     title="Delete notification"
                                 >
                                     <Trash2 className="w-4 h-4" />

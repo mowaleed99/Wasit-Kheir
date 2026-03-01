@@ -42,7 +42,7 @@ export const Profile: React.FC = () => {
   return (
     <div className="max-w-5xl mx-auto px-3 sm:px-6 py-4 sm:py-6">
       {/* Profile Header */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+      <div className="bg-card text-card-foreground rounded-lg shadow-sm border border-border mb-6">
         <div className="p-4 sm:p-8">
           <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
             <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6 text-center md:text-left">
@@ -56,35 +56,35 @@ export const Profile: React.FC = () => {
                       : `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.fullName || "User")}&background=3b82f6&color=fff&size=128`
                 }
                 alt={user?.fullName || "User"}
-                className="w-24 h-24 rounded-full object-cover border-4 border-gray-200"
+                className="w-24 h-24 rounded-full object-cover border-4 border-border"
               />
 
               {/* User Info */}
               <div className="flex flex-col items-center md:items-start">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                <h1 className="text-3xl font-bold text-foreground mb-2">
                   {user?.fullName || "Unknown User"}
                 </h1>
                 <div className="space-y-2">
                   {user?.email && (
-                    <div className="flex items-center space-x-2 text-gray-600">
+                    <div className="flex items-center space-x-2 text-muted-foreground">
                       <Mail className="w-4 h-4" />
                       <span className="text-sm">{user.email}</span>
                     </div>
                   )}
                   {user?.phoneNumber && (
-                    <div className="flex items-center space-x-2 text-gray-600">
+                    <div className="flex items-center space-x-2 text-muted-foreground">
                       <Phone className="w-4 h-4" />
                       <span className="text-sm">{user.phoneNumber}</span>
                     </div>
                   )}
                   {user?.address && (
-                    <div className="flex items-center space-x-2 text-gray-600">
+                    <div className="flex items-center space-x-2 text-muted-foreground">
                       <MapPin className="w-4 h-4" />
                       <span className="text-sm">{user.address}</span>
                     </div>
                   )}
                   {user?.createdAt && (
-                    <div className="flex items-center space-x-2 text-gray-600">
+                    <div className="flex items-center space-x-2 text-muted-foreground">
                       <Calendar className="w-4 h-4" />
                       <span className="text-sm">
                         Joined {formatDate(user.createdAt)}
@@ -102,7 +102,7 @@ export const Profile: React.FC = () => {
                 Edit Profile
               </Button>
               <Link to="/settings">
-                <Button variant="ghost" className="w-full sm:w-auto text-gray-600 hover:text-gray-900">
+                <Button variant="ghost" className="w-full sm:w-auto text-muted-foreground hover:text-foreground">
                   <Settings className="w-4 h-4 mr-2" />
                   Settings
                 </Button>
@@ -112,8 +112,8 @@ export const Profile: React.FC = () => {
 
           {/* Bio */}
           {user?.bio && (
-            <div className="mt-6 pt-6 border-t border-gray-200">
-              <p className="text-gray-700">{user.bio}</p>
+            <div className="mt-6 pt-6 border-t border-border">
+              <p className="text-muted-foreground">{user.bio}</p>
             </div>
           )}
         </div>
@@ -121,38 +121,38 @@ export const Profile: React.FC = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
+        <div className="bg-card rounded-lg shadow-sm border border-border p-6 text-center">
           <p className="text-3xl font-bold text-blue-600">{userPosts.length}</p>
-          <p className="text-sm text-gray-600 mt-1">Total Posts</p>
+          <p className="text-sm text-muted-foreground mt-1">Total Posts</p>
         </div>
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
+        <div className="bg-card rounded-lg shadow-sm border border-border p-6 text-center">
           <p className="text-3xl font-bold text-green-600">
             {userPosts.filter((p: any) => (p.type || '').toLowerCase().startsWith('found')).length}
           </p>
-          <p className="text-sm text-gray-600 mt-1">Found Items</p>
+          <p className="text-sm text-muted-foreground mt-1">Found Items</p>
         </div>
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
+        <div className="bg-card rounded-lg shadow-sm border border-border p-6 text-center">
           <p className="text-3xl font-bold text-orange-600">
             {userPosts.filter((p: any) => (p.type || '').toLowerCase().startsWith('lost')).length}
           </p>
-          <p className="text-sm text-gray-600 mt-1">Lost Items</p>
+          <p className="text-sm text-muted-foreground mt-1">Lost Items</p>
         </div>
-        <Link to="/saved-reports" className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center hover:border-blue-200 hover:bg-blue-50 transition-all group">
+        <Link to="/saved-reports" className="bg-card rounded-lg shadow-sm border border-border p-6 text-center hover:border-blue-200/50 hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-all group">
           <div className="flex justify-center mb-1">
             <Bookmark className="w-7 h-7 text-blue-500 group-hover:text-blue-600 transition-colors" />
           </div>
-          <p className="text-sm text-gray-600 mt-1 font-medium group-hover:text-blue-700 transition-colors">Saved Reports</p>
+          <p className="text-sm text-muted-foreground mt-1 font-medium group-hover:text-blue-700 transition-colors">Saved Reports</p>
         </Link>
       </div>
 
       {/* User's Posts */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h2 className="text-2xl font-bold mb-6">My Posts</h2>
+      <div className="bg-card rounded-lg shadow-sm border border-border p-6">
+        <h2 className="text-2xl font-bold mb-6 text-foreground">My Posts</h2>
 
         {postsLoading ? (
           <div className="text-center py-12">
             <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-gray-500">Loading your posts...</p>
+            <p className="text-muted-foreground">Loading your posts...</p>
           </div>
         ) : postsError ? (
           <div className="text-center py-12 bg-red-50 rounded-xl border border-red-100">
@@ -160,7 +160,7 @@ export const Profile: React.FC = () => {
           </div>
         ) : userPosts.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500">You haven't created any posts yet</p>
+            <p className="text-muted-foreground">You haven't created any posts yet</p>
             <Link to="/create-report">
               <Button className="mt-4">Create Your First Report</Button>
             </Link>
@@ -168,12 +168,12 @@ export const Profile: React.FC = () => {
         ) : (
           <div>
             {/* Tabs */}
-            <div className="flex flex-wrap justify-center sm:justify-start gap-2 mb-6 border-b border-gray-200">
+            <div className="flex flex-wrap justify-center sm:justify-start gap-2 mb-6 border-b border-border">
               <button
                 onClick={() => setActiveTab('all')}
                 className={`px-4 py-2 font-medium transition-colors ${activeTab === 'all'
                   ? 'text-blue-600 border-b-2 border-blue-600'
-                  : 'text-gray-600 hover:text-gray-900'
+                  : 'text-muted-foreground hover:text-foreground'
                   }`}
               >
                 All Posts ({userPosts.length})
@@ -182,7 +182,7 @@ export const Profile: React.FC = () => {
                 onClick={() => setActiveTab('lost')}
                 className={`px-4 py-2 font-medium transition-colors ${activeTab === 'lost'
                   ? 'text-orange-600 border-b-2 border-orange-600'
-                  : 'text-gray-600 hover:text-gray-900'
+                  : 'text-muted-foreground hover:text-foreground'
                   }`}
               >
                 Lost Items ({userPosts.filter((p: any) => (p.type || '').toLowerCase().startsWith('lost')).length})
@@ -191,7 +191,7 @@ export const Profile: React.FC = () => {
                 onClick={() => setActiveTab('found')}
                 className={`px-4 py-2 font-medium transition-colors ${activeTab === 'found'
                   ? 'text-green-600 border-b-2 border-green-600'
-                  : 'text-gray-600 hover:text-gray-900'
+                  : 'text-muted-foreground hover:text-foreground'
                   }`}
               >
                 Found Items ({userPosts.filter((p: any) => (p.type || '').toLowerCase().startsWith('found')).length})
@@ -201,7 +201,7 @@ export const Profile: React.FC = () => {
             {/* Posts Display */}
             <div className="space-y-4">
               {filteredPosts.length === 0 ? (
-                <div className="text-center py-12 text-gray-500">
+                <div className="text-center py-12 text-muted-foreground">
                   No {activeTab === 'all' ? '' : activeTab} posts found
                 </div>
               ) : (

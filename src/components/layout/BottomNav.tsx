@@ -16,7 +16,7 @@ export const BottomNav = () => {
     const navItem = (to: string, icon: React.ReactNode, label: string) => (
         <Link
             to={to}
-            className={`flex flex-col items-center gap-0.5 px-2 py-1 transition-colors ${isActive(to) ? 'text-blue-600' : 'text-gray-500 hover:text-blue-600'
+            className={`flex flex-col items-center gap-0.5 px-2 py-1 transition-colors ${isActive(to) ? 'text-blue-600' : 'text-muted-foreground hover:text-foreground'
                 }`}
         >
             {icon}
@@ -26,7 +26,7 @@ export const BottomNav = () => {
 
     return (
         <nav
-            className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-gray-200 md:hidden z-50"
+            className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t border-border md:hidden z-50"
             style={{ paddingBottom: "max(0.5rem, env(safe-area-inset-bottom))" }}
         >
             <div className="flex justify-around items-center max-w-md mx-auto px-2 pt-2 pb-1">

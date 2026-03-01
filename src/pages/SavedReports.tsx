@@ -18,27 +18,27 @@ export const SavedReports: React.FC = () => {
     return (
         <div className="max-w-5xl mx-auto px-4 py-8">
             <div className="flex items-center gap-3 mb-8">
-                <div className="p-2.5 bg-blue-100 rounded-xl">
-                    <Bookmark className="w-6 h-6 text-blue-600" />
+                <div className="p-2.5 bg-blue-100 dark:bg-blue-900/30 rounded-xl">
+                    <Bookmark className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                 </div>
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Saved Reports</h1>
-                    <p className="text-sm text-gray-500">Reports you've bookmarked for later</p>
+                    <h1 className="text-2xl font-bold text-foreground">Saved Reports</h1>
+                    <p className="text-sm text-muted-foreground">Reports you've bookmarked for later</p>
                 </div>
             </div>
 
             {isLoading ? (
                 <div className="flex flex-col items-center justify-center py-24">
                     <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4" />
-                    <p className="text-gray-500">Loading saved reports…</p>
+                    <p className="text-muted-foreground">Loading saved reports…</p>
                 </div>
             ) : savedList.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-24 text-center">
-                    <div className="p-5 bg-gray-100 rounded-full mb-4">
-                        <Bookmark className="w-10 h-10 text-gray-400" />
+                    <div className="p-5 bg-muted rounded-full mb-4">
+                        <Bookmark className="w-10 h-10 text-muted-foreground" />
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-700 mb-2">No saved reports yet</h3>
-                    <p className="text-gray-500 text-sm mb-6">
+                    <h3 className="text-xl font-semibold text-foreground mb-2">No saved reports yet</h3>
+                    <p className="text-muted-foreground text-sm mb-6">
                         Browse reports and click the bookmark icon to save them here.
                     </p>
                     <Link

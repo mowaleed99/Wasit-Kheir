@@ -19,10 +19,10 @@ const reportSchema = z.object({
 type ReportFormData = z.infer<typeof reportSchema>;
 
 const REPORT_TYPES = [
-    { value: "LostItem", label: "Lost Item", color: "text-red-600", activeClass: "bg-white text-red-600 shadow-sm" },
-    { value: "FoundItem", label: "Found Item", color: "text-green-600", activeClass: "bg-white text-green-600 shadow-sm" },
-    { value: "LostPerson", label: "Lost Person", color: "text-orange-600", activeClass: "bg-white text-orange-600 shadow-sm" },
-    { value: "FoundPerson", label: "Found Person", color: "text-blue-600", activeClass: "bg-white text-blue-600 shadow-sm" },
+    { value: "LostItem", label: "Lost Item", color: "text-red-600 dark:text-red-400", activeClass: "bg-card text-red-600 dark:text-red-400 shadow-sm border border-red-200 dark:border-red-900/50" },
+    { value: "FoundItem", label: "Found Item", color: "text-green-600 dark:text-green-400", activeClass: "bg-card text-green-600 dark:text-green-400 shadow-sm border border-green-200 dark:border-green-900/50" },
+    { value: "LostPerson", label: "Lost Person", color: "text-orange-600 dark:text-orange-400", activeClass: "bg-card text-orange-600 dark:text-orange-400 shadow-sm border border-orange-200 dark:border-orange-900/50" },
+    { value: "FoundPerson", label: "Found Person", color: "text-blue-600 dark:text-blue-400", activeClass: "bg-card text-blue-600 dark:text-blue-400 shadow-sm border border-blue-200 dark:border-blue-900/50" },
 ];
 
 export const ReportCreate = () => {
@@ -116,16 +116,16 @@ export const ReportCreate = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-8">
             {/* Report Type Selector */}
             <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                     Report Type <span className="text-red-500">*</span>
                 </label>
-                <div className="grid grid-cols-2 gap-2 bg-gray-100 p-1 rounded-xl">
+                <div className="grid grid-cols-2 gap-2 bg-muted p-1 rounded-xl">
                     {REPORT_TYPES.map((type) => (
                         <button
                             key={type.value}
                             type="button"
                             onClick={() => setReportType(type.value)}
-                            className={`py-2.5 px-3 rounded-lg text-sm font-medium transition-all duration-200 ${reportType === type.value ? type.activeClass : "text-gray-500 hover:text-gray-700"
+                            className={`py-2.5 px-3 rounded-lg text-sm font-medium transition-all duration-200 ${reportType === type.value ? type.activeClass : "text-muted-foreground hover:text-foreground hover:bg-card/50"
                                 }`}
                         >
                             {type.label}
@@ -136,16 +136,16 @@ export const ReportCreate = () => {
 
             {/* Title */}
             <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-foreground">
                     Title <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                    <div className="absolute top-1/2 -translate-y-1/2 left-3 text-gray-400">
+                    <div className="absolute top-1/2 -translate-y-1/2 left-3 text-muted-foreground">
                         <Type className="w-5 h-5" />
                     </div>
                     <input
                         {...register("title")}
-                        className={`w-full pl-10 pr-4 py-3 bg-gray-50 border ${errors.title ? "border-red-300" : "border-gray-200"} rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none text-gray-900 placeholder-gray-400`}
+                        className={`w-full pl-10 pr-4 py-3 bg-card border ${errors.title ? "border-red-500" : "border-border"} rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none text-foreground placeholder:text-muted-foreground`}
                         placeholder={`e.g. Lost black wallet near Cairo Mall`}
                     />
                 </div>
@@ -154,13 +154,13 @@ export const ReportCreate = () => {
 
             {/* Description */}
             <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-foreground">
                     Description <span className="text-red-500">*</span>
                 </label>
                 <textarea
                     {...register("description")}
                     rows={4}
-                    className={`w-full px-4 py-3 bg-gray-50 border ${errors.description ? "border-red-300" : "border-gray-200"} rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none resize-none text-gray-900 placeholder-gray-400`}
+                    className={`w-full px-4 py-3 bg-card border ${errors.description ? "border-red-500" : "border-border"} rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none resize-none text-foreground placeholder:text-muted-foreground`}
                     placeholder={`Describe the item in detail...`}
                 />
                 {errors.description && <p className="text-red-500 text-sm ml-1">{errors.description.message}</p>}
@@ -169,15 +169,15 @@ export const ReportCreate = () => {
             {/* Category Selection */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className="block text-sm font-medium text-foreground">
                         Category <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
-                        <div className="absolute top-1/2 -translate-y-1/2 left-3 text-gray-400">
+                        <div className="absolute top-1/2 -translate-y-1/2 left-3 text-muted-foreground">
                             <Tag className="w-5 h-5" />
                         </div>
                         <select
-                            className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none appearance-none text-gray-900"
+                            className="w-full pl-10 pr-4 py-3 bg-card border border-border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none appearance-none text-foreground"
                             onChange={(e) => setSelectedCategory(Number(e.target.value))}
                             value={selectedCategory || ""}
                         >
@@ -192,16 +192,16 @@ export const ReportCreate = () => {
                 </div>
 
                 <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className="block text-sm font-medium text-foreground">
                         Subcategory <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
-                        <div className="absolute top-1/2 -translate-y-1/2 left-3 text-gray-400">
+                        <div className="absolute top-1/2 -translate-y-1/2 left-3 text-muted-foreground">
                             <Tag className="w-5 h-5" />
                         </div>
                         <select
                             {...register("subCategoryId", { valueAsNumber: true })}
-                            className={`w-full pl-10 pr-4 py-3 bg-gray-50 border ${errors.subCategoryId ? "border-red-300" : "border-gray-200"} rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none appearance-none text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed`}
+                            className={`w-full pl-10 pr-4 py-3 bg-card border ${errors.subCategoryId ? "border-red-500" : "border-border"} rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none appearance-none text-foreground disabled:opacity-50 disabled:cursor-not-allowed`}
                             disabled={!selectedCategory}
                         >
                             <option value="">Select Subcategory</option>
@@ -218,38 +218,38 @@ export const ReportCreate = () => {
 
             {/* Date Reported */}
             <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
-                    Date Reported <span className="text-gray-400 font-normal">(Optional)</span>
+                <label className="block text-sm font-medium text-foreground">
+                    Date Reported <span className="text-muted-foreground font-normal">(Optional)</span>
                 </label>
                 <input
                     type="date"
                     {...register("dateReported")}
                     max={new Date().toISOString().split("T")[0]}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none text-gray-900"
+                    className="w-full px-4 py-3 bg-card border border-border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none text-foreground"
                 />
             </div>
 
             {/* Location */}
             <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
-                    Location <span className="text-gray-400 font-normal">(Optional)</span>
+                <label className="block text-sm font-medium text-foreground">
+                    Location <span className="text-muted-foreground font-normal">(Optional)</span>
                 </label>
                 {!showMap ? (
                     <button
                         type="button"
                         onClick={() => setShowMap(true)}
-                        className="w-full flex items-center justify-center gap-2 py-4 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50 transition-all group"
+                        className="w-full flex items-center justify-center gap-2 py-4 border-2 border-dashed border-border rounded-xl text-muted-foreground hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-all group"
                     >
                         <MapPin className="w-5 h-5 group-hover:scale-110 transition-transform" />
                         <span>{location ? location.address : "Click to pick a location on the map"}</span>
                     </button>
                 ) : (
                     <div className="space-y-2">
-                        <div className="rounded-xl overflow-hidden border border-gray-200 h-80 relative">
+                        <div className="rounded-xl overflow-hidden border border-border h-80 relative">
                             <button
                                 type="button"
                                 onClick={() => setShowMap(false)}
-                                className="absolute top-2 right-2 z-[1000] bg-white p-2 rounded-full shadow-md hover:bg-gray-100"
+                                className="absolute top-2 right-2 z-[1000] bg-card p-2 rounded-full shadow-md text-muted-foreground hover:text-foreground hover:bg-muted"
                             >
                                 <X className="w-4 h-4" />
                             </button>
@@ -272,12 +272,12 @@ export const ReportCreate = () => {
 
             {/* Photos */}
             <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
-                    Photos <span className="text-gray-400 font-normal">(Optional)</span>
+                <label className="block text-sm font-medium text-foreground">
+                    Photos <span className="text-muted-foreground font-normal">(Optional)</span>
                 </label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {previews.map((preview, index) => (
-                        <div key={index} className="relative aspect-square rounded-xl overflow-hidden group border border-gray-200">
+                        <div key={index} className="relative aspect-square rounded-xl overflow-hidden group border border-border">
                             <img src={preview} alt={`Preview ${index + 1}`} className="w-full h-full object-cover" />
                             <button
                                 type="button"
@@ -288,11 +288,11 @@ export const ReportCreate = () => {
                             </button>
                         </div>
                     ))}
-                    <label className="aspect-square flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-all group">
-                        <div className="p-3 rounded-full bg-gray-100 group-hover:bg-blue-100 transition-colors mb-2">
-                            <ImageIcon className="w-6 h-6 text-gray-400 group-hover:text-blue-500" />
+                    <label className="aspect-square flex flex-col items-center justify-center border-2 border-dashed border-border rounded-xl cursor-pointer hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-all group">
+                        <div className="p-3 rounded-full bg-muted group-hover:bg-blue-100 dark:group-hover:bg-blue-900/30 transition-colors mb-2">
+                            <ImageIcon className="w-6 h-6 text-muted-foreground group-hover:text-blue-500" />
                         </div>
-                        <span className="text-sm text-gray-500 group-hover:text-blue-600 font-medium">Add Photo</span>
+                        <span className="text-sm text-muted-foreground group-hover:text-blue-600 font-medium">Add Photo</span>
                         <input type="file" accept="image/*" multiple className="hidden" onChange={handleImageChange} />
                     </label>
                 </div>
@@ -300,8 +300,8 @@ export const ReportCreate = () => {
 
             {/* Submit Error */}
             {submitError && (
-                <div className="rounded-xl bg-red-50 border border-red-200 p-4">
-                    <p className="text-red-600 text-sm">{submitError}</p>
+                <div className="rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50 p-4">
+                    <p className="text-red-600 dark:text-red-400 text-sm">{submitError}</p>
                 </div>
             )}
 

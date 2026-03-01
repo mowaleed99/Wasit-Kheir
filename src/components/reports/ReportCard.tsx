@@ -2,10 +2,10 @@ import { Link } from "react-router-dom";
 import { MapPin, Calendar, Tag } from "lucide-react";
 
 const typeColors: Record<string, string> = {
-    LostItem: "bg-red-100 text-red-700 border-red-200",
-    FoundItem: "bg-green-100 text-green-700 border-green-200",
-    LostPerson: "bg-orange-100 text-orange-700 border-orange-200",
-    FoundPerson: "bg-blue-100 text-blue-700 border-blue-200",
+    LostItem: "bg-red-100 text-red-700 border-red-200 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20",
+    FoundItem: "bg-green-100 text-green-700 border-green-200 dark:bg-green-500/10 dark:text-green-400 dark:border-green-500/20",
+    LostPerson: "bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-500/10 dark:text-orange-400 dark:border-orange-500/20",
+    FoundPerson: "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20",
 };
 
 const typeLabels: Record<string, string> = {
@@ -33,7 +33,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report }) => {
         return `${diffDays}d ago`;
     };
 
-    const typeClass = typeColors[report.type] || "bg-gray-100 text-gray-700 border-gray-200";
+    const typeClass = typeColors[report.type] || "bg-muted text-muted-foreground border-border";
     const typeLabel = typeLabels[report.type] || report.type;
     const firstImage = report.images?.[0]?.imageUrl;
     const imageUrl = firstImage
@@ -43,11 +43,11 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report }) => {
     return (
         <Link
             to={`/report/${report.id}`}
-            className="group bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col"
+            className="group bg-card text-card-foreground rounded-2xl border border-border shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col"
         >
             {/* Image */}
             {imageUrl && (
-                <div className="w-full h-48 bg-gray-100 overflow-hidden">
+                <div className="w-full h-48 bg-muted overflow-hidden">
                     <img
                         src={imageUrl}
                         alt={report.title}
@@ -63,24 +63,24 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report }) => {
                         {typeLabel}
                     </span>
                     {report.lifecycleStatus && (
-                        <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200">
+                        <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground border border-border">
                             {report.lifecycleStatus}
                         </span>
                     )}
                 </div>
 
                 {/* Title */}
-                <h3 className="font-semibold text-gray-900 text-base leading-snug group-hover:text-blue-600 transition-colors line-clamp-2">
+                <h3 className="font-semibold text-foreground text-base leading-snug group-hover:text-blue-600 transition-colors line-clamp-2">
                     {report.title}
                 </h3>
 
                 {/* Description */}
                 {report.description && (
-                    <p className="text-gray-500 text-sm line-clamp-2">{report.description}</p>
+                    <p className="text-muted-foreground text-sm line-clamp-2">{report.description}</p>
                 )}
 
                 {/* Meta */}
-                <div className="flex items-center gap-4 text-xs text-gray-400 mt-auto pt-2 border-t border-gray-100">
+                <div className="flex items-center gap-4 text-xs text-muted-foreground mt-auto pt-2 border-t border-border">
                     {report.locationName && (
                         <span className="flex items-center gap-1">
                             <MapPin className="w-3 h-3" />
@@ -109,9 +109,9 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report }) => {
                                     : `https://ui-avatars.com/api/?name=${encodeURIComponent(report.createdByName)}&background=random&color=fff`
                             }
                             alt={report.createdByName}
-                            className="w-6 h-6 rounded-full object-cover border border-gray-200"
+                            className="w-6 h-6 rounded-full object-cover border border-border"
                         />
-                        <span className="text-xs text-gray-500">{report.createdByName}</span>
+                        <span className="text-xs text-muted-foreground">{report.createdByName}</span>
                     </div>
                 )}
             </div>
