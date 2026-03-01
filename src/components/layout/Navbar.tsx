@@ -152,7 +152,13 @@ export const Navbar: React.FC = () => {
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 to-purple-500 rounded-full blur opacity-0 group-hover:opacity-50 transition-opacity"></div>
               <img
-                src={user?.avatar || user?.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.fullName || 'User')}&background=3b82f6&color=fff`}
+                src={
+                  user?.profilePicture
+                    ? (user.profilePicture.startsWith('http') ? user.profilePicture : `https://wasitkheir.runasp.net${user.profilePicture}`)
+                    : user?.avatar
+                      ? user.avatar
+                      : `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.fullName || 'User')}&background=3b82f6&color=fff`
+                }
                 alt={user?.fullName || 'User'}
                 className="relative w-9 h-9 rounded-full object-cover border-2 border-white shadow-sm group-hover:border-blue-100 transition-all"
               />

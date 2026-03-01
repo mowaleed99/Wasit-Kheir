@@ -123,7 +123,8 @@ export const EditProfileModal = ({ user, isOpen, onClose }: EditProfileModalProp
 
     if (!isOpen) return null;
 
-    const currentPhoto = photoPreview || user?.avatar || user?.profilePicture;
+    const profilePic = user?.profilePicture ? (user.profilePicture.startsWith('http') ? user.profilePicture : `https://wasitkheir.runasp.net${user.profilePicture}`) : null;
+    const currentPhoto = photoPreview || profilePic || user?.avatar;
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">

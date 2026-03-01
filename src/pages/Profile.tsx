@@ -37,6 +37,8 @@ export const Profile: React.FC = () => {
     });
   };
 
+  console.log("Profile User:", user);
+
   return (
     <div className="max-w-5xl mx-auto p-6">
       {/* Profile Header */}
@@ -47,11 +49,11 @@ export const Profile: React.FC = () => {
               {/* Avatar */}
               <img
                 src={
-                  user?.avatar ||
-                  user?.profilePicture ||
-                  `https://ui-avatars.com/api/?name=${encodeURIComponent(
-                    user?.fullName || "User"
-                  )}&background=3b82f6&color=fff&size=128`
+                  user?.profilePicture
+                    ? (user.profilePicture.startsWith('http') ? user.profilePicture : `https://wasitkheir.runasp.net${user.profilePicture}`)
+                    : user?.avatar
+                      ? user.avatar
+                      : `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.fullName || "User")}&background=3b82f6&color=fff&size=128`
                 }
                 alt={user?.fullName || "User"}
                 className="w-24 h-24 rounded-full object-cover border-4 border-gray-200"
