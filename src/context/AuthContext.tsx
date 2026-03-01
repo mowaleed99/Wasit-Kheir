@@ -7,6 +7,8 @@ import {
 } from "react";
 import { useUser } from "@/api";
 import { removeAuthToken } from "@/api/mutator";
+import { requestForToken } from "@/lib/firebase";
+import { usePostApiNotificationsRegisterDevice } from "@/api/generated/notifications/notifications";
 
 interface AuthContextType {
   user: any | null;
@@ -34,6 +36,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<any>(null);
 
+  const { mutate: registerDeviceToken } = usePostApiNotificationsRegisterDevice();
+
   useEffect(() => {
     console.log("AuthContext - userData:", userData, "error:", error, "isLoading:", isLoading);
     if (userData) {
@@ -43,6 +47,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (userObj && (userObj.id || userObj.email)) {
         setUser(userObj);
         setIsAuthenticated(true);
+
+        // Register device for push notifications
+        requestForToken().then((token) => {
+          if (token) {
+            registerDeviceToken({ data: { token, platform: "web" } });
+          }
+        }).catch(err => console.error("Push registration error:", err));
+
       } else {
         console.log("User data exists but invalid, setting not authenticated");
         setUser(null);
