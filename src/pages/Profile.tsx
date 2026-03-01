@@ -49,8 +49,8 @@ export const Profile: React.FC = () => {
               {/* Avatar */}
               <img
                 src={
-                  user?.profilePicture
-                    ? (user.profilePicture.startsWith('http') ? user.profilePicture : `https://wasitkheir.runasp.net${user.profilePicture}`)
+                  user?.profilePictureUrl
+                    ? (user.profilePictureUrl.startsWith('http') ? user.profilePictureUrl : `https://wasitkheir.runasp.net${user.profilePictureUrl}`)
                     : user?.avatar
                       ? user.avatar
                       : `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.fullName || "User")}&background=3b82f6&color=fff&size=128`
