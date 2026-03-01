@@ -85,11 +85,8 @@ export const EditProfileModal = ({ user, isOpen, onClose }: EditProfileModalProp
                 onSuccess: () => {
                     // If there's a photo to upload, upload it
                     if (selectedPhoto) {
-                        const photoFormData = new FormData();
-                        photoFormData.append('file', selectedPhoto);
-
                         uploadProfilePicture(
-                            { data: photoFormData as any },
+                            { data: { file: selectedPhoto } },
                             {
                                 onSuccess: () => {
                                     queryClient.invalidateQueries({ queryKey: ["/api/Users/me"] });
