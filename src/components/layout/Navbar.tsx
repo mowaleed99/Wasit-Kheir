@@ -51,8 +51,8 @@ export const Navbar: React.FC = () => {
           </Link>
         </div>
 
-        {/* Center: Icon Navigation */}
-        <div className="flex items-center space-x-1 md:space-x-2 mx-4">
+        {/* Center: Icon Navigation (Hidden on mobile) */}
+        <div className="hidden md:flex items-center space-x-1 md:space-x-2 mx-4">
           {(user?.roles?.includes("Admin") || user?.email === "lost.found2026@gmail.com") && (
             <Link
               to="/admin"

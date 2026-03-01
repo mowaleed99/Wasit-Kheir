@@ -78,15 +78,15 @@ export const AdminDashboard: React.FC = () => {
     };
 
     return (
-        <div className="max-w-6xl mx-auto p-6">
-            <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-                <p className="text-gray-500 mt-2">Manage and review incoming reports.</p>
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-6">
+            <div className="mb-6">
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+                <p className="text-gray-500 mt-2 text-sm">Manage and review incoming reports.</p>
             </div>
 
             {/* Dashboard Stats */}
             {!dashboardLoading && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-8">
                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-5">
                         <div className="p-4 bg-blue-50 text-blue-600 rounded-2xl">
                             <Activity className="w-8 h-8" />

@@ -3,6 +3,7 @@ import { CategoryTree } from "../categories/CategoryTree";
 import { useTranslation } from "react-i18next";
 import { useSettings } from "@/context/SettingsContext";
 import { Navbar } from "./Navbar";
+import { BottomNav } from "./BottomNav";
 
 export const HomeLayout: React.FC = () => {
   const { direction } = useSettings();
@@ -22,10 +23,11 @@ export const HomeLayout: React.FC = () => {
           <CategoryTree />
         </div>
         {/* Center: Feed */}
-        <div className="flex-1 overflow-y-auto p-4">
+        <div className="flex-1 overflow-y-auto p-4 pb-20 md:pb-4 relative">
           <Outlet />
         </div>
       </div>
+      <BottomNav />
     </div>
   );
 };

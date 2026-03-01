@@ -40,10 +40,10 @@ export const Profile: React.FC = () => {
   console.log("Profile User:", user);
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="max-w-5xl mx-auto px-3 sm:px-6 py-4 sm:py-6">
       {/* Profile Header */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
-        <div className="p-8">
+        <div className="p-4 sm:p-8">
           <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
             <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6 text-center md:text-left">
               {/* Avatar */}
@@ -112,7 +112,7 @@ export const Profile: React.FC = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
           <p className="text-3xl font-bold text-blue-600">{userPosts.length}</p>
           <p className="text-sm text-gray-600 mt-1">Total Posts</p>

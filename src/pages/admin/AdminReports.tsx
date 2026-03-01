@@ -67,7 +67,7 @@ export const AdminReports: React.FC = () => {
 
             {/* Dashboard Stats */}
             {!dashboardLoading && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-8">
                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-5">
                         <div className="p-4 bg-blue-50 text-blue-600 rounded-2xl">
                             <Activity className="w-8 h-8" />

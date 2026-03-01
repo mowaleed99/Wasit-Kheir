@@ -48,17 +48,17 @@ export const SearchPage: React.FC = () => {
         <div className="min-h-screen bg-gray-50 pb-12">
             <div className="max-w-7xl mx-auto px-4 py-8">
                 {/* Header */}
-                <div className="mb-8">
-                    <h1 className="text-4xl font-bold text-gray-900 mb-2">Search Posts</h1>
-                    <p className="text-gray-600">Find lost or found items using advanced filters</p>
+                <div className="mb-6">
+                    <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-2">Search Posts</h1>
+                    <p className="text-gray-600 text-sm sm:text-base">Find lost or found items using advanced filters</p>
                 </div>
 
                 {/* Search Form */}
                 <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 mb-6">
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                         {/* Main Search Bar */}
-                        <div className="flex gap-3">
-                            <div className="flex-1 relative">
+                        <div className="flex flex-wrap gap-2">
+                            <div className="flex-1 min-w-[180px] relative">
                                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                                 <input
                                     {...register("Search")}

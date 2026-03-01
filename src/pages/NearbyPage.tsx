@@ -53,9 +53,9 @@ export const NearbyPage: React.FC = () => {
         <div className="min-h-screen bg-gray-50 pb-12">
             <div className="max-w-7xl mx-auto px-4 py-8">
                 {/* Header */}
-                <div className="mb-8">
-                    <h1 className="text-4xl font-bold text-gray-900 mb-2">Nearby Posts</h1>
-                    <p className="text-gray-600">Find lost or found items near your location</p>
+                <div className="mb-6">
+                    <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-2">Nearby Posts</h1>
+                    <p className="text-gray-600 text-sm">Find lost or found items near your location</p>
                 </div>
 
                 {/* Search Controls */}

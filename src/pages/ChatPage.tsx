@@ -26,8 +26,8 @@ export const ChatPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 pt-20 pb-8 px-4">
-            <div className="max-w-6xl mx-auto h-[calc(100vh-8rem)] bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden flex">
+        <div className="bg-gray-50 h-[calc(100vh-4rem)] pb-16 md:pb-0">
+            <div className="max-w-6xl mx-auto h-full bg-white md:rounded-3xl shadow-sm border-0 md:border border-gray-200 overflow-hidden flex">
                 {/* Sidebar - Chat List */}
                 <div className={`w-full md:w-80 lg:w-96 border-r border-gray-200 flex flex-col ${selectedSessionId ? 'hidden md:flex' : 'flex'}`}>
                     <div className="p-4 border-b border-gray-100 flex items-center justify-between">
