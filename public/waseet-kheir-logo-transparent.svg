@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Main beacon circle -->
+  <circle cx="256" cy="256" r="192" fill="white" />
+  
+  <!-- Inner icon - Two paths meeting -->
+  <g transform="translate(136, 136)">
+    <!-- Left path coming in -->
+    <path
+      d="M 32 120 Q 60 80 100 112"
+      stroke="#2563EB"
+      strokeWidth="12"
+      strokeLinecap="round"
+      fill="none"
+    />
+    
+    <!-- Right path coming in -->
+    <path
+      d="M 208 120 Q 180 80 140 112"
+      stroke="#2563EB"
+      strokeWidth="12"
+      strokeLinecap="round"
+      fill="none"
+    />
+    
+    <!-- Center meeting point - The connection -->
+    <circle cx="120" cy="120" r="32" fill="#10B981" />
+    
+    <!-- Small people symbols at path ends -->
+    <circle cx="32" cy="120" r="12" fill="#2563EB" />
+    <circle cx="208" cy="120" r="12" fill="#2563EB" />
+    
+    <!-- Connection complete indicator - rays -->
+    <g>
+      <path d="M 120 60 L 120 40" stroke="#10B981" strokeWidth="8" strokeLinecap="round" />
+      <path d="M 120 200 L 120 180" stroke="#10B981" strokeWidth="8" strokeLinecap="round" />
+      <path d="M 60 120 L 40 120" stroke="#10B981" strokeWidth="8" strokeLinecap="round" />
+      <path d="M 200 120 L 180 120" stroke="#10B981" strokeWidth="8" strokeLinecap="round" />
+    </g>
+  </g>
+  
+  <!-- Corner accent dots -->
+  <circle cx="492" cy="20" r="12" fill="#10B981" opacity="0.8" />
+  <circle cx="20" cy="492" r="8" fill="white" opacity="0.6" />
+</svg>

@@ -33,9 +33,9 @@ export const Navbar: React.FC = () => {
             <div className="relative">
               <div className="absolute inset-0 bg-blue-500 blur-lg opacity-20 group-hover:opacity-40 transition-opacity rounded-full"></div>
               <img
-                src="/logo.jpg"
-                alt="Lost & Found"
-                className="relative h-10 w-10 rounded-full object-cover border-2 border-white shadow-md group-hover:scale-105 transition-transform duration-200"
+                src="/logo1.png"
+                alt="Waseet Kheir"
+                className="relative h-10 w-10 rounded-full object-cover border-2 border-white shadow-md group-hover:scale-105 transition-transform duration-200 bg-white"
               />
             </div>
           </Link>
