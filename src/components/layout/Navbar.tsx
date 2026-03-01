@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useSettings } from "@/context/SettingsContext";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/Button";
-import { Search, Home, Bell, Settings, MessageCircle, ShieldCheck } from "lucide-react";
+import { Search, Home, Bell, Settings, MessageCircle, ShieldCheck, MapPin } from "lucide-react";
 import { useGetApiNotificationsUnread } from "@/api/generated/notifications/notifications";
 import { Link, useLocation } from "react-router-dom";
 
@@ -79,6 +79,20 @@ export const Navbar: React.FC = () => {
           >
             <Home className={`w-6 h-6 ${isActive("/") ? "fill-current" : ""}`} />
             {isActive("/") && (
+              <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-blue-600 rounded-full mb-1"></span>
+            )}
+          </Link>
+
+          <Link
+            to="/nearby"
+            className={`p-2.5 rounded-xl transition-all duration-200 group relative ${isActive("/nearby")
+              ? "text-blue-600 bg-blue-50"
+              : "text-gray-500 hover:text-blue-600 hover:bg-gray-50"
+              }`}
+            title="Nearby Reports"
+          >
+            <MapPin className={`w-6 h-6 ${isActive("/nearby") ? "fill-current" : ""}`} />
+            {isActive("/nearby") && (
               <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-blue-600 rounded-full mb-1"></span>
             )}
           </Link>
