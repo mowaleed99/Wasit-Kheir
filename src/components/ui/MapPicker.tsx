@@ -23,6 +23,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<L.Map | null>(null);
   const marker = useRef<L.Marker | null>(null);
+  const lastLocation = useRef<{ lat: number; lng: number } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -110,19 +111,26 @@ export const MapPicker: React.FC<MapPickerProps> = ({
       }
       if (marker.current) {
         marker.current.remove();
+        marker.current = null;
+      }
+      if (map.current) {
+        map.current.remove();
+        map.current = null;
       }
     };
   }, []); // Run only once
 
-  // Separate effect to handle updates to initialLocation
+  // Separate effect to handle updates to initialLocation — only fly if coords actually changed
   useEffect(() => {
-    if (map.current && initialLocation) {
-      map.current.setView([initialLocation.lat, initialLocation.lng], 13);
-      if (marker.current) {
-        marker.current.remove();
-      }
-      marker.current = L.marker([initialLocation.lat, initialLocation.lng]).addTo(map.current);
+    if (!map.current || !initialLocation) return;
+    const prev = lastLocation.current;
+    if (prev && prev.lat === initialLocation.lat && prev.lng === initialLocation.lng) return;
+    lastLocation.current = initialLocation;
+    map.current.setView([initialLocation.lat, initialLocation.lng], 13);
+    if (marker.current) {
+      marker.current.remove();
     }
+    marker.current = L.marker([initialLocation.lat, initialLocation.lng]).addTo(map.current);
   }, [initialLocation]);
 
   // Get current location
