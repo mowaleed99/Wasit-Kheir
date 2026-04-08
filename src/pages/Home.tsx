@@ -5,8 +5,10 @@ import { useCategoryFilter } from "@/context/CategoryFilterContext";
 import { Link } from "react-router-dom";
 import { Plus, Search, X } from "lucide-react";
 import { ReportCard } from "@/components/reports/ReportCard";
+import { useTranslation } from "react-i18next";
 
 export const Home = () => {
+  const { t } = useTranslation();
   const { isAuthenticated, isLoading: authLoading } = useAuth();
   const { selectedCategoryId, selectedSubCategoryId, clearFilter } = useCategoryFilter();
 
@@ -58,7 +60,7 @@ export const Home = () => {
   if (!isAuthenticated) {
     return (
       <div className="flex items-center justify-center h-full">
-        <p className="text-lg">Please login</p>
+        <p className="text-lg">{t('home.pleaseLogin')}</p>
       </div>
     );
   }
@@ -69,12 +71,12 @@ export const Home = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-foreground mb-1">Wasit Kheir</h1>
-            <p className="text-muted-foreground">Help your community find what matters</p>
+            <h1 className="text-3xl font-bold text-foreground mb-1">{t('app.title')}</h1>
+            <p className="text-muted-foreground">{t('home.subtitle')}</p>
             {hasFilter && (
               <div className="mt-2 flex items-center gap-2">
                 <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
-                  Filtered by category
+                  {t('home.filteredByCategory')}
                   <button
                     onClick={clearFilter}
                     className="ml-1 hover:bg-blue-200 dark:hover:bg-blue-800 rounded-full p-0.5 transition-colors"
@@ -91,7 +93,7 @@ export const Home = () => {
             className="w-full sm:w-auto text-center justify-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
           >
             <Plus className="w-5 h-5 mx-auto sm:mx-0" />
-            <span>Report</span>
+            <span>{t('home.reportButton')}</span>
           </Link>
         </div>
 
@@ -101,7 +103,7 @@ export const Home = () => {
         {loading && (
           <div className="text-center py-12">
             <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-muted-foreground text-lg">Loading reports...</p>
+            <p className="text-muted-foreground text-lg">{t('home.loadingReports')}</p>
           </div>
         )}
 
@@ -109,10 +111,10 @@ export const Home = () => {
         {error && !loading && (
           <div className="text-center py-12 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-100 dark:border-red-900/30">
             <p className="text-red-600 dark:text-red-400 text-lg">
-              Unable to load reports. Please try again later.
+              {t('home.errorLoading')}
             </p>
             <p className="text-red-400 text-sm mt-2">
-              {(error as any)?.message || "Unknown error"}
+              {(error as any)?.message || t('home.unknownError')}
             </p>
           </div>
         )}
@@ -128,13 +130,13 @@ export const Home = () => {
                     <div className="bg-muted rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                       <Search className="w-8 h-8 text-muted-foreground" />
                     </div>
-                    <h3 className="text-lg font-medium text-foreground">No reports found</h3>
-                    <p className="text-muted-foreground mt-1">No reports match the selected category</p>
+                    <h3 className="text-lg font-medium text-foreground">{t('home.noReportsFound')}</h3>
+                    <p className="text-muted-foreground mt-1">{t('home.noReportsMatch')}</p>
                     <button
                       onClick={clearFilter}
                       className="mt-4 text-blue-600 hover:text-blue-700 font-medium"
                     >
-                      Clear filter
+                      {t('home.clearFilter')}
                     </button>
                   </div>
                 ) : (
@@ -151,8 +153,8 @@ export const Home = () => {
                     <div className="bg-muted rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                       <Search className="w-8 h-8 text-muted-foreground" />
                     </div>
-                    <h3 className="text-lg font-medium text-foreground">No reports yet</h3>
-                    <p className="text-muted-foreground mt-1">Be the first to report a lost or found item!</p>
+                    <h3 className="text-lg font-medium text-foreground">{t('home.noReportsYet')}</h3>
+                    <p className="text-muted-foreground mt-1">{t('home.beTheFirst')}</p>
                   </div>
                 ) : (
                   <InfiniteScroll

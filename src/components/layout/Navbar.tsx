@@ -7,7 +7,7 @@ import { useGetApiNotificationsUnread } from "@/api/generated/notifications/noti
 import { Link, useLocation } from "react-router-dom";
 
 export const Navbar: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { toggleLanguage } = useSettings();
   const { user } = useAuth();
   const location = useLocation();
@@ -60,7 +60,7 @@ export const Navbar: React.FC = () => {
                 ? "text-blue-600 bg-blue-50 dark:bg-blue-500/10"
                 : "text-muted-foreground hover:text-blue-600 hover:bg-muted"
                 }`}
-              title="Admin Dashboard"
+              title={t("admin.dashboard.title")}
             >
               <ShieldCheck className={`w-6 h-6 ${isActive("/admin") ? "fill-current" : ""}`} />
               {isActive("/admin") && (
@@ -89,7 +89,7 @@ export const Navbar: React.FC = () => {
               ? "text-blue-600 bg-blue-50 dark:bg-blue-500/10"
               : "text-muted-foreground hover:text-blue-600 hover:bg-muted"
               }`}
-            title="Nearby Reports"
+            title="Nearby"
           >
             <MapPin className={`w-6 h-6 ${isActive("/nearby") ? "fill-current" : ""}`} />
             {isActive("/nearby") && (
@@ -103,7 +103,7 @@ export const Navbar: React.FC = () => {
               ? "text-blue-600 bg-blue-50 dark:bg-blue-500/10"
               : "text-muted-foreground hover:text-blue-600 hover:bg-muted"
               }`}
-            title="Chat"
+            title="Messages"
           >
             <MessageCircle className={`w-6 h-6 ${isActive("/chat") ? "fill-current" : ""}`} />
             {/* Unread Badge Placeholder */}
@@ -139,20 +139,20 @@ export const Navbar: React.FC = () => {
         </div>
 
         {/* Right: User Profile & Language Toggle */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 rtl:space-x-reverse">
           <Button
             onClick={toggleLanguage}
             variant="ghost"
             className="text-xs font-medium px-3 py-1.5 rounded-full bg-muted hover:bg-muted/80 text-muted-foreground transition-colors hidden sm:block"
           >
-            EN/AR
+            {i18n.language === "ar" ? "EN" : "AR"}
           </Button>
 
           {/* Mobile-only Search Icon */}
           <Link
             to="/search"
             className="md:hidden p-2 rounded-xl text-muted-foreground hover:text-blue-600 hover:bg-muted transition-all"
-            title="Search"
+            title={t("search")}
           >
             <Search className="w-5 h-5" />
           </Link>

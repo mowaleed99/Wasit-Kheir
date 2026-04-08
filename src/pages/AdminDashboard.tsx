@@ -9,8 +9,10 @@ import {
 import { useGetApiHomeDashboard } from "@/api/generated/home/home";
 import { queryClient } from "@/api";
 import { CheckCircle, XCircle, Search, Clock, Activity } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export const AdminDashboard: React.FC = () => {
+    const { t } = useTranslation();
     const { user, isAuthenticated, isLoading: authLoading } = useAuth();
     const [activeTab, setActiveTab] = useState<"Pending" | "Approved" | "Rejected">("Pending");
 
@@ -33,8 +35,6 @@ export const AdminDashboard: React.FC = () => {
     });
 
     const dashboardData = (dashboardRaw as any)?.data?.data || (dashboardRaw as any)?.data || dashboardRaw || {};
-    console.log("Admin Dashboard Stats raw:", dashboardRaw);
-    console.log("Admin Dashboard Stats parsed:", dashboardData);
 
     const { mutate: approveReport, isPending: isApproving } = usePutApiAdminReportsIdApprove();
     const { mutate: rejectReport, isPending: isRejecting } = usePutApiAdminReportsIdReject();
@@ -80,8 +80,8 @@ export const AdminDashboard: React.FC = () => {
     return (
         <div className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-6">
             <div className="mb-6">
-                <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Admin Dashboard</h1>
-                <p className="text-muted-foreground mt-2 text-sm">Manage and review incoming reports.</p>
+                <h1 className="text-2xl sm:text-3xl font-bold text-foreground">{t('admin.dashboard.title')}</h1>
+                <p className="text-muted-foreground mt-2 text-sm">{t('admin.dashboard.subtitle')}</p>
             </div>
 
             {/* Dashboard Stats */}
@@ -92,7 +92,7 @@ export const AdminDashboard: React.FC = () => {
                             <Activity className="w-8 h-8" />
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Total Reports</p>
+                            <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">{t('admin.dashboard.totalReports')}</p>
                             <p className="text-3xl font-bold text-foreground mt-1">{dashboardData.totalReportsCount ?? 0}</p>
                         </div>
                     </div>
@@ -102,7 +102,7 @@ export const AdminDashboard: React.FC = () => {
                             <Activity className="w-8 h-8" />
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Platform Categories</p>
+                            <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">{t('admin.dashboard.platformCategories')}</p>
                             <p className="text-3xl font-bold text-foreground mt-1">{dashboardData.categoriesCount ?? 0}</p>
                         </div>
                     </div>
@@ -120,7 +120,7 @@ export const AdminDashboard: React.FC = () => {
                             : "text-muted-foreground border-transparent hover:text-foreground hover:border-border"
                             }`}
                     >
-                        {tab}
+                        {t(`admin.reports.tabs.${tab}`)}
                     </button>
                 ))}
             </div>
@@ -130,29 +130,29 @@ export const AdminDashboard: React.FC = () => {
                 {reportsLoading ? (
                     <div className="text-center py-12">
                         <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                        <p className="text-muted-foreground">Loading reports...</p>
+                        <p className="text-muted-foreground">{t('admin.reports.loading')}</p>
                     </div>
                 ) : reportsError ? (
                     <div className="text-center py-12 bg-red-50 dark:bg-red-900/20">
-                        <p className="text-red-600 dark:text-red-400">Failed to load reports.</p>
+                        <p className="text-red-600 dark:text-red-400">{t('admin.reports.error')}</p>
                     </div>
                 ) : reportsList.length === 0 ? (
                     <div className="text-center py-16">
                         <div className="bg-muted rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                             <Search className="w-8 h-8 text-muted-foreground" />
                         </div>
-                        <h3 className="text-lg font-medium text-foreground">No {activeTab.toLowerCase()} reports</h3>
-                        <p className="text-muted-foreground mt-1">There are currently no reports in this category.</p>
+                        <h3 className="text-lg font-medium text-foreground">{t('admin.reports.noReports', { status: t(`admin.reports.tabs.${activeTab}`).toLowerCase() })}</h3>
+                        <p className="text-muted-foreground mt-1">{t('admin.reports.noReportsDesc')}</p>
                     </div>
                 ) : (
                     <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse">
+                        <table className="w-full text-left rtl:text-right border-collapse">
                             <thead>
                                 <tr className="bg-muted border-b border-border text-xs uppercase text-muted-foreground">
-                                    <th className="px-6 py-4 font-semibold">Report Details</th>
-                                    <th className="px-6 py-4 font-semibold">Creator</th>
-                                    <th className="px-6 py-4 font-semibold">Date</th>
-                                    <th className="px-6 py-4 font-semibold text-right">Actions</th>
+                                    <th className="px-6 py-4 font-semibold">{t('admin.reports.table.details')}</th>
+                                    <th className="px-6 py-4 font-semibold">{t('admin.reports.table.creator')}</th>
+                                    <th className="px-6 py-4 font-semibold">{t('admin.reports.table.date')}</th>
+                                    <th className="px-6 py-4 font-semibold text-right rtl:text-left">{t('admin.reports.table.actions')}</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-border">
@@ -170,7 +170,7 @@ export const AdminDashboard: React.FC = () => {
                                                         />
                                                     ) : (
                                                         <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs">
-                                                            No Image
+                                                            {t('admin.reports.table.noImage')}
                                                         </div>
                                                     )}
                                                 </div>
@@ -184,7 +184,7 @@ export const AdminDashboard: React.FC = () => {
                                                     </Link>
                                                     <div className="text-xs text-muted-foreground mt-1 flex items-center gap-2">
                                                         <span className="px-2 py-0.5 rounded border border-border bg-card">
-                                                            {report.type}
+                                                            {t(`reportTypes.${report.type}`, { defaultValue: report.type })}
                                                         </span>
                                                         <span>{report.locationName}</span>
                                                     </div>
@@ -205,24 +205,24 @@ export const AdminDashboard: React.FC = () => {
                                                     className="w-8 h-8 rounded-full border border-border"
                                                 />
                                                 <span className="text-sm text-foreground font-medium">
-                                                    {report.createdByName || "Unknown User"}
+                                                    {report.createdByName || t('reportDetails.unknownUser')}
                                                 </span>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                                                <Clock className="w-4 h-4" />
-                                                {new Date(report.createdAt).toLocaleDateString()}
+                                                <Clock className="w-4 h-4 rtl:ml-1 rtl:mr-0" />
+                                                {new Date(report.createdAt).toLocaleDateString(t('settings.currentLanguage') === t('settings.arabic') ? 'ar-EG' : 'en-US')}
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 text-right">
+                                        <td className="px-6 py-4 text-right rtl:text-left">
                                             {activeTab === "Pending" ? (
-                                                <div className="flex items-center justify-end gap-2">
+                                                <div className="flex items-center justify-end rtl:justify-start gap-2">
                                                     <button
                                                         onClick={() => handleApprove(report.id)}
                                                         disabled={isApproving || isRejecting}
                                                         className="p-2 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-colors border border-transparent hover:border-green-200 dark:hover:border-green-800 disabled:opacity-50"
-                                                        title="Approve"
+                                                        title={t('admin.reports.table.approve')}
                                                     >
                                                         <CheckCircle className="w-5 h-5" />
                                                     </button>
@@ -230,14 +230,14 @@ export const AdminDashboard: React.FC = () => {
                                                         onClick={() => handleReject(report.id)}
                                                         disabled={isApproving || isRejecting}
                                                         className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors border border-transparent hover:border-red-200 dark:hover:border-red-800 disabled:opacity-50"
-                                                        title="Reject"
+                                                        title={t('admin.reports.table.reject')}
                                                     >
                                                         <XCircle className="w-5 h-5" />
                                                     </button>
                                                 </div>
                                             ) : (
                                                 <span className="text-sm text-muted-foreground italic">
-                                                    {activeTab}
+                                                    {t(`admin.reports.tabs.${activeTab}`)}
                                                 </span>
                                             )}
                                         </td>

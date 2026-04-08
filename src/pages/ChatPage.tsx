@@ -3,8 +3,10 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ChatList } from "@/components/chat/ChatList";
 import { ChatWindow } from "@/components/chat/ChatWindow";
 import { MessageCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export const ChatPage = () => {
+    const { t } = useTranslation();
     const { sessionId } = useParams<{ sessionId: string }>();
     const navigate = useNavigate();
     const [selectedSessionId, setSelectedSessionId] = useState<number | null>(null);
@@ -32,8 +34,8 @@ export const ChatPage = () => {
                 <div className={`w-full md:w-80 lg:w-96 border-r border-border flex flex-col ${selectedSessionId ? 'hidden md:flex' : 'flex'}`}>
                     <div className="p-4 border-b border-border flex items-center justify-between">
                         <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                            <MessageCircle className="w-6 h-6 text-blue-600" />
-                            Messages
+                            <MessageCircle className="w-6 h-6 text-blue-600 rtl:ml-2 rtl:mr-0" />
+                            {t('chat.messages')}
                         </h2>
                     </div>
                     <ChatList
@@ -54,8 +56,8 @@ export const ChatPage = () => {
                             <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-4 border border-border">
                                 <MessageCircle className="w-10 h-10 text-muted-foreground opacity-50" />
                             </div>
-                            <h3 className="text-lg font-medium text-foreground mb-1">Select a conversation</h3>
-                            <p>Choose a chat from the list to start messaging</p>
+                            <h3 className="text-lg font-medium text-foreground mb-1">{t('chat.selectConversation')}</h3>
+                            <p>{t('chat.selectConversationDesc')}</p>
                         </div>
                     )}
                 </div>

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
 interface SettingsContextType {
@@ -12,16 +12,31 @@ const SettingsContext = createContext<SettingsContextType | undefined>(
 );
 
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState<"en" | "ar">("en");
+  const savedLang = (localStorage.getItem("lang") as "en" | "ar") || "ar";
+  const [language, setLanguage] = useState<"en" | "ar">(savedLang);
   const { i18n } = useTranslation();
+
+  // Sync i18n on first mount
+  useEffect(() => {
+    i18n.changeLanguage(savedLang);
+  }, []);
 
   const toggleLanguage = () => {
     const newLang = language === "en" ? "ar" : "en";
     setLanguage(newLang);
     i18n.changeLanguage(newLang);
-    document.documentElement.dir = newLang === "ar" ? "rtl" : "ltr";
-    document.documentElement.lang = newLang;
+    localStorage.setItem("lang", newLang);
   };
+
+  useEffect(() => {
+    document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+    document.documentElement.lang = language;
+    if (language === "ar") {
+      document.body.classList.add("font-cairo");
+    } else {
+      document.body.classList.remove("font-cairo");
+    }
+  }, [language]);
 
   const direction = language === "ar" ? "rtl" : "ltr";
 

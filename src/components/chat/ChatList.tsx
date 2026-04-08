@@ -2,6 +2,7 @@ import { useGetApiChatSessions } from "@/api/generated/chat/chat";
 import { Loader2, Search } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface ChatListProps {
     selectedSessionId?: number | null;
@@ -9,6 +10,7 @@ interface ChatListProps {
 }
 
 export const ChatList = ({ selectedSessionId = null, onSelectSession }: ChatListProps) => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     // const { user } = useAuth(); // Removed unused
     const { data: sessionsData, isLoading } = useGetApiChatSessions();
@@ -44,13 +46,13 @@ export const ChatList = ({ selectedSessionId = null, onSelectSession }: ChatList
             {/* Search */}
             <div className="p-4">
                 <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Search className="absolute left-3 rtl:right-3 rtl:left-auto top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <input
                         type="text"
-                        placeholder="Search chats..."
+                        placeholder={t('chat.searchPlaceholder')}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-9 pr-4 py-2 bg-muted border-transparent focus:bg-card focus:border-blue-500 focus:ring-0 rounded-xl text-sm transition-all text-foreground placeholder:text-muted-foreground shadow-sm"
+                        className="w-full pl-9 pr-4 rtl:pr-9 rtl:pl-4 py-2 bg-muted border-transparent focus:bg-card focus:border-blue-500 focus:ring-0 rounded-xl text-sm transition-all text-foreground placeholder:text-muted-foreground shadow-sm"
                     />
                 </div>
             </div>
@@ -59,7 +61,7 @@ export const ChatList = ({ selectedSessionId = null, onSelectSession }: ChatList
             <div className="flex-1 overflow-y-auto">
                 {filteredSessions.length === 0 ? (
                     <div className="text-center py-8 text-muted-foreground text-sm">
-                        No conversations found
+                        {t('chat.noConversations')}
                     </div>
                 ) : (
                     <div className="divide-y divide-border">
@@ -71,7 +73,7 @@ export const ChatList = ({ selectedSessionId = null, onSelectSession }: ChatList
                                 <button
                                     key={session.id}
                                     onClick={() => handleSelectSession(session.id)}
-                                    className={`w-full p-4 flex items-center gap-3 hover:bg-muted/50 transition-colors text-left ${isSelected ? "bg-blue-50/50 dark:bg-blue-900/10 hover:bg-blue-50/50 dark:hover:bg-blue-900/10" : ""
+                                    className={`w-full p-4 flex items-center gap-3 hover:bg-muted/50 transition-colors text-left rtl:text-right ${isSelected ? "bg-blue-50/50 dark:bg-blue-900/10 hover:bg-blue-50/50 dark:hover:bg-blue-900/10" : ""
                                         }`}
                                 >
                                     <div className="relative">
@@ -87,7 +89,7 @@ export const ChatList = ({ selectedSessionId = null, onSelectSession }: ChatList
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center justify-between mb-1">
                                             <h3 className={`font-semibold truncate ${isSelected ? "text-blue-900 dark:text-blue-400" : "text-foreground"}`}>
-                                                {otherUser?.fullName || "Unknown User"}
+                                                {otherUser?.fullName || t('chat.unknownUser')}
                                             </h3>
                                             {session.lastMessage && (
                                                 <span className="text-xs text-muted-foreground whitespace-nowrap ml-2">
@@ -96,7 +98,7 @@ export const ChatList = ({ selectedSessionId = null, onSelectSession }: ChatList
                                             )}
                                         </div>
                                         <p className={`text-sm truncate ${isSelected ? "text-blue-700 dark:text-blue-300" : "text-muted-foreground"}`}>
-                                            {session.lastMessage?.content || session.lastMessage?.text || "No messages yet"}
+                                            {session.lastMessage?.content || session.lastMessage?.text || t('chat.noMessages')}
                                         </p>
                                     </div>
 

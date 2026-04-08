@@ -3,6 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import { ArrowLeft, Loader2, Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 interface ChatWindowProps {
     sessionId: number;
@@ -10,6 +11,7 @@ interface ChatWindowProps {
 }
 
 export const ChatWindow = ({ sessionId, onBack }: ChatWindowProps) => {
+    const { t } = useTranslation();
     const { user } = useAuth();
     const queryClient = useQueryClient();
     const [messageInput, setMessageInput] = useState("");
@@ -106,7 +108,7 @@ export const ChatWindow = ({ sessionId, onBack }: ChatWindowProps) => {
                     onClick={onBack}
                     className="md:hidden p-2 hover:bg-muted rounded-full transition-colors"
                 >
-                    <ArrowLeft className="w-5 h-5 text-muted-foreground" />
+                    <ArrowLeft className="w-5 h-5 text-muted-foreground rtl:scale-x-[-1]" />
                 </button>
 
                 {/* We could show the other user's name here if we passed it down or fetched session details */}
@@ -123,7 +125,7 @@ export const ChatWindow = ({ sessionId, onBack }: ChatWindowProps) => {
                                 {otherUser.isOnline && (
                                     <span className="text-xs text-green-500 flex items-center gap-1">
                                         <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
-                                        Online
+                                        {t('chat.online')}
                                     </span>
                                 )}
                             </div>
@@ -134,10 +136,10 @@ export const ChatWindow = ({ sessionId, onBack }: ChatWindowProps) => {
                                 #
                             </div>
                             <div>
-                                <h3 className="font-bold text-foreground">Chat Session</h3>
-                                <span className="text-xs text-green-500 flex items-center gap-1">
+                                <h3 className="font-bold text-foreground">{t('chat.chatSession')}</h3>
+                                <span className="text-sm text-green-500 flex items-center gap-1">
                                     <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
-                                    Active
+                                    {t('chat.active')}
                                 </span>
                             </div>
                         </>
@@ -149,7 +151,7 @@ export const ChatWindow = ({ sessionId, onBack }: ChatWindowProps) => {
             <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-muted/30">
                 {messages.length === 0 ? (
                     <div className="text-center py-12 text-muted-foreground">
-                        <p>No messages yet. Say hello! 👋</p>
+                        <p>{t('chat.noMessages')}</p>
                     </div>
                 ) : (
                     messages.map((msg: any) => {
@@ -161,8 +163,8 @@ export const ChatWindow = ({ sessionId, onBack }: ChatWindowProps) => {
                             >
                                 <div
                                     className={`max-w-[75%] rounded-2xl px-4 py-3 shadow-sm ${isMe
-                                        ? 'bg-blue-600 text-white rounded-br-none'
-                                        : 'bg-card text-foreground border border-border rounded-bl-none'
+                                        ? 'bg-blue-600 text-white rounded-br-none rtl:rounded-br-2xl rtl:rounded-bl-none'
+                                        : 'bg-card text-foreground border border-border rounded-bl-none rtl:rounded-bl-2xl rtl:rounded-br-none'
                                         }`}
                                 >
                                     <p className="text-sm leading-relaxed">{msg.content || msg.text || ''}</p>
@@ -184,7 +186,7 @@ export const ChatWindow = ({ sessionId, onBack }: ChatWindowProps) => {
                         type="text"
                         value={messageInput}
                         onChange={(e) => setMessageInput(e.target.value)}
-                        placeholder="Type a message..."
+                        placeholder={t('chat.typeMessage')}
                         className="flex-1 bg-muted border-transparent focus:bg-background focus:border-blue-500 focus:ring-0 rounded-xl py-3 px-4 transition-all text-foreground placeholder:text-muted-foreground"
                     />
                     <button

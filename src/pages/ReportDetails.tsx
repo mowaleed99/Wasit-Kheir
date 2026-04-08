@@ -13,6 +13,7 @@ import {
     Trash2, CheckCircle, Tag, User, Sparkles, Bookmark, BookmarkCheck
 } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const typeColors: Record<string, string> = {
     LostItem: "bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-900/50",
@@ -20,16 +21,11 @@ const typeColors: Record<string, string> = {
     LostPerson: "bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-400 dark:border-orange-900/50",
     FoundPerson: "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-900/50",
 };
-const typeLabels: Record<string, string> = {
-    LostItem: "Lost Item",
-    FoundItem: "Found Item",
-    LostPerson: "Lost Person",
-    FoundPerson: "Found Person",
-};
 
 const BASE_URL = "https://wasitkheir.runasp.net";
 
 export const ReportDetails: React.FC = () => {
+    const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { user } = useAuth();
@@ -56,11 +52,11 @@ export const ReportDetails: React.FC = () => {
 
     const { mutate: runMatch, isPending: isRunningMatch } = usePostApiMatchingRunReportId({
         mutation: {
-            onSuccess: () => {
-                alert("AI Match scan complete!");
-                refetchMatches();
-            },
-            onError: () => alert("Failed to run AI matching.")
+      onSuccess: () => {
+        alert("AI Match scan complete!");
+        refetchMatches();
+      },
+      onError: () => alert("Failed to run AI matching.")
         }
     });
 
@@ -195,7 +191,7 @@ export const ReportDetails: React.FC = () => {
 
     const handleContact = () => {
         const ownerId = reportData?.createdById;
-        if (!ownerId) { alert("Unable to contact reporter"); return; }
+        if (!ownerId) { alert("Unable to contact reporter. Owner ID is missing."); return; }
         createChatSession({ otherUserId: ownerId });
     };
 
@@ -204,7 +200,7 @@ export const ReportDetails: React.FC = () => {
             <div className="min-h-screen bg-background flex items-center justify-center">
                 <div className="text-center">
                     <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-muted-foreground text-lg">Loading report...</p>
+                    <p className="text-muted-foreground text-lg">Loading report details...</p>
                 </div>
             </div>
         );
@@ -214,15 +210,15 @@ export const ReportDetails: React.FC = () => {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center">
                 <div className="text-center">
-                    <p className="text-muted-foreground text-lg">Report not found.</p>
-                    <Link to="/" className="mt-4 text-blue-600 hover:underline inline-block">← Back to Home</Link>
+                    <p className="text-muted-foreground text-lg">Report not found</p>
+                    <Link to="/" className="mt-4 text-blue-600 hover:underline inline-block">Back to Home</Link>
                 </div>
             </div>
         );
     }
 
     const typeClass = typeColors[reportData.type] || "bg-muted text-muted-foreground border-border";
-    const typeLabel = typeLabels[reportData.type] || reportData.type;
+    const typeLabel = t(`reportTypes.${reportData.type}`, { defaultValue: reportData.type });
     const images: any[] = reportData.images || [];
 
     // Parse matches
@@ -238,7 +234,7 @@ export const ReportDetails: React.FC = () => {
                     className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors group mb-6"
                 >
                     <div className="p-2 rounded-full bg-card border border-border group-hover:border-blue-200/50 group-hover:bg-blue-50/50 dark:group-hover:bg-blue-900/10 transition-all shadow-sm">
-                        <ArrowLeft className="w-5 h-5" />
+                        <ArrowLeft className="w-5 h-5 rtl:scale-x-[-1]" />
                     </div>
                     <span className="font-medium">Back to Feed</span>
                 </button>
@@ -296,13 +292,13 @@ export const ReportDetails: React.FC = () => {
                                         src={
                                             reportData.createdByProfilePictureUrl
                                                 ? `${BASE_URL}${reportData.createdByProfilePictureUrl}`
-                                                : `https://ui-avatars.com/api/?name=${encodeURIComponent(reportData.createdByName || "User")}&background=random&color=fff`
+                                                : `https://ui-avatars.com/api/?name=${encodeURIComponent(reportData.createdByName || t('reportDetails.unknownUser'))}&background=random&color=fff`
                                         }
                                         alt={reportData.createdByName}
                                         className="w-10 h-10 rounded-full object-cover border border-border"
                                     />
                                     <div>
-                                        <p className="font-semibold text-foreground text-sm">{reportData.createdByName || "Unknown User"}</p>
+                                        <p className="font-semibold text-foreground text-sm">{reportData.createdByName || t('reportDetails.unknownUser')}</p>
                                         <div className="flex items-center gap-3 text-xs text-muted-foreground">
                                             <span className="flex items-center gap-1">
                                                 <Calendar className="w-3 h-3" />
@@ -316,8 +312,8 @@ export const ReportDetails: React.FC = () => {
                             {/* Owner or Admin Actions */}
                             {(isOwner || isAdmin) && (
                                 <div className="px-6 py-3 bg-muted/30 border-b border-border flex flex-wrap gap-2 items-center">
-                                    <span className="text-sm font-medium text-muted-foreground mr-2">Manage:</span>
-                                    <div className="ml-auto flex gap-2">
+                                    <span className="text-sm font-medium text-muted-foreground ml-2">Manage:</span>
+                                    <div className="mr-auto flex gap-2">
                                         {showDeleteConfirm ? (
                                             <div className="flex items-center gap-2">
                                                 <span className="text-xs text-red-600 font-medium">Sure?</span>
@@ -364,7 +360,7 @@ export const ReportDetails: React.FC = () => {
                                     {reportData.subCategoryName && (
                                         <span className="flex items-center gap-1.5 px-3 py-1.5 bg-muted text-muted-foreground rounded-full border border-border">
                                             <Tag className="w-3.5 h-3.5" />
-                                            {reportData.subCategoryName}
+                                            {t(`subcategories.${reportData.subCategoryName}`, { defaultValue: reportData.subCategoryName })}
                                         </span>
                                     )}
                                     {reportData.locationName && (
@@ -426,7 +422,7 @@ export const ReportDetails: React.FC = () => {
                                         disabled={isCreatingChat}
                                         className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
-                                        <Send className="w-4 h-4" />
+                                        <Send className="w-4 h-4 rtl:-scale-x-100" />
                                         <span className="text-sm font-medium">
                                             {isCreatingChat ? "Connecting..." : "Contact Reporter"}
                                         </span>
@@ -463,7 +459,7 @@ export const ReportDetails: React.FC = () => {
                                                 >
                                                     <div className="flex justify-between items-start">
                                                         <span className={`text-xs font-semibold px-2 py-1 rounded-full ${typeColors[matchedReport.type] || 'bg-muted text-muted-foreground border-border border'}`}>
-                                                            {typeLabels[matchedReport.type] || matchedReport.type || 'Item'}
+                                                            {t(`reportTypes.${matchedReport.type}`, { defaultValue: matchedReport.type || 'Item' })}
                                                         </span>
                                                         {score !== undefined && score !== null && (
                                                             <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-1 rounded-full border border-indigo-100 dark:border-indigo-900/50">
@@ -477,11 +473,11 @@ export const ReportDetails: React.FC = () => {
                                                     <div className="mt-auto pt-3 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
                                                         <span className="flex items-center gap-1">
                                                             <MapPin className="w-3 h-3" />
-                                                            <span className="truncate max-w-[100px]">{matchedReport.locationName || 'Unknown'}</span>
+                                                            <span className="truncate max-w-[100px]">{matchedReport.locationName || "Unknown"}</span>
                                                         </span>
                                                         <span className="flex items-center gap-1">
                                                             <Calendar className="w-3 h-3" />
-                                                            {matchedReport.dateReported ? new Date(matchedReport.dateReported).toLocaleDateString() : 'N/A'}
+                                                            {matchedReport.dateReported ? new Date(matchedReport.dateReported).toLocaleDateString() : "N/A"}
                                                         </span>
                                                     </div>
                                                 </Link>
@@ -491,7 +487,7 @@ export const ReportDetails: React.FC = () => {
                                 ) : (
                                     <div className="bg-card rounded-2xl p-6 border border-border shadow-sm flex flex-col items-center justify-center text-center">
                                         <Sparkles className="w-8 h-8 text-muted-foreground mb-2" />
-                                        <p className="text-muted-foreground text-sm">No matches found yet.<br />Click "Run AI Match" above to scan.</p>
+                                        <p className="text-muted-foreground text-sm">No matches found yet. Click "Run AI Match" above to scan.</p>
                                     </div>
                                 )}
                             </div>
@@ -510,13 +506,13 @@ export const ReportDetails: React.FC = () => {
                                     src={
                                         reportData.createdByProfilePictureUrl
                                             ? `${BASE_URL}${reportData.createdByProfilePictureUrl}`
-                                            : `https://ui-avatars.com/api/?name=${encodeURIComponent(reportData.createdByName || "User")}&background=random&color=fff`
+                                            : `https://ui-avatars.com/api/?name=${encodeURIComponent(reportData.createdByName || t('reportDetails.unknownUser'))}&background=random&color=fff`
                                     }
                                     alt={reportData.createdByName}
                                     className="w-14 h-14 rounded-full object-cover border border-border"
                                 />
                                 <div>
-                                    <p className="font-semibold text-foreground">{reportData.createdByName || "Unknown"}</p>
+                                    <p className="font-semibold text-foreground">{reportData.createdByName || t('reportDetails.unknown')}</p>
                                     <Link
                                         to={`/profile/${reportData.createdById}`}
                                         className="text-sm text-blue-600 hover:underline"

@@ -3,6 +3,7 @@ import { useState, useMemo } from "react";
 import { ChevronDown, ChevronRight, AlertCircle, Smartphone, Car, Dog, Briefcase, Gem, Watch, Stethoscope, Book, Hammer } from "lucide-react";
 import { useCategoryFilter } from "@/context/CategoryFilterContext";
 import { useCategoriesTree } from "@/api";
+import { useTranslation } from "react-i18next";
 
 
 interface Category {
@@ -179,6 +180,7 @@ const STATIC_CATEGORIES: Category[] = [
 ];
 
 export const CategoryTree: React.FC = () => {
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState<Set<number>>(new Set());
   const { selectedCategoryId, selectedSubCategoryId, setSelectedCategory } = useCategoryFilter();
 
@@ -266,7 +268,7 @@ export const CategoryTree: React.FC = () => {
           )}
 
           <span className={`text-sm ${level === 0 ? 'font-medium' : ''}`}>
-            {cat.name}
+            {level === 0 ? t(`categories.${cat.name}`, { defaultValue: cat.name }) : t(`subcategories.${cat.name}`, { defaultValue: cat.name })}
           </span>
         </button>
 

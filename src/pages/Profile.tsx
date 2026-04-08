@@ -5,9 +5,11 @@ import { Mail, Phone, MapPin, Calendar, Edit2, Bookmark, Settings } from "lucide
 import { Button } from "@/components/ui/Button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { EditProfileModal } from "@/components/profile/EditProfileModal";
 
 export const Profile: React.FC = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [showEditModal, setShowEditModal] = useState(false);
   const [activeTab, setActiveTab] = useState<'all' | 'lost' | 'found'>('all');
@@ -62,7 +64,7 @@ export const Profile: React.FC = () => {
               {/* User Info */}
               <div className="flex flex-col items-center md:items-start">
                 <h1 className="text-3xl font-bold text-foreground mb-2">
-                  {user?.fullName || "Unknown User"}
+                  {user?.fullName || t('profile.unknownUser')}
                 </h1>
                 <div className="space-y-2">
                   {user?.email && (
@@ -87,7 +89,7 @@ export const Profile: React.FC = () => {
                     <div className="flex items-center space-x-2 text-muted-foreground">
                       <Calendar className="w-4 h-4" />
                       <span className="text-sm">
-                        Joined {formatDate(user.createdAt)}
+                        {t('profile.joined', { date: formatDate(user.createdAt) })}
                       </span>
                     </div>
                   )}
@@ -98,13 +100,13 @@ export const Profile: React.FC = () => {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
               <Button variant="outline" className="w-full sm:w-auto" onClick={() => setShowEditModal(true)}>
-                <Edit2 className="w-4 h-4 mr-2" />
-                Edit Profile
+                <Edit2 className="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0" />
+                {t('profile.editProfile')}
               </Button>
               <Link to="/settings">
                 <Button variant="ghost" className="w-full sm:w-auto text-muted-foreground hover:text-foreground">
-                  <Settings className="w-4 h-4 mr-2" />
-                  Settings
+                  <Settings className="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0" />
+                  {t('profile.settings')}
                 </Button>
               </Link>
             </div>
@@ -123,46 +125,46 @@ export const Profile: React.FC = () => {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6">
         <div className="bg-card rounded-lg shadow-sm border border-border p-6 text-center">
           <p className="text-3xl font-bold text-blue-600">{userPosts.length}</p>
-          <p className="text-sm text-muted-foreground mt-1">Total Posts</p>
+          <p className="text-sm text-muted-foreground mt-1">{t('profile.totalPosts')}</p>
         </div>
         <div className="bg-card rounded-lg shadow-sm border border-border p-6 text-center">
           <p className="text-3xl font-bold text-green-600">
             {userPosts.filter((p: any) => (p.type || '').toLowerCase().startsWith('found')).length}
           </p>
-          <p className="text-sm text-muted-foreground mt-1">Found Items</p>
+          <p className="text-sm text-muted-foreground mt-1">{t('profile.foundItems')}</p>
         </div>
         <div className="bg-card rounded-lg shadow-sm border border-border p-6 text-center">
           <p className="text-3xl font-bold text-orange-600">
             {userPosts.filter((p: any) => (p.type || '').toLowerCase().startsWith('lost')).length}
           </p>
-          <p className="text-sm text-muted-foreground mt-1">Lost Items</p>
+          <p className="text-sm text-muted-foreground mt-1">{t('profile.lostItems')}</p>
         </div>
         <Link to="/saved-reports" className="bg-card rounded-lg shadow-sm border border-border p-6 text-center hover:border-blue-200/50 hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-all group">
           <div className="flex justify-center mb-1">
             <Bookmark className="w-7 h-7 text-blue-500 group-hover:text-blue-600 transition-colors" />
           </div>
-          <p className="text-sm text-muted-foreground mt-1 font-medium group-hover:text-blue-700 transition-colors">Saved Reports</p>
+          <p className="text-sm text-muted-foreground mt-1 font-medium group-hover:text-blue-700 transition-colors">{t('profile.savedReports')}</p>
         </Link>
       </div>
 
       {/* User's Posts */}
       <div className="bg-card rounded-lg shadow-sm border border-border p-6">
-        <h2 className="text-2xl font-bold mb-6 text-foreground">My Posts</h2>
+        <h2 className="text-2xl font-bold mb-6 text-foreground">{t('profile.myPosts')}</h2>
 
         {postsLoading ? (
           <div className="text-center py-12">
             <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Loading your posts...</p>
+            <p className="text-muted-foreground">{t('profile.loadingPosts')}</p>
           </div>
         ) : postsError ? (
           <div className="text-center py-12 bg-red-50 rounded-xl border border-red-100">
-            <p className="text-red-600">Failed to load posts. Please try again.</p>
+            <p className="text-red-600">{t('profile.failedToLoad')}</p>
           </div>
         ) : userPosts.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-muted-foreground">You haven't created any posts yet</p>
+            <p className="text-muted-foreground">{t('profile.noPostsYet')}</p>
             <Link to="/create-report">
-              <Button className="mt-4">Create Your First Report</Button>
+              <Button className="mt-4">{t('profile.createFirstReport')}</Button>
             </Link>
           </div>
         ) : (
@@ -176,7 +178,7 @@ export const Profile: React.FC = () => {
                   : 'text-muted-foreground hover:text-foreground'
                   }`}
               >
-                All Posts ({userPosts.length})
+                {t('profile.allPostsTab', { count: userPosts.length })}
               </button>
               <button
                 onClick={() => setActiveTab('lost')}
@@ -185,7 +187,7 @@ export const Profile: React.FC = () => {
                   : 'text-muted-foreground hover:text-foreground'
                   }`}
               >
-                Lost Items ({userPosts.filter((p: any) => (p.type || '').toLowerCase().startsWith('lost')).length})
+                {t('profile.lostItemsTab', { count: userPosts.filter((p: any) => (p.type || '').toLowerCase().startsWith('lost')).length })}
               </button>
               <button
                 onClick={() => setActiveTab('found')}
@@ -194,7 +196,7 @@ export const Profile: React.FC = () => {
                   : 'text-muted-foreground hover:text-foreground'
                   }`}
               >
-                Found Items ({userPosts.filter((p: any) => (p.type || '').toLowerCase().startsWith('found')).length})
+                {t('profile.foundItemsTab', { count: userPosts.filter((p: any) => (p.type || '').toLowerCase().startsWith('found')).length })}
               </button>
             </div>
 
@@ -202,7 +204,7 @@ export const Profile: React.FC = () => {
             <div className="space-y-4">
               {filteredPosts.length === 0 ? (
                 <div className="text-center py-12 text-muted-foreground">
-                  No {activeTab === 'all' ? '' : activeTab} posts found
+                  {t('profile.noPostsFound', { type: activeTab === 'all' ? '' : activeTab })}
                 </div>
               ) : (
                 filteredPosts.map((post: any) => (

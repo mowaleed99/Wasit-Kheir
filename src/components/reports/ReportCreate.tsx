@@ -8,24 +8,31 @@ import { useNavigate } from "react-router-dom";
 import { MapPicker } from "@/components/ui/MapPicker";
 import { X, MapPin, Tag, Type, Image as ImageIcon, Loader2 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
-const reportSchema = z.object({
-    title: z.string().min(3, "Title must be at least 3 characters"),
-    description: z.string().min(10, "Description must be at least 10 characters"),
-    subCategoryId: z.number().min(1, "Please select a subcategory"),
+const getReportSchema = (t: any) => z.object({
+    title: z.string().min(3, t('createReport.validation.titleMin')),
+    description: z.string().min(10, t('createReport.validation.descMin')),
+    subCategoryId: z.number().min(1, t('createReport.validation.subCatRequired')),
     dateReported: z.string().optional(),
 });
 
-type ReportFormData = z.infer<typeof reportSchema>;
+type ReportFormData = {
+    title: string;
+    description: string;
+    subCategoryId: number;
+    dateReported?: string;
+};
 
-const REPORT_TYPES = [
-    { value: "LostItem", label: "Lost Item", color: "text-red-600 dark:text-red-400", activeClass: "bg-card text-red-600 dark:text-red-400 shadow-sm border border-red-200 dark:border-red-900/50" },
-    { value: "FoundItem", label: "Found Item", color: "text-green-600 dark:text-green-400", activeClass: "bg-card text-green-600 dark:text-green-400 shadow-sm border border-green-200 dark:border-green-900/50" },
-    { value: "LostPerson", label: "Lost Person", color: "text-orange-600 dark:text-orange-400", activeClass: "bg-card text-orange-600 dark:text-orange-400 shadow-sm border border-orange-200 dark:border-orange-900/50" },
-    { value: "FoundPerson", label: "Found Person", color: "text-blue-600 dark:text-blue-400", activeClass: "bg-card text-blue-600 dark:text-blue-400 shadow-sm border border-blue-200 dark:border-blue-900/50" },
+const getReportTypes = (t: any) => [
+    { value: "LostItem", label: t('reportTypes.LostItem'), color: "text-red-600 dark:text-red-400", activeClass: "bg-card text-red-600 dark:text-red-400 shadow-sm border border-red-200 dark:border-red-900/50" },
+    { value: "FoundItem", label: t('reportTypes.FoundItem'), color: "text-green-600 dark:text-green-400", activeClass: "bg-card text-green-600 dark:text-green-400 shadow-sm border border-green-200 dark:border-green-900/50" },
+    { value: "LostPerson", label: t('reportTypes.LostPerson'), color: "text-orange-600 dark:text-orange-400", activeClass: "bg-card text-orange-600 dark:text-orange-400 shadow-sm border border-orange-200 dark:border-orange-900/50" },
+    { value: "FoundPerson", label: t('reportTypes.FoundPerson'), color: "text-blue-600 dark:text-blue-400", activeClass: "bg-card text-blue-600 dark:text-blue-400 shadow-sm border border-blue-200 dark:border-blue-900/50" },
 ];
 
 export const ReportCreate = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
@@ -53,8 +60,10 @@ export const ReportCreate = () => {
         setValue,
         formState: { errors },
     } = useForm<ReportFormData>({
-        resolver: zodResolver(reportSchema),
+        resolver: zodResolver(getReportSchema(t)),
     });
+
+    const reportTypes = useMemo(() => getReportTypes(t), [t]);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -100,7 +109,7 @@ export const ReportCreate = () => {
                     error?.response?.data?.message ||
                     error?.response?.data?.title ||
                     error?.message ||
-                    "Failed to create report. Please try again.";
+                    t('createReport.validation.subCatRequired'); // Fallback error msg if needed, though usually backend provides it
                 setSubmitError(msg);
             },
         });
@@ -117,10 +126,10 @@ export const ReportCreate = () => {
             {/* Report Type Selector */}
             <div>
                 <label className="block text-sm font-medium text-foreground mb-2">
-                    Report Type <span className="text-red-500">*</span>
+                    {t('createReport.reportType')} <span className="text-red-500">{t('createReport.required')}</span>
                 </label>
                 <div className="grid grid-cols-2 gap-2 bg-muted p-1 rounded-xl">
-                    {REPORT_TYPES.map((type) => (
+                    {reportTypes.map((type) => (
                         <button
                             key={type.value}
                             type="button"
@@ -137,54 +146,54 @@ export const ReportCreate = () => {
             {/* Title */}
             <div className="space-y-2">
                 <label className="block text-sm font-medium text-foreground">
-                    Title <span className="text-red-500">*</span>
+                    {t('createReport.titleLabel')} <span className="text-red-500">{t('createReport.required')}</span>
                 </label>
                 <div className="relative">
-                    <div className="absolute top-1/2 -translate-y-1/2 left-3 text-muted-foreground">
+                    <div className="absolute top-1/2 -translate-y-1/2 left-3 rtl:right-3 rtl:left-auto text-muted-foreground">
                         <Type className="w-5 h-5" />
                     </div>
                     <input
                         {...register("title")}
-                        className={`w-full pl-10 pr-4 py-3 bg-card border ${errors.title ? "border-red-500" : "border-border"} rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none text-foreground placeholder:text-muted-foreground`}
-                        placeholder={`e.g. Lost black wallet near Cairo Mall`}
+                        className={`w-full pl-10 pr-4 rtl:pr-10 rtl:pl-4 py-3 bg-card border ${errors.title ? "border-red-500" : "border-border"} rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none text-foreground placeholder:text-muted-foreground`}
+                        placeholder={t('createReport.titlePlaceholder')}
                     />
                 </div>
-                {errors.title && <p className="text-red-500 text-sm ml-1">{errors.title.message}</p>}
+                {errors.title && <p className="text-red-500 text-sm ml-1 rtl:mr-1 rtl:ml-0">{errors.title.message}</p>}
             </div>
 
             {/* Description */}
             <div className="space-y-2">
                 <label className="block text-sm font-medium text-foreground">
-                    Description <span className="text-red-500">*</span>
+                    {t('createReport.descriptionLabel')} <span className="text-red-500">{t('createReport.required')}</span>
                 </label>
                 <textarea
                     {...register("description")}
                     rows={4}
                     className={`w-full px-4 py-3 bg-card border ${errors.description ? "border-red-500" : "border-border"} rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none resize-none text-foreground placeholder:text-muted-foreground`}
-                    placeholder={`Describe the item in detail...`}
+                    placeholder={t('createReport.descriptionPlaceholder')}
                 />
-                {errors.description && <p className="text-red-500 text-sm ml-1">{errors.description.message}</p>}
+                {errors.description && <p className="text-red-500 text-sm ml-1 rtl:mr-1 rtl:ml-0">{errors.description.message}</p>}
             </div>
 
             {/* Category Selection */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                     <label className="block text-sm font-medium text-foreground">
-                        Category <span className="text-red-500">*</span>
+                        {t('createReport.categoryLabel')} <span className="text-red-500">{t('createReport.required')}</span>
                     </label>
                     <div className="relative">
-                        <div className="absolute top-1/2 -translate-y-1/2 left-3 text-muted-foreground">
+                        <div className="absolute top-1/2 -translate-y-1/2 left-3 rtl:right-3 rtl:left-auto text-muted-foreground">
                             <Tag className="w-5 h-5" />
                         </div>
                         <select
-                            className="w-full pl-10 pr-4 py-3 bg-card border border-border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none appearance-none text-foreground"
+                            className="w-full pl-10 pr-4 rtl:pr-10 rtl:pl-4 py-3 bg-card border border-border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none appearance-none text-foreground"
                             onChange={(e) => setSelectedCategory(Number(e.target.value))}
                             value={selectedCategory || ""}
                         >
-                            <option value="">Select Category</option>
+                            <option value="">{t('createReport.selectCategory')}</option>
                             {(categoriesTree as any)?.data?.map((cat: any) => (
                                 <option key={cat.id} value={cat.id}>
-                                    {cat.name}
+                                    {t(`categories.${cat.name}`, { defaultValue: cat.name })}
                                 </option>
                             ))}
                         </select>
@@ -193,33 +202,33 @@ export const ReportCreate = () => {
 
                 <div className="space-y-2">
                     <label className="block text-sm font-medium text-foreground">
-                        Subcategory <span className="text-red-500">*</span>
+                        {t('createReport.subcategoryLabel')} <span className="text-red-500">{t('createReport.required')}</span>
                     </label>
                     <div className="relative">
-                        <div className="absolute top-1/2 -translate-y-1/2 left-3 text-muted-foreground">
+                        <div className="absolute top-1/2 -translate-y-1/2 left-3 rtl:right-3 rtl:left-auto text-muted-foreground">
                             <Tag className="w-5 h-5" />
                         </div>
                         <select
                             {...register("subCategoryId", { valueAsNumber: true })}
-                            className={`w-full pl-10 pr-4 py-3 bg-card border ${errors.subCategoryId ? "border-red-500" : "border-border"} rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none appearance-none text-foreground disabled:opacity-50 disabled:cursor-not-allowed`}
+                            className={`w-full pl-10 pr-4 rtl:pr-10 rtl:pl-4 py-3 bg-card border ${errors.subCategoryId ? "border-red-500" : "border-border"} rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none appearance-none text-foreground disabled:opacity-50 disabled:cursor-not-allowed`}
                             disabled={!selectedCategory}
                         >
-                            <option value="">Select Subcategory</option>
+                            <option value="">{t('createReport.selectSubcategory')}</option>
                             {subCategories.map((sub: any) => (
                                 <option key={sub.id} value={sub.id}>
-                                    {sub.name}
+                                    {t(`subcategories.${sub.name}`, { defaultValue: sub.name })}
                                 </option>
                             ))}
                         </select>
                     </div>
-                    {errors.subCategoryId && <p className="text-red-500 text-sm ml-1">{errors.subCategoryId.message}</p>}
+                    {errors.subCategoryId && <p className="text-red-500 text-sm ml-1 rtl:mr-1 rtl:ml-0">{errors.subCategoryId.message}</p>}
                 </div>
             </div>
 
             {/* Date Reported */}
             <div className="space-y-2">
                 <label className="block text-sm font-medium text-foreground">
-                    Date Reported <span className="text-muted-foreground font-normal">(Optional)</span>
+                    {t('createReport.dateReportedLabel')} <span className="text-muted-foreground font-normal">{t('createReport.optional')}</span>
                 </label>
                 <input
                     type="date"
@@ -232,7 +241,7 @@ export const ReportCreate = () => {
             {/* Location */}
             <div className="space-y-2">
                 <label className="block text-sm font-medium text-foreground">
-                    Location <span className="text-muted-foreground font-normal">(Optional)</span>
+                    {t('createReport.locationLabel')} <span className="text-muted-foreground font-normal">{t('createReport.optional')}</span>
                 </label>
                 {!showMap ? (
                     <button
@@ -241,7 +250,7 @@ export const ReportCreate = () => {
                         className="w-full flex items-center justify-center gap-2 py-4 border-2 border-dashed border-border rounded-xl text-muted-foreground hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-all group"
                     >
                         <MapPin className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                        <span>{location ? location.address : "Click to pick a location on the map"}</span>
+                        <span>{location ? t('createReport.locationSelected', { address: location.address }) : t('createReport.pickLocationOnMap')}</span>
                     </button>
                 ) : (
                     <div className="space-y-2">
@@ -262,8 +271,8 @@ export const ReportCreate = () => {
                         </div>
                         {location && (
                             <p className="text-sm text-green-600 flex items-center gap-1">
-                                <MapPin className="w-4 h-4" />
-                                Selected: {location.address}
+                                <MapPin className="w-4 h-4 rtl:ml-1 rtl:mr-0" />
+                                {t('createReport.locationSelected', { address: location.address })}
                             </p>
                         )}
                     </div>
@@ -273,7 +282,7 @@ export const ReportCreate = () => {
             {/* Photos */}
             <div className="space-y-2">
                 <label className="block text-sm font-medium text-foreground">
-                    Photos <span className="text-muted-foreground font-normal">(Optional)</span>
+                    {t('createReport.photosLabel')} <span className="text-muted-foreground font-normal">{t('createReport.optional')}</span>
                 </label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {previews.map((preview, index) => (
@@ -292,7 +301,7 @@ export const ReportCreate = () => {
                         <div className="p-3 rounded-full bg-muted group-hover:bg-blue-100 dark:group-hover:bg-blue-900/30 transition-colors mb-2">
                             <ImageIcon className="w-6 h-6 text-muted-foreground group-hover:text-blue-500" />
                         </div>
-                        <span className="text-sm text-muted-foreground group-hover:text-blue-600 font-medium">Add Photo</span>
+                        <span className="text-sm text-muted-foreground group-hover:text-blue-600 font-medium">{t('createReport.addPhoto')}</span>
                         <input type="file" accept="image/*" multiple className="hidden" onChange={handleImageChange} />
                     </label>
                 </div>
@@ -313,11 +322,11 @@ export const ReportCreate = () => {
             >
                 {isPending ? (
                     <>
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        <span>Submitting Report...</span>
+                        <Loader2 className="w-5 h-5 animate-spin rtl:ml-2 rtl:mr-0" />
+                        <span>{t('createReport.submitting')}</span>
                     </>
                 ) : (
-                    "Submit Report"
+                    t('createReport.submit')
                 )}
             </button>
         </form>

@@ -10,15 +10,15 @@ import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Eye, EyeOff, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 
-const signupSchema = z.object({
-  firstName: z.string().min(1, "First name is required").max(50),
-  lastName: z.string().min(1, "Last name is required").max(50),
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-  phone: z.string().min(1, "Phone number is required"),
+const getSignupSchema = (t: any) => z.object({
+  firstName: z.string().min(1, t('auth.firstNameRequired')).max(50),
+  lastName: z.string().min(1, t('auth.lastNameRequired')).max(50),
+  email: z.string().email(t('auth.invalidEmail')),
+  password: z.string().min(6, t('auth.passwordMinLength')),
+  phone: z.string().min(1, t('auth.phoneRequired')),
 });
 
-type SignupFormData = z.infer<typeof signupSchema>;
+type SignupFormData = z.infer<ReturnType<typeof getSignupSchema>>;
 
 export const SignupForm: React.FC = () => {
   const { t } = useTranslation();
@@ -34,7 +34,7 @@ export const SignupForm: React.FC = () => {
       },
       onError: (error: any) => {
         console.error("Signup error details:", error);
-        let errorMessage = "Signup failed. Please try again.";
+        let errorMessage = t('auth.signupFailed');
 
         if (error?.response?.data?.message) {
           errorMessage = error.response.data.message;
@@ -46,9 +46,9 @@ export const SignupForm: React.FC = () => {
         } else if (error?.message) {
           errorMessage = error.message;
         } else if (error?.code === "ECONNABORTED") {
-          errorMessage = "Request timeout. Please check your internet connection.";
+          errorMessage = t('auth.requestTimeout');
         } else if (error?.message === "Network Error" || error?.code === "ERR_NETWORK") {
-          errorMessage = "Network error. Please check your connection and try again.";
+          errorMessage = t('auth.networkError');
         }
 
         setSignupError(errorMessage);
@@ -62,7 +62,7 @@ export const SignupForm: React.FC = () => {
     formState: { errors },
     watch,
   } = useForm<SignupFormData>({
-    resolver: zodResolver(signupSchema),
+    resolver: zodResolver(getSignupSchema(t)),
   });
 
   const onSubmit = (data: SignupFormData) => {
@@ -80,10 +80,10 @@ export const SignupForm: React.FC = () => {
     if (/\d/.test(pwd)) strength++;
     if (/[^a-zA-Z\d]/.test(pwd)) strength++;
 
-    if (strength <= 2) return { strength, label: "Weak", color: "bg-red-400" };
-    if (strength <= 3) return { strength, label: "Fair", color: "bg-yellow-400" };
-    if (strength <= 4) return { strength, label: "Good", color: "bg-blue-400" };
-    return { strength, label: "Strong", color: "bg-green-400" };
+    if (strength <= 2) return { strength, label: t('auth.weak'), color: "bg-red-400" };
+    if (strength <= 3) return { strength, label: t('auth.fair'), color: "bg-yellow-400" };
+    if (strength <= 4) return { strength, label: t('auth.good'), color: "bg-blue-400" };
+    return { strength, label: t('auth.strong'), color: "bg-green-400" };
   };
 
   const passwordStrength = getPasswordStrength(password);
@@ -95,12 +95,12 @@ export const SignupForm: React.FC = () => {
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="firstName" className="text-white font-medium">
-              First Name
+              {t('auth.firstNameLabel')}
             </Label>
             <Input
               id="firstName"
               {...register("firstName")}
-              placeholder="John"
+              placeholder={t('auth.firstNamePlaceholder')}
               className={`w-full bg-white/20 border-white/30 text-white placeholder:text-white/60 focus:bg-white/30 focus:border-white/50 transition-all duration-300 ${errors.firstName ? "border-red-400" : ""
                 }`}
             />
@@ -113,12 +113,12 @@ export const SignupForm: React.FC = () => {
           </div>
           <div className="space-y-2">
             <Label htmlFor="lastName" className="text-white font-medium">
-              Last Name
+              {t('auth.lastNameLabel')}
             </Label>
             <Input
               id="lastName"
               {...register("lastName")}
-              placeholder="Doe"
+              placeholder={t('auth.lastNamePlaceholder')}
               className={`w-full bg-white/20 border-white/30 text-white placeholder:text-white/60 focus:bg-white/30 focus:border-white/50 transition-all duration-300 ${errors.lastName ? "border-red-400" : ""
                 }`}
             />
@@ -134,13 +134,13 @@ export const SignupForm: React.FC = () => {
         {/* Email Field */}
         <div className="space-y-2">
           <Label htmlFor="email" className="text-white font-medium">
-            Email Address
+            {t('auth.emailAddressLabel')}
           </Label>
           <Input
             id="email"
             {...register("email")}
             type="email"
-            placeholder="you@example.com"
+            placeholder={t('auth.emailPlaceholder')}
             className={`w-full bg-white/20 border-white/30 text-white placeholder:text-white/60 focus:bg-white/30 focus:border-white/50 transition-all duration-300 ${errors.email ? "border-red-400" : ""
               }`}
           />
@@ -155,7 +155,7 @@ export const SignupForm: React.FC = () => {
         {/* Password Field */}
         <div className="space-y-2">
           <Label htmlFor="password" className="text-white font-medium">
-            Password
+            {t('auth.passwordLabel')}
           </Label>
           <div className="relative">
             <Input
@@ -200,7 +200,7 @@ export const SignupForm: React.FC = () => {
                 ))}
               </div>
               <p className="text-xs text-white/80">
-                Password strength: {passwordStrength.label}
+                {t('auth.passwordStrength')}{passwordStrength.label}
               </p>
             </div>
           )}
@@ -209,13 +209,13 @@ export const SignupForm: React.FC = () => {
         {/* Phone Field */}
         <div className="space-y-2">
           <Label htmlFor="phone" className="text-white font-medium">
-            Phone Number
+            {t('auth.phoneNumberLabel')}
           </Label>
           <Input
             id="phone"
             {...register("phone")}
             type="tel"
-            placeholder="+20 100 000 0000"
+            placeholder={t('auth.phonePlaceholder')}
             className={`w-full bg-white/20 border-white/30 text-white placeholder:text-white/60 focus:bg-white/30 focus:border-white/50 transition-all duration-300 ${errors.phone ? "border-red-400" : ""
               }`}
           />
@@ -246,7 +246,7 @@ export const SignupForm: React.FC = () => {
           {mutation.isPending ? (
             <span className="flex items-center justify-center gap-2">
               <Loader2 className="w-5 h-5 animate-spin" />
-              Creating account...
+              {t('auth.creatingAccount')}
             </span>
           ) : (
             <span className="flex items-center justify-center gap-2">
@@ -260,12 +260,12 @@ export const SignupForm: React.FC = () => {
       {/* Sign In Link */}
       <div className="text-center pt-4 border-t border-white/20">
         <p className="text-white/90 text-sm">
-          Already have an account?{" "}
+          {t('auth.alreadyHaveAccount')} {" "}
           <Link
             to="/login"
             className="font-semibold text-white hover:text-white/80 underline underline-offset-2 transition-colors"
           >
-            Sign in here
+            {t('auth.signInHere')}
           </Link>
         </p>
       </div>

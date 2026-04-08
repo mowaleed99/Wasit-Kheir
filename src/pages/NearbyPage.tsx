@@ -4,8 +4,10 @@ import { ReportCard } from "@/components/reports/ReportCard";
 import { MapPin, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { MapPicker } from "@/components/ui/MapPicker";
+import { useTranslation } from "react-i18next";
 
 export const NearbyPage: React.FC = () => {
+    const { t } = useTranslation();
     const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
     const [radius, setRadius] = useState(5); // Default 5km
     const [hasSearched, setHasSearched] = useState(false);
@@ -41,11 +43,11 @@ export const NearbyPage: React.FC = () => {
                 },
                 (error) => {
                     console.error("Error getting location:", error);
-                    alert("Unable to get your location. Please select manually on the map.");
+                    alert(t('nearbyPage.alertCantGetLocation'));
                 }
             );
         } else {
-            alert("Geolocation is not supported by your browser");
+            alert(t('nearbyPage.alertGeoNotSupported'));
         }
     };
 
@@ -54,8 +56,8 @@ export const NearbyPage: React.FC = () => {
             <div className="max-w-7xl mx-auto px-4 py-8">
                 {/* Header */}
                 <div className="mb-6">
-                    <h1 className="text-2xl sm:text-4xl font-bold text-foreground mb-2">Nearby Posts</h1>
-                    <p className="text-muted-foreground text-sm">Find lost or found items near your location</p>
+                    <h1 className="text-2xl sm:text-4xl font-bold text-foreground mb-2">{t('nearbyPage.title')}</h1>
+                    <p className="text-muted-foreground text-sm">{t('nearbyPage.subtitle')}</p>
                 </div>
 
                 {/* Search Controls */}
@@ -65,7 +67,7 @@ export const NearbyPage: React.FC = () => {
                         <div>
                             <label className="block text-sm font-medium text-foreground mb-3">
                                 <MapPin className="w-4 h-4 inline mr-1" />
-                                Select Location
+                                {t('nearbyPage.selectLocation')}
                             </label>
                             <div className="rounded-2xl overflow-hidden border border-border h-96 mb-4">
                                 <MapPicker
@@ -80,14 +82,14 @@ export const NearbyPage: React.FC = () => {
                                 className="w-full md:w-auto"
                             >
                                 <MapPin className="w-4 h-4 mr-2" />
-                                Use My Current Location
+                                {t('nearbyPage.useCurrentLocation')}
                             </Button>
                         </div>
 
                         {/* Radius */}
                         <div>
                             <label className="block text-sm font-medium text-foreground mb-2">
-                                Search Radius: {radius} km
+                                {t('nearbyPage.searchRadius', { radius })}
                             </label>
                             <input
                                 type="range"
@@ -98,8 +100,8 @@ export const NearbyPage: React.FC = () => {
                                 className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-blue-600"
                             />
                             <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                                <span>1 km</span>
-                                <span>50 km</span>
+                                <span>1 {t('nearbyPage.km')}</span>
+                                <span>50 {t('nearbyPage.km')}</span>
                             </div>
                         </div>
 
@@ -112,12 +114,12 @@ export const NearbyPage: React.FC = () => {
                             {isLoading ? (
                                 <>
                                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                    Searching...
+                                    {t('nearbyPage.searching')}
                                 </>
                             ) : (
                                 <>
                                     <MapPin className="w-4 h-4 mr-2" />
-                                    Search Nearby Posts
+                                    {t('nearbyPage.searchNearby')}
                                 </>
                             )}
                         </Button>
@@ -130,33 +132,32 @@ export const NearbyPage: React.FC = () => {
                         <div className="text-center py-12 bg-card rounded-3xl border border-border">
                             <MapPin className="w-16 h-16 text-muted mx-auto mb-4" />
                             <h3 className="text-xl font-semibold text-foreground mb-2">
-                                Select a Location
+                                {t('nearbyPage.selectLocationFirst')}
                             </h3>
                             <p className="text-muted-foreground">
-                                Choose a location on the map and search for nearby posts
+                                {t('nearbyPage.chooseLocationPrompt')}
                             </p>
                         </div>
                     ) : isLoading ? (
                         <div className="text-center py-12">
                             <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                            <p className="text-muted-foreground">Searching nearby...</p>
+                            <p className="text-muted-foreground">{t('nearbyPage.searchingNearby')}</p>
                         </div>
                     ) : results.length === 0 ? (
                         <div className="text-center py-12 bg-card rounded-3xl border border-border">
                             <MapPin className="w-16 h-16 text-muted mx-auto mb-4" />
                             <h3 className="text-xl font-semibold text-foreground mb-2">
-                                No Nearby Posts
+                                {t('nearbyPage.noNearbyPosts')}
                             </h3>
                             <p className="text-muted-foreground">
-                                Try increasing the search radius or selecting a different location
+                                {t('nearbyPage.tryIncreasingRadius')}
                             </p>
                         </div>
                     ) : (
                         <div>
                             <div className="mb-4 flex items-center justify-between">
                                 <p className="text-muted-foreground">
-                                    Found <span className="font-semibold text-foreground">{results.length}</span> posts
-                                    within {radius} km
+                                    {t('nearbyPage.foundPosts', { count: results.length, radius })}
                                 </p>
                             </div>
                             <div className="space-y-4">

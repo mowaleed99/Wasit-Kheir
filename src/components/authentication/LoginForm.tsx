@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/Label";
 import { useNavigate, Link } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { Eye, EyeOff, Loader2, AlertCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface LoginFormData {
   email: string;
@@ -15,6 +16,7 @@ interface LoginFormData {
 }
 
 export const LoginForm: React.FC = () => {
+  const { t } = useTranslation();
   const loginMutation = useLogin();
   const { isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
@@ -78,7 +80,7 @@ export const LoginForm: React.FC = () => {
       console.error("Error code:", error?.code);
 
       // Show user-friendly error message
-      let errorMessage = "Login failed. Please check your email and password.";
+      let errorMessage = t('auth.loginFailed');
 
       if (error?.response?.data?.message) {
         errorMessage = error.response.data.message;
@@ -90,14 +92,12 @@ export const LoginForm: React.FC = () => {
       } else if (error?.message) {
         errorMessage = error.message;
       } else if (error?.code === "ECONNABORTED") {
-        errorMessage =
-          "Request timeout. Please check your internet connection.";
+        errorMessage = t('auth.requestTimeout');
       } else if (
         error?.code === "ERR_NETWORK" ||
         error?.message === "Network Error"
       ) {
-        errorMessage =
-          "Network error. Please check your connection and try again.";
+        errorMessage = t('auth.networkError');
       }
 
       setLoginError(errorMessage);
@@ -118,13 +118,13 @@ export const LoginForm: React.FC = () => {
         {/* Email Field */}
         <div className="space-y-2">
           <Label htmlFor="email" className="text-white font-medium">
-            Email Address
+            {t('auth.emailAddressLabel')}
           </Label>
           <Input
             id="email"
             type="email"
-            placeholder="you@example.com"
-            {...register("email", { required: "Email is required" })}
+            placeholder={t('auth.emailPlaceholder')}
+            {...register("email", { required: t('auth.emailRequired') })}
             className={`w-full bg-white/20 border-white/30 text-white placeholder:text-white/60 focus:bg-white/30 focus:border-white/50 transition-all duration-300 ${errors.email ? "border-red-400" : ""
               }`}
           />
@@ -139,14 +139,14 @@ export const LoginForm: React.FC = () => {
         {/* Password Field */}
         <div className="space-y-2">
           <Label htmlFor="password" className="text-white font-medium">
-            Password
+            {t('auth.passwordLabel')}
           </Label>
           <div className="relative">
             <Input
               id="password"
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
-              {...register("password", { required: "Password is required" })}
+              {...register("password", { required: t('auth.passwordRequired') })}
               className={`w-full bg-white/20 border-white/30 text-white placeholder:text-white/60 focus:bg-white/30 focus:border-white/50 transition-all duration-300 pr-10 ${errors.password ? "border-red-400" : ""
                 }`}
             />
@@ -189,10 +189,10 @@ export const LoginForm: React.FC = () => {
           {isLoading ? (
             <span className="flex items-center justify-center gap-2">
               <Loader2 className="w-5 h-5 animate-spin" />
-              Signing in...
+              {t('auth.signingIn')}
             </span>
           ) : (
-            "Sign In"
+            t('auth.signIn')
           )}
         </Button>
       </form>
@@ -200,12 +200,12 @@ export const LoginForm: React.FC = () => {
       {/* Sign Up Link */}
       <div className="text-center pt-4 border-t border-white/20">
         <p className="text-white/90 text-sm">
-          Don't have an account?{" "}
+          {t('auth.noAccount')} {" "}
           <Link
             to="/signup"
             className="font-semibold text-white hover:text-white/80 underline underline-offset-2 transition-colors"
           >
-            Sign up here
+            {t('auth.signUpHere')}
           </Link>
         </p>
       </div>

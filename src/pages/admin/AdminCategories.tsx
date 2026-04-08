@@ -12,8 +12,10 @@ import {
 } from "@/api/generated/sub-categories/sub-categories";
 import { queryClient } from "@/api";
 import { FolderPlus, Edit3, Trash2, ChevronDown, ChevronRight, PlusCircle, Tag } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export const AdminCategories: React.FC = () => {
+    const { t } = useTranslation();
     const [expandedCats, setExpandedCats] = useState<Record<number, boolean>>({});
 
     // Fetch the entire tree
@@ -42,38 +44,38 @@ export const AdminCategories: React.FC = () => {
 
     // Category Actions
     const handleCreateCategory = () => {
-        const name = window.prompt("Enter new category name:");
+        const name = window.prompt(t('admin.categories.prompts.newCategory'));
         if (!name) return;
         createCat({ data: { name } }, { onSuccess: invalidateTree });
     };
 
     const handleEditCategory = (id: number, currentName: string) => {
-        const name = window.prompt("Edit category name:", currentName);
+        const name = window.prompt(t('admin.categories.prompts.editCategory'), currentName);
         if (!name || name === currentName) return;
         editCat({ id, data: { name } }, { onSuccess: invalidateTree });
     };
 
     const handleDeleteCategory = (id: number, name: string) => {
-        if (window.confirm(`Are you sure you want to delete category "${name}"?`)) {
+        if (window.confirm(t('admin.categories.prompts.confirmDeleteCategory', { name }))) {
             deleteCat({ id }, { onSuccess: invalidateTree });
         }
     };
 
     // SubCategory Actions
     const handleCreateSubCategory = (categoryId: number) => {
-        const name = window.prompt("Enter new subcategory name:");
+        const name = window.prompt(t('admin.categories.prompts.newSubcategory'));
         if (!name) return;
         createSub({ data: { categoryId, name } }, { onSuccess: invalidateTree });
     };
 
     const handleEditSubCategory = (id: number, categoryId: number, currentName: string) => {
-        const name = window.prompt("Edit subcategory name:", currentName);
+        const name = window.prompt(t('admin.categories.prompts.editSubcategory'), currentName);
         if (!name || name === currentName) return;
         editSub({ id, data: { categoryId, name } }, { onSuccess: invalidateTree });
     };
 
     const handleDeleteSubCategory = (id: number, name: string) => {
-        if (window.confirm(`Are you sure you want to delete subcategory "${name}"?`)) {
+        if (window.confirm(t('admin.categories.prompts.confirmDeleteSubcategory', { name }))) {
             deleteSub({ id }, { onSuccess: invalidateTree });
         }
     };
@@ -84,16 +86,16 @@ export const AdminCategories: React.FC = () => {
         <div className="w-full">
             <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-2xl font-bold text-foreground">Manage Categories</h2>
-                    <p className="text-muted-foreground mt-1 text-sm">Organize the reporting taxonomy into categories and subcategories.</p>
+                    <h2 className="text-2xl font-bold text-foreground">{t('admin.categories.title')}</h2>
+                    <p className="text-muted-foreground mt-1 text-sm">{t('admin.categories.subtitle')}</p>
                 </div>
                 <button
                     onClick={handleCreateCategory}
                     disabled={isMutating}
                     className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium disabled:opacity-50"
                 >
-                    <FolderPlus className="w-4 h-4" />
-                    New Category
+                    <FolderPlus className="w-4 h-4 rtl:ml-2 rtl:mr-0" />
+                    {t('admin.categories.newCategory')}
                 </button>
             </div>
 
@@ -101,12 +103,12 @@ export const AdminCategories: React.FC = () => {
                 {isLoading ? (
                     <div className="text-center py-12">
                         <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                        <p className="text-muted-foreground">Loading category tree...</p>
+                        <p className="text-muted-foreground">{t('admin.categories.loading')}</p>
                     </div>
                 ) : categoriesList.length === 0 ? (
                     <div className="text-center py-16">
-                        <h3 className="text-lg font-medium text-foreground">No categories found</h3>
-                        <p className="text-muted-foreground mt-1 text-sm">Create your first category to get started.</p>
+                        <h3 className="text-lg font-medium text-foreground">{t('admin.categories.noCategories')}</h3>
+                        <p className="text-muted-foreground mt-1 text-sm">{t('admin.categories.createFirst')}</p>
                     </div>
                 ) : (
                     <div className="divide-y divide-border">
@@ -122,12 +124,16 @@ export const AdminCategories: React.FC = () => {
                                             {expandedCats[cat.id] ? (
                                                 <ChevronDown className="w-5 h-5" />
                                             ) : (
-                                                <ChevronRight className="w-5 h-5" />
+                                                <ChevronRight className="w-5 h-5 rtl:scale-x-[-1]" />
                                             )}
                                         </button>
                                         <div>
-                                            <h3 className="font-semibold text-foreground">{cat.name}</h3>
-                                            <p className="text-xs text-muted-foreground">{cat.subCategories?.length || 0} subcategories</p>
+                                            <h3 className="font-semibold text-foreground">
+                                                {t(`categories.${cat.name}`, { defaultValue: cat.name })}
+                                            </h3>
+                                            <p className="text-xs text-muted-foreground">
+                                                {t('admin.categories.subcategoriesCount', { count: cat.subCategories?.length || 0 })}
+                                            </p>
                                         </div>
                                     </div>
 
@@ -136,7 +142,7 @@ export const AdminCategories: React.FC = () => {
                                             onClick={() => handleCreateSubCategory(cat.id)}
                                             disabled={isMutating}
                                             className="p-1.5 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded"
-                                            title="Add Subcategory"
+                                            title={t('admin.categories.addSubcategory')}
                                         >
                                             <PlusCircle className="w-4 h-4" />
                                         </button>
@@ -144,7 +150,7 @@ export const AdminCategories: React.FC = () => {
                                             onClick={() => handleEditCategory(cat.id, cat.name)}
                                             disabled={isMutating}
                                             className="p-1.5 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded"
-                                            title="Edit Category Name"
+                                            title={t('admin.categories.editCategory')}
                                         >
                                             <Edit3 className="w-4 h-4" />
                                         </button>
@@ -152,7 +158,7 @@ export const AdminCategories: React.FC = () => {
                                             onClick={() => handleDeleteCategory(cat.id, cat.name)}
                                             disabled={cat.subCategories?.length > 0 || isMutating}
                                             className="p-1.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded disabled:opacity-30 disabled:hover:bg-transparent"
-                                            title={cat.subCategories?.length > 0 ? "Cannot delete: has subcategories" : "Delete Category"}
+                                            title={cat.subCategories?.length > 0 ? t('admin.categories.cannotDelete') : t('admin.categories.deleteCategory')}
                                         >
                                             <Trash2 className="w-4 h-4" />
                                         </button>
@@ -164,15 +170,17 @@ export const AdminCategories: React.FC = () => {
                                     <div className="bg-muted/30 border-t border-border">
                                         {(!cat.subCategories || cat.subCategories.length === 0) ? (
                                             <div className="px-12 py-4 text-sm text-muted-foreground italic">
-                                                No subcategories yet.
+                                                {t('admin.categories.noSubcategories')}
                                             </div>
                                         ) : (
-                                            <div className="pl-12 pr-4 divide-y divide-border">
+                                            <div className="pl-12 pr-4 rtl:pr-12 rtl:pl-4 divide-y divide-border">
                                                 {cat.subCategories.map((sub: any) => (
                                                     <div key={sub.id} className="flex items-center justify-between py-3 group/sub">
                                                         <div className="flex items-center gap-2">
-                                                            <Tag className="w-3.5 h-3.5 text-muted-foreground" />
-                                                            <span className="text-sm font-medium text-foreground">{sub.name}</span>
+                                                            <Tag className="w-3.5 h-3.5 text-muted-foreground rtl:rotate-90" />
+                                                            <span className="text-sm font-medium text-foreground">
+                                                                {t(`subcategories.${sub.name}`, { defaultValue: sub.name })}
+                                                            </span>
                                                         </div>
 
                                                         <div className="flex items-center gap-2 opacity-100 md:opacity-0 md:group-hover/sub:opacity-100 transition-opacity">
@@ -180,7 +188,7 @@ export const AdminCategories: React.FC = () => {
                                                                 onClick={() => handleEditSubCategory(sub.id, cat.id, sub.name)}
                                                                 disabled={isMutating}
                                                                 className="p-1 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded"
-                                                                title="Edit Subcategory"
+                                                                title={t('admin.categories.editSubcategory')}
                                                             >
                                                                 <Edit3 className="w-3.5 h-3.5" />
                                                             </button>
@@ -188,7 +196,7 @@ export const AdminCategories: React.FC = () => {
                                                                 onClick={() => handleDeleteSubCategory(sub.id, sub.name)}
                                                                 disabled={isMutating}
                                                                 className="p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
-                                                                title="Delete Subcategory"
+                                                                title={t('admin.categories.deleteSubcategory')}
                                                             >
                                                                 <Trash2 className="w-3.5 h-3.5" />
                                                             </button>

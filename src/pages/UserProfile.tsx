@@ -7,8 +7,10 @@ import { Mail, Phone, Calendar, MessageCircle, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export const UserProfile: React.FC = () => {
+    const { t } = useTranslation();
     const { userId, id } = useParams<{ userId?: string; id?: string }>();
     const navigate = useNavigate();
     const { user: currentUser } = useAuth();
@@ -52,7 +54,7 @@ export const UserProfile: React.FC = () => {
             },
             onError: (error) => {
                 console.error("Chat creation error:", error);
-                alert("Failed to start chat. Please try again.");
+                alert(t('userProfile.failedToStartChat'));
             },
         },
     });
@@ -73,7 +75,7 @@ export const UserProfile: React.FC = () => {
             <div className="min-h-screen bg-background flex items-center justify-center">
                 <div className="text-center">
                     <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-muted-foreground text-lg">Loading profile...</p>
+                    <p className="text-muted-foreground text-lg">{t('userProfile.loadingProfile')}</p>
                 </div>
             </div>
         );
@@ -95,9 +97,9 @@ export const UserProfile: React.FC = () => {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                                     </svg>
                                 </div>
-                                <h2 className="text-2xl font-bold text-foreground mb-2">Access Restricted</h2>
+                                <h2 className="text-2xl font-bold text-foreground mb-2">{t('userProfile.accessRestricted')}</h2>
                                 <p className="text-muted-foreground mb-6">
-                                    You don't have permission to view this user's profile.
+                                    {t('userProfile.noPermission')}
                                 </p>
                             </>
                         ) : (
@@ -107,11 +109,11 @@ export const UserProfile: React.FC = () => {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                     </svg>
                                 </div>
-                                <h2 className="text-2xl font-bold text-foreground mb-2">User Not Found</h2>
-                                <p className="text-muted-foreground mb-6">The user you're looking for doesn't exist or has been removed.</p>
+                                <h2 className="text-2xl font-bold text-foreground mb-2">{t('userProfile.userNotFound')}</h2>
+                                <p className="text-muted-foreground mb-6">{t('userProfile.userRemoved')}</p>
                             </>
                         )}
-                        <Link to="/"><Button className="w-full">Go Home</Button></Link>
+                        <Link to="/"><Button className="w-full">{t('userProfile.goHome')}</Button></Link>
                     </div>
                 </div>
             </div>
@@ -122,8 +124,8 @@ export const UserProfile: React.FC = () => {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center">
                 <div className="text-center">
-                    <p className="text-muted-foreground text-lg">User not found</p>
-                    <Link to="/"><Button className="mt-4">Go Home</Button></Link>
+                    <p className="text-muted-foreground text-lg">{t('userProfile.userNotFound')}</p>
+                    <Link to="/"><Button className="mt-4">{t('userProfile.goHome')}</Button></Link>
                 </div>
             </div>
         );
@@ -140,9 +142,9 @@ export const UserProfile: React.FC = () => {
                     className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-6 group"
                 >
                     <div className="p-2 rounded-full bg-card border border-border group-hover:border-blue-200/50 group-hover:bg-blue-50/50 dark:group-hover:bg-blue-900/10 transition-all shadow-sm">
-                        <ArrowLeft className="w-5 h-5" />
+                        <ArrowLeft className="w-5 h-5 rtl:scale-x-[-1]" />
                     </div>
-                    <span className="font-medium">Back</span>
+                    <span className="font-medium">{t('userProfile.back')}</span>
                 </Link>
 
                 {/* Profile Header */}
@@ -165,7 +167,7 @@ export const UserProfile: React.FC = () => {
                                 {/* User Info */}
                                 <div className="flex flex-col items-center md:items-start">
                                     <h1 className="text-3xl font-bold text-foreground mb-2">
-                                        {user?.fullName || "Unknown User"}
+                                        {user?.fullName || t('userProfile.unknownUser')}
                                     </h1>
                                     <div className="space-y-2">
                                         {user?.email && (
@@ -183,7 +185,7 @@ export const UserProfile: React.FC = () => {
                                         {user?.createdAt && (
                                             <div className="flex items-center space-x-2 text-muted-foreground">
                                                 <Calendar className="w-4 h-4" />
-                                                <span className="text-sm">Joined {formatDate(user.createdAt)}</span>
+                                                <span className="text-sm">{t('userProfile.joined', { date: formatDate(user.createdAt) })}</span>
                                             </div>
                                         )}
                                     </div>
@@ -197,8 +199,8 @@ export const UserProfile: React.FC = () => {
                                     onClick={() => createChatSession({ otherUserId: userIdNum })}
                                     disabled={isCreatingChat}
                                 >
-                                    <MessageCircle className="w-4 h-4 mr-2" />
-                                    {isCreatingChat ? "Connecting..." : "Send Message"}
+                                    <MessageCircle className="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0" />
+                                    {isCreatingChat ? t('userProfile.connecting') : t('userProfile.sendMessage')}
                                 </Button>
                             )}
                         </div>
@@ -209,35 +211,35 @@ export const UserProfile: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                     <div className="bg-card rounded-2xl shadow-sm border border-border p-6 text-center">
                         <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{userPosts.length}</p>
-                        <p className="text-sm text-muted-foreground mt-1">Reports</p>
+                        <p className="text-sm text-muted-foreground mt-1">{t('userProfile.reports')}</p>
                     </div>
                     <div className="bg-card rounded-2xl shadow-sm border border-border p-6 text-center">
                         <p className="text-3xl font-bold text-green-600 dark:text-green-400">
                             {/* lifecycleStatus field from backend */}
                             {userPosts.filter((p: any) => p.lifecycleStatus === "Resolved").length}
                         </p>
-                        <p className="text-sm text-muted-foreground mt-1">Resolved</p>
+                        <p className="text-sm text-muted-foreground mt-1">{t('userProfile.resolved')}</p>
                     </div>
                     <div className="bg-card rounded-2xl shadow-sm border border-border p-6 text-center">
                         <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">
                             {userPosts.filter((p: any) => p.lifecycleStatus === "Active" || p.lifecycleStatus === "Pending").length}
                         </p>
-                        <p className="text-sm text-muted-foreground mt-1">Active</p>
+                        <p className="text-sm text-muted-foreground mt-1">{t('userProfile.active')}</p>
                     </div>
                 </div>
 
                 {/* User's Reports */}
                 <div className="bg-card rounded-3xl shadow-sm border border-border p-6">
-                    <h2 className="text-2xl font-bold mb-6 text-foreground">Reports by {user?.fullName}</h2>
+                    <h2 className="text-2xl font-bold mb-6 text-foreground">{t('userProfile.reportsBy', { name: user?.fullName })}</h2>
 
                     {isLoadingPosts ? (
                         <div className="text-center py-12">
                             <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                            <p className="text-muted-foreground">Loading reports...</p>
+                            <p className="text-muted-foreground">{t('userProfile.loadingReports')}</p>
                         </div>
                     ) : userPosts.length === 0 ? (
                         <div className="text-center py-12">
-                            <p className="text-muted-foreground">This user hasn't created any reports yet</p>
+                            <p className="text-muted-foreground">{t('userProfile.noReportsYet')}</p>
                         </div>
                     ) : (
                         <div className="space-y-4">

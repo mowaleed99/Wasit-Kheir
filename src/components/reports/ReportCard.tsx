@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { MapPin, Calendar, Tag } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const typeColors: Record<string, string> = {
     LostItem: "bg-red-100 text-red-700 border-red-200 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20",
@@ -8,18 +9,12 @@ const typeColors: Record<string, string> = {
     FoundPerson: "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20",
 };
 
-const typeLabels: Record<string, string> = {
-    LostItem: "Lost Item",
-    FoundItem: "Found Item",
-    LostPerson: "Lost Person",
-    FoundPerson: "Found Person",
-};
-
 interface ReportCardProps {
     report: any;
 }
 
 export const ReportCard: React.FC<ReportCardProps> = ({ report }) => {
+    const { t } = useTranslation();
     const formatTime = (dateString: string) => {
         if (!dateString) return "";
         const date = new Date(dateString);
@@ -28,13 +23,13 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report }) => {
         const diffMins = Math.floor(diffMs / 60000);
         const diffHours = Math.floor(diffMs / 3600000);
         const diffDays = Math.floor(diffMs / 86400000);
-        if (diffMins < 60) return `${diffMins}m ago`;
-        if (diffHours < 24) return `${diffHours}h ago`;
-        return `${diffDays}d ago`;
+        if (diffMins < 60) return t('reportCard.agoM', { count: diffMins });
+        if (diffHours < 24) return t('reportCard.agoH', { count: diffHours });
+        return t('reportCard.agoD', { count: diffDays });
     };
 
     const typeClass = typeColors[report.type] || "bg-muted text-muted-foreground border-border";
-    const typeLabel = typeLabels[report.type] || report.type;
+    const typeLabel = t(`reportTypes.${report.type}`, { defaultValue: report.type });
     const firstImage = report.images?.[0]?.imageUrl;
     const imageUrl = firstImage
         ? `https://wasitkheir.runasp.net${firstImage}`
@@ -90,7 +85,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report }) => {
                     {report.subCategoryName && (
                         <span className="flex items-center gap-1">
                             <Tag className="w-3 h-3" />
-                            {report.subCategoryName}
+                            {t(`subcategories.${report.subCategoryName}`, { defaultValue: report.subCategoryName })}
                         </span>
                     )}
                     <span className="flex items-center gap-1 ml-auto">

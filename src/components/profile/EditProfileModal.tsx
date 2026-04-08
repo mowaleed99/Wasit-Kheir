@@ -6,6 +6,7 @@ import { usePutApiUsersMe, usePostApiUsersMeProfilePicture } from "@/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { X, Loader2, Camera, User } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { useTranslation } from "react-i18next";
 
 const editProfileSchema = z.object({
     fullName: z.string().min(2, "Name must be at least 2 characters"),
@@ -25,6 +26,7 @@ interface EditProfileModalProps {
 }
 
 export const EditProfileModal = ({ user, isOpen, onClose }: EditProfileModalProps) => {
+    const { t } = useTranslation();
     const queryClient = useQueryClient();
     const { mutate: updateProfile, isPending } = usePutApiUsersMe();
     const { mutate: uploadProfilePicture, isPending: isUploadingPhoto } = usePostApiUsersMeProfilePicture();
@@ -131,7 +133,7 @@ export const EditProfileModal = ({ user, isOpen, onClose }: EditProfileModalProp
             <div className="bg-card text-card-foreground rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
                 {/* Header */}
                 <div className="sticky top-0 bg-card border-b border-border p-6 flex items-center justify-between rounded-t-3xl z-10">
-                    <h2 className="text-2xl font-bold text-foreground">Edit Profile</h2>
+                    <h2 className="text-2xl font-bold text-foreground">{t('editProfile.title')}</h2>
                     <button
                         onClick={onClose}
                         className="p-2 hover:bg-muted rounded-full transition-colors"
@@ -174,7 +176,7 @@ export const EditProfileModal = ({ user, isOpen, onClose }: EditProfileModalProp
                                 onClick={removePhoto}
                                 className="text-sm text-red-600 hover:text-red-700 font-medium"
                             >
-                                Remove new photo
+                                {t('editProfile.removePhoto')}
                             </button>
                         )}
                     </div>
@@ -182,13 +184,13 @@ export const EditProfileModal = ({ user, isOpen, onClose }: EditProfileModalProp
                     {/* Full Name */}
                     <div>
                         <label className="block text-sm font-medium text-foreground mb-2">
-                            Full Name *
+                            {t('editProfile.fullName')}
                         </label>
                         <input
                             {...register("fullName")}
                             type="text"
                             className="w-full px-4 py-3 bg-background text-foreground border border-input rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-muted-foreground"
-                            placeholder="Enter your full name"
+                            placeholder={t('editProfile.fullNamePlaceholder')}
                         />
                         {errors.fullName && (
                             <p className="text-red-500 text-sm mt-1">{errors.fullName.message}</p>
@@ -198,33 +200,33 @@ export const EditProfileModal = ({ user, isOpen, onClose }: EditProfileModalProp
                     {/* Phone Number */}
                     <div>
                         <label className="block text-sm font-medium text-foreground mb-2">
-                            Phone Number
+                            {t('editProfile.phoneNumber')}
                         </label>
                         <input
                             {...register("phoneNumber")}
                             type="tel"
                             className="w-full px-4 py-3 bg-background text-foreground border border-input rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-muted-foreground"
-                            placeholder="Enter your phone number"
+                            placeholder={t('editProfile.phoneNumberPlaceholder')}
                         />
                     </div>
 
                     {/* Address */}
                     <div>
                         <label className="block text-sm font-medium text-foreground mb-2">
-                            Address
+                            {t('editProfile.address')}
                         </label>
                         <input
                             {...register("address")}
                             type="text"
                             className="w-full px-4 py-3 bg-background text-foreground border border-input rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-muted-foreground"
-                            placeholder="Enter your address"
+                            placeholder={t('editProfile.addressPlaceholder')}
                         />
                     </div>
 
                     {/* Date of Birth */}
                     <div>
                         <label className="block text-sm font-medium text-foreground mb-2">
-                            Date of Birth
+                            {t('editProfile.dateOfBirth')}
                         </label>
                         <input
                             {...register("dateOfBirth")}
@@ -236,29 +238,29 @@ export const EditProfileModal = ({ user, isOpen, onClose }: EditProfileModalProp
                     {/* Gender */}
                     <div>
                         <label className="block text-sm font-medium text-foreground mb-2">
-                            Gender
+                            {t('editProfile.gender')}
                         </label>
                         <select
                             {...register("gender")}
                             className="w-full px-4 py-3 bg-background text-foreground border border-input rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         >
-                            <option value="">Select gender</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
+                            <option value="">{t('editProfile.selectGender')}</option>
+                            <option value="Male">{t('editProfile.male')}</option>
+                            <option value="Female">{t('editProfile.female')}</option>
+                            <option value="Other">{t('editProfile.other')}</option>
                         </select>
                     </div>
 
                     {/* Bio */}
                     <div>
                         <label className="block text-sm font-medium text-foreground mb-2">
-                            Bio
+                            {t('editProfile.bio')}
                         </label>
                         <textarea
                             {...register("bio")}
                             rows={4}
                             className="w-full px-4 py-3 bg-background text-foreground border border-input rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none placeholder:text-muted-foreground"
-                            placeholder="Tell us about yourself..."
+                            placeholder={t('editProfile.bioPlaceholder')}
                         />
                     </div>
 
@@ -271,16 +273,16 @@ export const EditProfileModal = ({ user, isOpen, onClose }: EditProfileModalProp
                             className="flex-1"
                             disabled={isPending || isUploadingPhoto}
                         >
-                            Cancel
+                            {t('editProfile.cancel')}
                         </Button>
                         <Button type="submit" className="flex-1" disabled={isPending || isUploadingPhoto}>
                             {isPending || isUploadingPhoto ? (
                                 <>
-                                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                    {isUploadingPhoto ? "Uploading Photo..." : "Updating..."}
+                                    <Loader2 className="w-4 h-4 mr-2 animate-spin rtl:ml-2 rtl:mr-0" />
+                                    {isUploadingPhoto ? t('editProfile.uploadingPhoto') : t('editProfile.updating')}
                                 </>
                             ) : (
-                                "Update Profile"
+                                t('editProfile.updateBtn')
                             )}
                         </Button>
                     </div>
