@@ -32,116 +32,75 @@ import "./styles/globals.css";
 import { queryClient } from "./api";
 
 const router = createBrowserRouter([
+  // Public routes that use HomeLayout
   {
     path: "/",
     element: <HomeLayout />,
     errorElement: <div>Error</div>,
     children: [
       {
-        index: true,
-        element: (
-          <ProtectedRoute>
-            <Home />
-          </ProtectedRoute>
-        ),
-      },
-
-      {
         path: "report/:id",
-        element: (
-          <ProtectedRoute>
-            <ReportDetails />
-          </ProtectedRoute>
-        ),
+        element: <ReportDetails />,
+      },
+    ],
+  },
+  // Protected routes that use HomeLayout
+  {
+    path: "/",
+    element: (
+      <ProtectedRoute>
+        <HomeLayout />
+      </ProtectedRoute>
+    ),
+    errorElement: <div>Error</div>,
+    children: [
+      {
+        index: true,
+        element: <Home />,
       },
       {
         path: "chat",
-        element: (
-          <ProtectedRoute>
-            <ChatPage />
-          </ProtectedRoute>
-        ),
+        element: <ChatPage />,
       },
       {
         path: "chat/:sessionId",
-        element: (
-          <ProtectedRoute>
-            <ChatPage />
-          </ProtectedRoute>
-        ),
+        element: <ChatPage />,
       },
       {
         path: "profile",
-        element: (
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        ),
+        element: <Profile />,
       },
       {
         path: "profile/:id",
-        element: (
-          <ProtectedRoute>
-            <UserProfile />
-          </ProtectedRoute>
-        ),
+        element: <UserProfile />,
       },
       {
         path: "settings",
-        element: (
-          <ProtectedRoute>
-            <Settings />
-          </ProtectedRoute>
-        ),
+        element: <Settings />,
       },
       {
         path: "notifications",
-        element: (
-          <ProtectedRoute>
-            <Notifications />
-          </ProtectedRoute>
-        ),
+        element: <Notifications />,
       },
-
       {
         path: "create-report",
-        element: (
-          <ProtectedRoute>
-            <CreateReportPage />
-          </ProtectedRoute>
-        ),
+        element: <CreateReportPage />,
       },
       {
         path: "user/:userId",
-        element: (
-          <ProtectedRoute>
-            <UserProfile />
-          </ProtectedRoute>
-        ),
+        element: <UserProfile />,
       },
       {
         path: "search",
-        element: (
-          <ProtectedRoute>
-            <SearchPage />
-          </ProtectedRoute>
-        ),
+        element: <SearchPage />,
       },
       {
         path: "nearby",
-        element: (
-          <ProtectedRoute>
-            <NearbyPage />
-          </ProtectedRoute>
-        ),
+        element: <NearbyPage />,
       },
       {
         path: "saved-reports",
-        element: (
-          <ProtectedRoute>
-            <SavedReports />
-          </ProtectedRoute>
-        ),
+        element: <SavedReports />,
       },
     ],
   },

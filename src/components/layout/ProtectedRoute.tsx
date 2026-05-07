@@ -1,34 +1,23 @@
 import { useAuth } from "@/context/AuthContext";
-import { Navigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Navigate, useLocation } from "react-router-dom";
 
 export const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { isAuthenticated, isLoading } = useAuth();
-  const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
+  const location = useLocation();
 
-  // Give auth context time to check authentication
-  useEffect(() => {
-    if (!isLoading) {
-      // Small delay to ensure auth state is properly set
-      const timer = setTimeout(() => {
-        setHasCheckedAuth(true);
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [isLoading, isAuthenticated]);
-
-  if (isLoading || !hasCheckedAuth) {
+  if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <div>Loading...</div>
+      <div className="flex items-center justify-center h-full min-h-[50vh]">
+        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    // Save the intended location so we can redirect back after login
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   return <>{children}</>;

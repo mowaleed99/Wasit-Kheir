@@ -190,6 +190,11 @@ export const ReportDetails: React.FC = () => {
     };
 
     const handleContact = () => {
+        if (!user) {
+            alert(t('auth.loginRequired', { defaultValue: "You must be logged in to contact the reporter." }));
+            navigate("/login");
+            return;
+        }
         const ownerId = reportData?.createdById;
         if (!ownerId) { alert("Unable to contact reporter. Owner ID is missing."); return; }
         createChatSession({ otherUserId: ownerId });

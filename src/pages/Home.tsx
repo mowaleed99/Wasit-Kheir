@@ -49,21 +49,7 @@ export const Home = () => {
   const allReports =
     data?.pages?.flatMap((page: any) => extractList(page)) ?? [];
 
-  if (authLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
 
-  if (!isAuthenticated) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-lg">{t('home.pleaseLogin')}</p>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-background text-foreground">
