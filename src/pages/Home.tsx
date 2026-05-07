@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 
 export const Home = () => {
   const { t } = useTranslation();
-  const { isAuthenticated, isLoading: authLoading } = useAuth();
+  const { isAuthenticated } = useAuth();
   const { selectedCategoryId, selectedSubCategoryId, clearFilter } = useCategoryFilter();
 
   const hasFilter = selectedCategoryId !== null || selectedSubCategoryId !== null;
