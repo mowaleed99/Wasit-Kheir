@@ -27,7 +27,12 @@ export const SearchPage: React.FC = () => {
 
     const { register, handleSubmit, watch, reset } = useForm<SearchFilters>();
 
-    const categories = (categoriesData as any)?.data || [];
+    let categories: any[] = [];
+    const apiData = categoriesData as any;
+    if (Array.isArray(apiData)) categories = apiData;
+    else if (Array.isArray(apiData?.data)) categories = apiData.data;
+    else if (Array.isArray(apiData?.data?.data)) categories = apiData.data.data;
+
     const selectedCategoryId = watch("CategoryId");
     const selectedCategory = categories.find((cat: any) => cat.id === Number(selectedCategoryId));
 

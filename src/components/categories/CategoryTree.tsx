@@ -190,10 +190,16 @@ export const CategoryTree: React.FC = () => {
   // Use API data if available, otherwise fall back to static data
   const categories = useMemo(() => {
     const apiData = apiCategoriesData as any;
-    if (apiData?.data?.data && Array.isArray(apiData.data.data)) {
-      console.log("Using API categories:", apiData.data.data);
+    let catArray = null;
+    
+    if (Array.isArray(apiData)) catArray = apiData;
+    else if (Array.isArray(apiData?.data)) catArray = apiData.data;
+    else if (Array.isArray(apiData?.data?.data)) catArray = apiData.data.data;
+
+    if (catArray) {
+      console.log("Using API categories:", catArray);
       // Map API categories to include icons
-      return apiData.data.data.map((cat: any) => ({
+      return catArray.map((cat: any) => ({
         ...cat,
         icon: CATEGORY_ICONS[cat.name] || Smartphone,
         children: cat.subCategories || []
