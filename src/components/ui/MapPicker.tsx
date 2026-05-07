@@ -193,6 +193,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
 
       {/* Current location button */}
       <button
+        type="button"
         onClick={getCurrentLocation}
         className="absolute bottom-4 right-4 bg-white p-2 rounded-lg shadow-md hover:bg-gray-100 transition-colors z-[1000]"
         title="Get current location"
