@@ -162,6 +162,48 @@ code?: string;
 email?: string;
 };
 
+export type PostApiAiMultimodalSearchBody = {
+  Image?: Blob;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  K?: number;
+  Text?: string;
+};
+
+export type PostApiAiFaceMatchBody = {
+  Image: Blob;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  K?: number;
+};
+
+export type PostApiAiSearchImageBody = {
+  Image: Blob;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  K?: number;
+};
+
+export type PostApiAiAddTextBody = {
+  PostId: string;
+  Text: string;
+};
+
+export type PostApiAiSearchTextBody = {
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  K?: number;
+  Text: string;
+};
+
 export type GetApiAdminReportsParams = {
 Type?: string;
 Status?: string;
@@ -502,5 +544,22 @@ export interface ChangeEmailConfirmDto {
    * @maxLength 6
    */
   verificationCode: string;
+}
+
+export interface AiSearchRequestDto {
+  /** @nullable */
+  indexName?: string | null;
+  /** @nullable */
+  text?: string | null;
+}
+
+export interface AiResultDto {
+  /** @nullable */
+  personId?: string | null;
+  /** @nullable */
+  postId?: string | null;
+  score?: number;
+  /** @nullable */
+  text?: string | null;
 }
 

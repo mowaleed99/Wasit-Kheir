@@ -3,18 +3,15 @@ import { useAuth } from "@/context/AuthContext";
 import { Link, Navigate } from "react-router-dom";
 import {
     useGetApiAdminReports,
-    usePutApiAdminReportsIdApprove,
-    usePutApiAdminReportsIdReject,
 } from "@/api/generated/admin/admin";
 import { useGetApiHomeDashboard } from "@/api/generated/home/home";
-import { queryClient } from "@/api";
-import { CheckCircle, XCircle, Search, Clock, Activity } from "lucide-react";
+import { Search, Clock, Activity } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export const AdminDashboard: React.FC = () => {
     const { t } = useTranslation();
     const { user, isAuthenticated, isLoading: authLoading } = useAuth();
-    const [activeTab, setActiveTab] = useState<"Pending" | "Approved" | "Rejected">("Pending");
+    const [activeTab, setActiveTab] = useState<"Active" | "Archived" | "Closed">("Active");
 
     // Fetch reports using the Admin endpoint
     const {
@@ -36,8 +33,7 @@ export const AdminDashboard: React.FC = () => {
 
     const dashboardData = (dashboardRaw as any)?.data?.data || (dashboardRaw as any)?.data || dashboardRaw || {};
 
-    const { mutate: approveReport, isPending: isApproving } = usePutApiAdminReportsIdApprove();
-    const { mutate: rejectReport, isPending: isRejecting } = usePutApiAdminReportsIdReject();
+
 
     if (authLoading) {
         return (
@@ -55,27 +51,7 @@ export const AdminDashboard: React.FC = () => {
     const rawData: any = (reportsData as any)?.data || reportsData;
     const reportsList = Array.isArray(rawData) ? rawData : rawData?.data || [];
 
-    const handleApprove = (id: number) => {
-        approveReport(
-            { id },
-            {
-                onSuccess: () => {
-                    queryClient.invalidateQueries({ queryKey: ["/api/Admin/reports"] });
-                },
-            }
-        );
-    };
 
-    const handleReject = (id: number) => {
-        rejectReport(
-            { id },
-            {
-                onSuccess: () => {
-                    queryClient.invalidateQueries({ queryKey: ["/api/Admin/reports"] });
-                },
-            }
-        );
-    };
 
     return (
         <div className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-6">
@@ -111,7 +87,7 @@ export const AdminDashboard: React.FC = () => {
 
             {/* Tabs */}
             <div className="flex gap-4 mb-6 border-b border-border">
-                {(["Pending", "Approved", "Rejected"] as const).map((tab) => (
+                {(["Active", "Archived", "Closed"] as const).map((tab) => (
                     <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
@@ -216,30 +192,9 @@ export const AdminDashboard: React.FC = () => {
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 text-right rtl:text-left">
-                                            {activeTab === "Pending" ? (
-                                                <div className="flex items-center justify-end rtl:justify-start gap-2">
-                                                    <button
-                                                        onClick={() => handleApprove(report.id)}
-                                                        disabled={isApproving || isRejecting}
-                                                        className="p-2 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-colors border border-transparent hover:border-green-200 dark:hover:border-green-800 disabled:opacity-50"
-                                                        title={t('admin.reports.table.approve')}
-                                                    >
-                                                        <CheckCircle className="w-5 h-5" />
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleReject(report.id)}
-                                                        disabled={isApproving || isRejecting}
-                                                        className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors border border-transparent hover:border-red-200 dark:hover:border-red-800 disabled:opacity-50"
-                                                        title={t('admin.reports.table.reject')}
-                                                    >
-                                                        <XCircle className="w-5 h-5" />
-                                                    </button>
-                                                </div>
-                                            ) : (
-                                                <span className="text-sm text-muted-foreground italic">
-                                                    {t(`admin.reports.tabs.${activeTab}`)}
-                                                </span>
-                                            )}
+                                            <span className="text-sm text-muted-foreground italic">
+                                                {t(`admin.reports.tabs.${activeTab}`)}
+                                            </span>
                                         </td>
                                     </tr>
                                 ))}

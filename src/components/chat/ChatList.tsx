@@ -1,4 +1,4 @@
-import { useGetApiChatSessions } from "@/api/generated/chat/chat";
+import { useGetApiChatSessions, useGetApiChatSessionsSessionIdMessages } from "@/api/generated/chat/chat";
 import { Loader2, Search } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -65,54 +65,74 @@ export const ChatList = ({ selectedSessionId = null, onSelectSession }: ChatList
                     </div>
                 ) : (
                     <div className="divide-y divide-border">
-                        {filteredSessions.map((session: any) => {
-                            const otherUser = session.otherUser;
-                            const isSelected = selectedSessionId === session.id;
-
-                            return (
-                                <button
-                                    key={session.id}
-                                    onClick={() => handleSelectSession(session.id)}
-                                    className={`w-full p-4 flex items-center gap-3 hover:bg-muted/50 transition-colors text-left rtl:text-right ${isSelected ? "bg-blue-50/50 dark:bg-blue-900/10 hover:bg-blue-50/50 dark:hover:bg-blue-900/10" : ""
-                                        }`}
-                                >
-                                    <div className="relative">
-                                        <img
-                                            src={otherUser?.avatar || otherUser?.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(otherUser?.fullName || 'User')}&background=random&color=fff`}
-                                            alt={otherUser?.fullName}
-                                            className="w-12 h-12 rounded-full object-cover border border-border"
-                                        />
-                                        {/* Online indicator placeholder */}
-                                        {/* <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div> */}
-                                    </div>
-
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex items-center justify-between mb-1">
-                                            <h3 className={`font-semibold truncate ${isSelected ? "text-blue-900 dark:text-blue-400" : "text-foreground"}`}>
-                                                {otherUser?.fullName || t('chat.unknownUser')}
-                                            </h3>
-                                            {session.lastMessage && (
-                                                <span className="text-xs text-muted-foreground whitespace-nowrap ml-2">
-                                                    {new Date(session.lastMessage.createdAt).toLocaleDateString()}
-                                                </span>
-                                            )}
-                                        </div>
-                                        <p className={`text-sm truncate ${isSelected ? "text-blue-700 dark:text-blue-300" : "text-muted-foreground"}`}>
-                                            {session.lastMessage?.content || session.lastMessage?.text || t('chat.noMessages')}
-                                        </p>
-                                    </div>
-
-                                    {session.unreadCount > 0 && (
-                                        <div className="w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
-                                            <span className="text-xs text-white font-medium">{session.unreadCount}</span>
-                                        </div>
-                                    )}
-                                </button>
-                            );
-                        })}
+                        {filteredSessions.map((session: any) => (
+                            <ChatListItem
+                                key={session.id}
+                                session={session}
+                                isSelected={selectedSessionId === session.id}
+                                onSelect={() => handleSelectSession(session.id)}
+                            />
+                        ))}
                     </div>
                 )}
             </div>
         </div>
+    );
+};
+
+interface ChatListItemProps {
+    session: any;
+    isSelected: boolean;
+    onSelect: () => void;
+}
+
+const ChatListItem = ({ session, isSelected, onSelect }: ChatListItemProps) => {
+    const { t } = useTranslation();
+    const otherUser = session.otherUser;
+
+    // Fetch messages for this specific session to get the REAL last message
+    // since the backend's session.lastMessage is currently returning the FIRST message.
+    const { data: messagesData } = useGetApiChatSessionsSessionIdMessages(session.id);
+    const messages = (messagesData as any)?.data || [];
+    
+    // Use the fetched messages to find the true last message, fallback to session.lastMessage if not loaded yet
+    const trueLastMessage = messages.length > 0 ? messages[messages.length - 1] : session.lastMessage;
+
+    return (
+        <button
+            onClick={onSelect}
+            className={`w-full p-4 flex items-center gap-3 hover:bg-muted/50 transition-colors text-left rtl:text-right ${isSelected ? "bg-blue-50/50 dark:bg-blue-900/10 hover:bg-blue-50/50 dark:hover:bg-blue-900/10" : ""
+                }`}
+        >
+            <div className="relative">
+                <img
+                    src={otherUser?.avatar || otherUser?.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(otherUser?.fullName || 'User')}&background=random&color=fff`}
+                    alt={otherUser?.fullName}
+                    className="w-12 h-12 rounded-full object-cover border border-border"
+                />
+            </div>
+
+            <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between mb-1">
+                    <h3 className={`font-semibold truncate ${isSelected ? "text-blue-900 dark:text-blue-400" : "text-foreground"}`}>
+                        {otherUser?.fullName || t('chat.unknownUser')}
+                    </h3>
+                    {trueLastMessage && (
+                        <span className="text-xs text-muted-foreground whitespace-nowrap ml-2">
+                            {new Date(trueLastMessage.createdAt).toLocaleDateString()}
+                        </span>
+                    )}
+                </div>
+                <p className={`text-sm truncate ${isSelected ? "text-blue-700 dark:text-blue-300" : "text-muted-foreground"}`}>
+                    {trueLastMessage?.content || trueLastMessage?.text || t('chat.noMessages')}
+                </p>
+            </div>
+
+            {session.unreadCount > 0 && (
+                <div className="w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
+                    <span className="text-xs text-white font-medium">{session.unreadCount}</span>
+                </div>
+            )}
+        </button>
     );
 };

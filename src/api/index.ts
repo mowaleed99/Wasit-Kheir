@@ -90,8 +90,7 @@ export const useReports = (
     queryKey: ["reports-feed", params],
     queryFn: async ({ pageParam = 1 }) => {
       const response = await apiClient.get("/api/Reports", {
-        // ForPublicView: false → backend returns all statuses for authenticated users
-        params: { ...params, Page: pageParam, PageSize: params?.PageSize || 20, ForPublicView: false },
+        params: { ...params, Page: pageParam, PageSize: params?.PageSize || 20 },
       });
       // response.data is the HTTP body: { success, data: { data: [], page, totalPages } }
       return response.data;
@@ -127,8 +126,7 @@ export const useFilteredReports = (
     queryKey: ["reports-filtered", params],
     queryFn: async () => {
       const response = await apiClient.get("/api/Reports", {
-        // ForPublicView: false → shows Pending/Active/all statuses for authenticated users
-        params: { ...params, ForPublicView: false },
+        params: { ...params },
       });
       return response.data;
     },

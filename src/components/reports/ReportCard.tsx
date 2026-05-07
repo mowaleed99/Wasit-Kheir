@@ -57,9 +57,9 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report }) => {
                     <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold border ${typeClass}`}>
                         {typeLabel}
                     </span>
-                    {report.lifecycleStatus && (
+                    {report.lifecycleStatus && !["Pending", "Approved", "Rejected", "Flagged", "Active"].includes(report.lifecycleStatus) && (
                         <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground border border-border">
-                            {report.lifecycleStatus}
+                            {t(`admin.reports.tabs.${report.lifecycleStatus}`, { defaultValue: report.lifecycleStatus })}
                         </span>
                     )}
                 </div>

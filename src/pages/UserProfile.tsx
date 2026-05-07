@@ -222,7 +222,7 @@ export const UserProfile: React.FC = () => {
                     </div>
                     <div className="bg-card rounded-2xl shadow-sm border border-border p-6 text-center">
                         <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">
-                            {userPosts.filter((p: any) => p.lifecycleStatus === "Active" || p.lifecycleStatus === "Pending").length}
+                            {userPosts.filter((p: any) => p.lifecycleStatus === "Active").length}
                         </p>
                         <p className="text-sm text-muted-foreground mt-1">{t('userProfile.active')}</p>
                     </div>

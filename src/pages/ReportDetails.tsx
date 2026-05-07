@@ -275,9 +275,9 @@ export const ReportDetails: React.FC = () => {
                                     <span className={`px-3 py-1 rounded-full text-sm font-semibold border ${typeClass}`}>
                                         {typeLabel}
                                     </span>
-                                    {reportData.lifecycleStatus && (
+                                    {reportData.lifecycleStatus && !["Pending", "Approved", "Rejected", "Flagged", "Active"].includes(reportData.lifecycleStatus) && (
                                         <span className="px-3 py-1 rounded-full text-sm font-medium bg-muted text-muted-foreground border border-border">
-                                            {reportData.lifecycleStatus}
+                                            {t(`admin.reports.tabs.${reportData.lifecycleStatus}`, { defaultValue: reportData.lifecycleStatus })}
                                         </span>
                                     )}
                                 </div>

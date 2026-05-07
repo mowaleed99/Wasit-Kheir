@@ -154,23 +154,35 @@ export const ChatWindow = ({ sessionId, onBack }: ChatWindowProps) => {
                         <p>{t('chat.noMessages')}</p>
                     </div>
                 ) : (
-                    messages.map((msg: any) => {
+                    messages.map((msg: any, index: number) => {
                         const isMe = msg.senderId === user?.id;
+                        const msgDate = new Date(msg.createdAt);
+                        const prevMsg = index > 0 ? messages[index - 1] : null;
+                        const showDate = !prevMsg || new Date(prevMsg.createdAt).toDateString() !== msgDate.toDateString();
+
                         return (
-                            <div
-                                key={msg.id}
-                                className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}
-                            >
+                            <div key={msg.id} className="flex flex-col">
+                                {showDate && (
+                                    <div className="flex justify-center my-4">
+                                        <span className="bg-background text-muted-foreground text-xs font-medium px-3 py-1 rounded-full border border-border shadow-sm">
+                                            {msgDate.toLocaleDateString(undefined, { weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric' })}
+                                        </span>
+                                    </div>
+                                )}
                                 <div
-                                    className={`max-w-[75%] rounded-2xl px-4 py-3 shadow-sm ${isMe
-                                        ? 'bg-blue-600 text-white rounded-br-none rtl:rounded-br-2xl rtl:rounded-bl-none'
-                                        : 'bg-card text-foreground border border-border rounded-bl-none rtl:rounded-bl-2xl rtl:rounded-br-none'
-                                        }`}
+                                    className={`flex ${isMe ? 'justify-end' : 'justify-start'} mb-1`}
                                 >
-                                    <p className="text-sm leading-relaxed">{msg.content || msg.text || ''}</p>
-                                    <span className={`text-[10px] mt-1 block ${isMe ? 'text-blue-100' : 'text-muted-foreground'}`}>
-                                        {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                    </span>
+                                    <div
+                                        className={`max-w-[75%] rounded-2xl px-4 py-3 shadow-sm ${isMe
+                                            ? 'bg-blue-600 text-white rounded-br-none rtl:rounded-br-2xl rtl:rounded-bl-none'
+                                            : 'bg-card text-foreground border border-border rounded-bl-none rtl:rounded-bl-2xl rtl:rounded-br-none'
+                                            }`}
+                                    >
+                                        <p className="text-sm leading-relaxed">{msg.content || msg.text || ''}</p>
+                                        <span className={`text-[10px] mt-1 block ${isMe ? 'text-blue-100' : 'text-muted-foreground'}`}>
+                                            {msgDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         );

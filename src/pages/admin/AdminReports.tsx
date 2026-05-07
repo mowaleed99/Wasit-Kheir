@@ -2,14 +2,11 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
     useGetApiAdminReports,
-    usePutApiAdminReportsIdApprove,
-    usePutApiAdminReportsIdReject,
-    usePutApiAdminReportsIdFlag,
     usePutApiAdminReportsIdArchive,
     useDeleteApiAdminReportsId,
 } from "@/api/generated/admin/admin";
 import { queryClient } from "@/api";
-import { CheckCircle, XCircle, Search, Clock, Flag, Archive, Trash2, Activity } from "lucide-react";
+import { Search, Clock, Archive, Trash2, Activity } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useGetApiHomeDashboard } from "@/api/generated/home/home";
 import { useTranslation } from "react-i18next";
@@ -17,7 +14,7 @@ import { useTranslation } from "react-i18next";
 export const AdminReports: React.FC = () => {
     const { t } = useTranslation();
     const { user, isAuthenticated } = useAuth();
-    const [activeTab, setActiveTab] = useState<"Pending" | "Approved" | "Rejected" | "Flagged" | "Archived">("Pending");
+    const [activeTab, setActiveTab] = useState<"Active" | "Archived" | "Closed">("Active");
 
     // Fetch reports using the Admin endpoint
     const {
@@ -30,9 +27,6 @@ export const AdminReports: React.FC = () => {
         Page: 1,
     });
 
-    const { mutate: approveReport, isPending: isApproving } = usePutApiAdminReportsIdApprove();
-    const { mutate: rejectReport, isPending: isRejecting } = usePutApiAdminReportsIdReject();
-    const { mutate: flagReport, isPending: isFlagging } = usePutApiAdminReportsIdFlag();
     const { mutate: archiveReport, isPending: isArchiving } = usePutApiAdminReportsIdArchive();
     const { mutate: deleteReport, isPending: isDeleting } = useDeleteApiAdminReportsId();
 
@@ -56,7 +50,7 @@ export const AdminReports: React.FC = () => {
         actionMutate({ id }, { onSuccess: invalidateReports });
     };
 
-    const isAnyActionPending = isApproving || isRejecting || isFlagging || isArchiving || isDeleting;
+    const isAnyActionPending = isArchiving || isDeleting;
 
     return (
         <div className="w-full">
@@ -94,7 +88,7 @@ export const AdminReports: React.FC = () => {
 
             {/* Tabs */}
             <div className="flex gap-4 mb-6 border-b border-border overflow-x-auto pb-1">
-                {(["Pending", "Approved", "Rejected", "Flagged", "Archived"] as const).map((tab) => (
+                {(["Active", "Archived", "Closed"] as const).map((tab) => (
                     <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
@@ -202,30 +196,8 @@ export const AdminReports: React.FC = () => {
                                         </td>
                                         <td className="px-6 py-4 text-right rtl:text-left">
                                             <div className="flex items-center justify-end rtl:justify-start gap-1">
-                                                {/* Pending actions */}
-                                                {activeTab === "Pending" && (
-                                                    <>
-                                                        <button
-                                                            onClick={() => handleAction(approveReport, report.id)}
-                                                            disabled={isAnyActionPending}
-                                                            className="p-1.5 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded transition-colors disabled:opacity-50"
-                                                            title={t('admin.reports.table.approve')}
-                                                        >
-                                                            <CheckCircle className="w-5 h-5" />
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleAction(rejectReport, report.id)}
-                                                            disabled={isAnyActionPending}
-                                                            className="p-1.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors disabled:opacity-50"
-                                                            title={t('admin.reports.table.reject')}
-                                                        >
-                                                            <XCircle className="w-5 h-5" />
-                                                        </button>
-                                                    </>
-                                                )}
-
-                                                {/* Approved actions */}
-                                                {activeTab === "Approved" && (
+                                                {/* Active actions */}
+                                                {activeTab === "Active" && (
                                                     <button
                                                         onClick={() => handleAction(archiveReport, report.id)}
                                                         disabled={isAnyActionPending}
@@ -237,14 +209,6 @@ export const AdminReports: React.FC = () => {
                                                 )}
 
                                                 {/* Extra universal actions */}
-                                                <button
-                                                    onClick={() => handleAction(flagReport, report.id)}
-                                                    disabled={isAnyActionPending}
-                                                    className="p-1.5 text-yellow-600 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 rounded transition-colors disabled:opacity-50 ml-2 rtl:mr-2 rtl:ml-0"
-                                                    title={t('admin.reports.table.flag')}
-                                                >
-                                                    <Flag className="w-4 h-4" />
-                                                </button>
                                                 <button
                                                     onClick={() => {
                                                         if (window.confirm(t('admin.reports.table.confirmDelete'))) {

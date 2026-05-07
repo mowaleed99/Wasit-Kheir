@@ -434,8 +434,7 @@
       "subtitle": "Overview of activity and recent submissions",
       "totalReports": "Total Reports",
       "platformCategories": "Platform Categories",
-      "pendingReports": "Pending Reports",
-      "viewAllPending": "View all pending reports",
+
       "loading": "Loading dashboard state...",
       "error": "Failed to load dashboard statistics."
     },
@@ -465,13 +464,11 @@
     },
     "reports": {
       "title": "Manage Reports",
-      "subtitle": "Review, approve, flag, or delete user-submitted reports.",
+      "subtitle": "Review, archive, or delete user-submitted reports.",
       "tabs": {
-        "Pending": "Pending",
-        "Approved": "Approved",
-        "Rejected": "Rejected",
-        "Flagged": "Flagged",
-        "Archived": "Archived"
+        "Active": "Active",
+        "Archived": "Archived",
+        "Closed": "Closed"
       },
       "loading": "Loading reports...",
       "error": "Failed to load reports.",
@@ -483,10 +480,7 @@
         "date": "Date",
         "actions": "Actions",
         "noImage": "No Image",
-        "approve": "Approve",
-        "reject": "Reject",
         "archive": "Archive",
-        "flag": "Flag",
         "delete": "Delete",
         "confirmDelete": "Are you sure you want to permanently delete this report?"
       }

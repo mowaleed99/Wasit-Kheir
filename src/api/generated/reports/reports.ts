@@ -35,120 +35,117 @@ import { customInstance } from '../../mutator';
  * @summary Create a new report with optional images.
  */
 export const postApiReports = (
-  postApiReportsBody: PostApiReportsBody,
-) => {
+    postApiReportsBody: PostApiReportsBody,
+ ) => {
+      
+      const formData = new FormData();
+formData.append('Title', postApiReportsBody.Title)
+formData.append('Description', postApiReportsBody.Description)
+formData.append('Type', postApiReportsBody.Type)
+if(postApiReportsBody.LocationName !== undefined) {
+ formData.append('LocationName', postApiReportsBody.LocationName)
+ }
+if(postApiReportsBody.Latitude !== undefined) {
+ formData.append('Latitude', postApiReportsBody.Latitude.toString())
+ }
+if(postApiReportsBody.Longitude !== undefined) {
+ formData.append('Longitude', postApiReportsBody.Longitude.toString())
+ }
+formData.append('SubCategoryId', postApiReportsBody.SubCategoryId.toString())
+if(postApiReportsBody.DateReported !== undefined) {
+ formData.append('DateReported', postApiReportsBody.DateReported)
+ }
+if(postApiReportsBody.Images !== undefined) {
+ postApiReportsBody.Images.forEach(value => formData.append('Images', value));
+ }
 
-  const formData = new FormData();
-  formData.append('Title', postApiReportsBody.Title)
-  formData.append('Description', postApiReportsBody.Description)
-  formData.append('Type', postApiReportsBody.Type)
-  if (postApiReportsBody.LocationName !== undefined) {
-    formData.append('LocationName', postApiReportsBody.LocationName)
-  }
-  if (postApiReportsBody.Latitude !== undefined) {
-    formData.append('Latitude', postApiReportsBody.Latitude.toString())
-  }
-  if (postApiReportsBody.Longitude !== undefined) {
-    formData.append('Longitude', postApiReportsBody.Longitude.toString())
-  }
-  formData.append('SubCategoryId', postApiReportsBody.SubCategoryId.toString())
-  if (postApiReportsBody.DateReported !== undefined) {
-    formData.append('DateReported', postApiReportsBody.DateReported)
-  }
-  if (postApiReportsBody.Images !== undefined) {
-    postApiReportsBody.Images.forEach(value => formData.append('Images', value));
-  }
-
-  return customInstance<void>(
-    {
-      url: `/api/Reports`, method: 'POST',
-      headers: { 'Content-Type': 'multipart/form-data', },
-      data: formData
+      return customInstance<void>(
+      {url: `/api/Reports`, method: 'POST',
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData
     },
-  );
-}
-
+      );
+    }
+  
 
 
 export const getPostApiReportsMutationOptions = <TError = unknown,
-  TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof postApiReports>>, TError, { data: PostApiReportsBody }, TContext>, }
-  ): UseMutationOptions<Awaited<ReturnType<typeof postApiReports>>, TError, { data: PostApiReportsBody }, TContext> => {
-  const { mutation: mutationOptions } = options ?? {};
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiReports>>, TError,{data: PostApiReportsBody}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof postApiReports>>, TError,{data: PostApiReportsBody}, TContext> => {
+const {mutation: mutationOptions} = options ?? {};
+
+      
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiReports>>, {data: PostApiReportsBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiReports(data,)
+        }
+
+        
 
 
-  const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiReports>>, { data: PostApiReportsBody }> = (props) => {
-    const { data } = props ?? {};
+  return  { mutationFn, ...mutationOptions }}
 
-    return postApiReports(data,)
-  }
+    export type PostApiReportsMutationResult = NonNullable<Awaited<ReturnType<typeof postApiReports>>>
+    export type PostApiReportsMutationBody = PostApiReportsBody
+    export type PostApiReportsMutationError = unknown
 
-
-
-
-  return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiReportsMutationResult = NonNullable<Awaited<ReturnType<typeof postApiReports>>>
-export type PostApiReportsMutationBody = PostApiReportsBody
-export type PostApiReportsMutationError = unknown
-
-/**
-* @summary Create a new report with optional images.
-*/
+    /**
+ * @summary Create a new report with optional images.
+ */
 export const usePostApiReports = <TError = unknown,
-  TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof postApiReports>>, TError, { data: PostApiReportsBody }, TContext>, }
-  ): UseMutationResult<
-    Awaited<ReturnType<typeof postApiReports>>,
-    TError,
-    { data: PostApiReportsBody },
-    TContext
-  > => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiReports>>, TError,{data: PostApiReportsBody}, TContext>, }
+): UseMutationResult<
+        Awaited<ReturnType<typeof postApiReports>>,
+        TError,
+        {data: PostApiReportsBody},
+        TContext
+      > => {
 
-  const mutationOptions = getPostApiReportsMutationOptions(options);
+      const mutationOptions = getPostApiReportsMutationOptions(options);
 
-  return useMutation(mutationOptions);
-}
-/**
-* @summary Get all reports with filtering and pagination.
-*/
+      return useMutation(mutationOptions);
+    }
+    /**
+ * @summary Get all reports with filtering and pagination.
+ */
 export const getApiReports = (
-  params?: GetApiReportsParams,
-  signal?: AbortSignal
+    params?: GetApiReportsParams,
+ signal?: AbortSignal
 ) => {
-
-
-  return customInstance<void>(
-    {
-      url: `/api/Reports`, method: 'GET',
-      params, signal
+      
+      
+      return customInstance<void>(
+      {url: `/api/Reports`, method: 'GET',
+        params, signal
     },
-  );
-}
-
+      );
+    }
+  
 
 export const getGetApiReportsQueryKey = (params?: GetApiReportsParams,) => {
-  return [`/api/Reports`, ...(params ? [params] : [])] as const;
-}
+    return [`/api/Reports`, ...(params ? [params]: [])] as const;
+    }
 
-
-export const getGetApiReportsQueryOptions = <TData = Awaited<ReturnType<typeof getApiReports>>, TError = unknown>(params?: GetApiReportsParams, options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiReports>>, TError, TData>>, }
+    
+export const getGetApiReportsQueryOptions = <TData = Awaited<ReturnType<typeof getApiReports>>, TError = unknown>(params?: GetApiReportsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiReports>>, TError, TData>>, }
 ) => {
 
-  const { query: queryOptions } = options ?? {};
+const {query: queryOptions} = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiReportsQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getGetApiReportsQueryKey(params);
 
+  
 
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiReports>>> = ({ signal }) => getApiReports(params, signal);
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiReports>>> = ({ signal }) => getApiReports(params, signal);
+      
 
+      
 
-
-
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<Awaited<ReturnType<typeof getApiReports>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiReports>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type GetApiReportsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiReports>>>
@@ -158,15 +155,15 @@ export type GetApiReportsQueryError = unknown
  * @summary Get all reports with filtering and pagination.
  */
 export const useGetApiReports = <TData = Awaited<ReturnType<typeof getApiReports>>, TError = unknown>(
-  params?: GetApiReportsParams, options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiReports>>, TError, TData>>, }
+ params?: GetApiReportsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiReports>>, TError, TData>>, }
 
-): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getGetApiReportsQueryOptions(params, options)
+  const queryOptions = getGetApiReportsQueryOptions(params,options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
@@ -177,40 +174,39 @@ export const useGetApiReports = <TData = Awaited<ReturnType<typeof getApiReports
  * @summary Get a single report by ID.
  */
 export const getApiReportsId = (
-  id: number,
-  signal?: AbortSignal
+    id: number,
+ signal?: AbortSignal
 ) => {
-
-
-  return customInstance<void>(
-    {
-      url: `/api/Reports/${id}`, method: 'GET', signal
+      
+      
+      return customInstance<void>(
+      {url: `/api/Reports/${id}`, method: 'GET', signal
     },
-  );
-}
-
+      );
+    }
+  
 
 export const getGetApiReportsIdQueryKey = (id: number,) => {
-  return [`/api/Reports/${id}`] as const;
-}
+    return [`/api/Reports/${id}`] as const;
+    }
 
-
-export const getGetApiReportsIdQueryOptions = <TData = Awaited<ReturnType<typeof getApiReportsId>>, TError = unknown>(id: number, options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiReportsId>>, TError, TData>>, }
+    
+export const getGetApiReportsIdQueryOptions = <TData = Awaited<ReturnType<typeof getApiReportsId>>, TError = unknown>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiReportsId>>, TError, TData>>, }
 ) => {
 
-  const { query: queryOptions } = options ?? {};
+const {query: queryOptions} = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiReportsIdQueryKey(id);
+  const queryKey =  queryOptions?.queryKey ?? getGetApiReportsIdQueryKey(id);
 
+  
 
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiReportsId>>> = ({ signal }) => getApiReportsId(id, signal);
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiReportsId>>> = ({ signal }) => getApiReportsId(id, signal);
+      
 
+      
 
-
-
-
-  return { queryKey, queryFn, enabled: !!(id), ...queryOptions } as UseQueryOptions<Awaited<ReturnType<typeof getApiReportsId>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiReportsId>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type GetApiReportsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getApiReportsId>>>
@@ -220,15 +216,15 @@ export type GetApiReportsIdQueryError = unknown
  * @summary Get a single report by ID.
  */
 export const useGetApiReportsId = <TData = Awaited<ReturnType<typeof getApiReportsId>>, TError = unknown>(
-  id: number, options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiReportsId>>, TError, TData>>, }
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiReportsId>>, TError, TData>>, }
 
-): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getGetApiReportsIdQueryOptions(id, options)
+  const queryOptions = getGetApiReportsIdQueryOptions(id,options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
@@ -239,246 +235,239 @@ export const useGetApiReportsId = <TData = Awaited<ReturnType<typeof getApiRepor
  * @summary Update a report.
  */
 export const putApiReportsId = (
-  id: number,
-  putApiReportsIdBody: PutApiReportsIdBody,
-) => {
+    id: number,
+    putApiReportsIdBody: PutApiReportsIdBody,
+ ) => {
+      
+      const formData = new FormData();
+if(putApiReportsIdBody.Title !== undefined) {
+ formData.append('Title', putApiReportsIdBody.Title)
+ }
+if(putApiReportsIdBody.Description !== undefined) {
+ formData.append('Description', putApiReportsIdBody.Description)
+ }
+if(putApiReportsIdBody.Type !== undefined) {
+ formData.append('Type', putApiReportsIdBody.Type)
+ }
+if(putApiReportsIdBody.LocationName !== undefined) {
+ formData.append('LocationName', putApiReportsIdBody.LocationName)
+ }
+if(putApiReportsIdBody.Latitude !== undefined) {
+ formData.append('Latitude', putApiReportsIdBody.Latitude.toString())
+ }
+if(putApiReportsIdBody.Longitude !== undefined) {
+ formData.append('Longitude', putApiReportsIdBody.Longitude.toString())
+ }
+if(putApiReportsIdBody.SubCategoryId !== undefined) {
+ formData.append('SubCategoryId', putApiReportsIdBody.SubCategoryId.toString())
+ }
+if(putApiReportsIdBody.DateReported !== undefined) {
+ formData.append('DateReported', putApiReportsIdBody.DateReported)
+ }
+if(putApiReportsIdBody.ImageIdsToRemove !== undefined) {
+ putApiReportsIdBody.ImageIdsToRemove.forEach(value => formData.append('ImageIdsToRemove', value.toString()));
+ }
+if(putApiReportsIdBody.NewImages !== undefined) {
+ putApiReportsIdBody.NewImages.forEach(value => formData.append('NewImages', value));
+ }
 
-  const formData = new FormData();
-  if (putApiReportsIdBody.Title !== undefined) {
-    formData.append('Title', putApiReportsIdBody.Title)
-  }
-  if (putApiReportsIdBody.Description !== undefined) {
-    formData.append('Description', putApiReportsIdBody.Description)
-  }
-  if (putApiReportsIdBody.Type !== undefined) {
-    formData.append('Type', putApiReportsIdBody.Type)
-  }
-  if (putApiReportsIdBody.LocationName !== undefined) {
-    formData.append('LocationName', putApiReportsIdBody.LocationName)
-  }
-  if (putApiReportsIdBody.Latitude !== undefined) {
-    formData.append('Latitude', putApiReportsIdBody.Latitude.toString())
-  }
-  if (putApiReportsIdBody.Longitude !== undefined) {
-    formData.append('Longitude', putApiReportsIdBody.Longitude.toString())
-  }
-  if (putApiReportsIdBody.SubCategoryId !== undefined) {
-    formData.append('SubCategoryId', putApiReportsIdBody.SubCategoryId.toString())
-  }
-  if (putApiReportsIdBody.DateReported !== undefined) {
-    formData.append('DateReported', putApiReportsIdBody.DateReported)
-  }
-  if (putApiReportsIdBody.ImageIdsToRemove !== undefined) {
-    putApiReportsIdBody.ImageIdsToRemove.forEach(value => formData.append('ImageIdsToRemove', value.toString()));
-  }
-  if (putApiReportsIdBody.NewImages !== undefined) {
-    putApiReportsIdBody.NewImages.forEach(value => formData.append('NewImages', value));
-  }
-
-  return customInstance<void>(
-    {
-      url: `/api/Reports/${id}`, method: 'PUT',
-      headers: { 'Content-Type': 'multipart/form-data', },
-      data: formData
+      return customInstance<void>(
+      {url: `/api/Reports/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData
     },
-  );
-}
-
+      );
+    }
+  
 
 
 export const getPutApiReportsIdMutationOptions = <TError = unknown,
-  TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof putApiReportsId>>, TError, { id: number; data: PutApiReportsIdBody }, TContext>, }
-  ): UseMutationOptions<Awaited<ReturnType<typeof putApiReportsId>>, TError, { id: number; data: PutApiReportsIdBody }, TContext> => {
-  const { mutation: mutationOptions } = options ?? {};
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiReportsId>>, TError,{id: number;data: PutApiReportsIdBody}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof putApiReportsId>>, TError,{id: number;data: PutApiReportsIdBody}, TContext> => {
+const {mutation: mutationOptions} = options ?? {};
+
+      
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putApiReportsId>>, {id: number;data: PutApiReportsIdBody}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  putApiReportsId(id,data,)
+        }
+
+        
 
 
-  const mutationFn: MutationFunction<Awaited<ReturnType<typeof putApiReportsId>>, { id: number; data: PutApiReportsIdBody }> = (props) => {
-    const { id, data } = props ?? {};
+  return  { mutationFn, ...mutationOptions }}
 
-    return putApiReportsId(id, data,)
-  }
+    export type PutApiReportsIdMutationResult = NonNullable<Awaited<ReturnType<typeof putApiReportsId>>>
+    export type PutApiReportsIdMutationBody = PutApiReportsIdBody
+    export type PutApiReportsIdMutationError = unknown
 
-
-
-
-  return { mutationFn, ...mutationOptions }
-}
-
-export type PutApiReportsIdMutationResult = NonNullable<Awaited<ReturnType<typeof putApiReportsId>>>
-export type PutApiReportsIdMutationBody = PutApiReportsIdBody
-export type PutApiReportsIdMutationError = unknown
-
-/**
-* @summary Update a report.
-*/
+    /**
+ * @summary Update a report.
+ */
 export const usePutApiReportsId = <TError = unknown,
-  TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof putApiReportsId>>, TError, { id: number; data: PutApiReportsIdBody }, TContext>, }
-  ): UseMutationResult<
-    Awaited<ReturnType<typeof putApiReportsId>>,
-    TError,
-    { id: number; data: PutApiReportsIdBody },
-    TContext
-  > => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiReportsId>>, TError,{id: number;data: PutApiReportsIdBody}, TContext>, }
+): UseMutationResult<
+        Awaited<ReturnType<typeof putApiReportsId>>,
+        TError,
+        {id: number;data: PutApiReportsIdBody},
+        TContext
+      > => {
 
-  const mutationOptions = getPutApiReportsIdMutationOptions(options);
+      const mutationOptions = getPutApiReportsIdMutationOptions(options);
 
-  return useMutation(mutationOptions);
-}
-/**
-* @summary Delete a report.
-*/
+      return useMutation(mutationOptions);
+    }
+    /**
+ * @summary Delete a report.
+ */
 export const deleteApiReportsId = (
-  id: number,
-) => {
-
-
-  return customInstance<void>(
-    {
-      url: `/api/Reports/${id}`, method: 'DELETE'
+    id: number,
+ ) => {
+      
+      
+      return customInstance<void>(
+      {url: `/api/Reports/${id}`, method: 'DELETE'
     },
-  );
-}
-
+      );
+    }
+  
 
 
 export const getDeleteApiReportsIdMutationOptions = <TError = unknown,
-  TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteApiReportsId>>, TError, { id: number }, TContext>, }
-  ): UseMutationOptions<Awaited<ReturnType<typeof deleteApiReportsId>>, TError, { id: number }, TContext> => {
-  const { mutation: mutationOptions } = options ?? {};
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiReportsId>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteApiReportsId>>, TError,{id: number}, TContext> => {
+const {mutation: mutationOptions} = options ?? {};
+
+      
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteApiReportsId>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteApiReportsId(id,)
+        }
+
+        
 
 
-  const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteApiReportsId>>, { id: number }> = (props) => {
-    const { id } = props ?? {};
+  return  { mutationFn, ...mutationOptions }}
 
-    return deleteApiReportsId(id,)
-  }
+    export type DeleteApiReportsIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteApiReportsId>>>
+    
+    export type DeleteApiReportsIdMutationError = unknown
 
-
-
-
-  return { mutationFn, ...mutationOptions }
-}
-
-export type DeleteApiReportsIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteApiReportsId>>>
-
-export type DeleteApiReportsIdMutationError = unknown
-
-/**
-* @summary Delete a report.
-*/
+    /**
+ * @summary Delete a report.
+ */
 export const useDeleteApiReportsId = <TError = unknown,
-  TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteApiReportsId>>, TError, { id: number }, TContext>, }
-  ): UseMutationResult<
-    Awaited<ReturnType<typeof deleteApiReportsId>>,
-    TError,
-    { id: number },
-    TContext
-  > => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiReportsId>>, TError,{id: number}, TContext>, }
+): UseMutationResult<
+        Awaited<ReturnType<typeof deleteApiReportsId>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
 
-  const mutationOptions = getDeleteApiReportsIdMutationOptions(options);
+      const mutationOptions = getDeleteApiReportsIdMutationOptions(options);
 
-  return useMutation(mutationOptions);
-}
-/**
-* @summary Express interest in a report. Notifies the report owner.
-*/
+      return useMutation(mutationOptions);
+    }
+    /**
+ * @summary Express interest in a report. Notifies the report owner.
+ */
 export const postApiReportsIdInterested = (
-  id: number,
-) => {
-
-
-  return customInstance<void>(
-    {
-      url: `/api/Reports/${id}/interested`, method: 'POST'
+    id: number,
+ ) => {
+      
+      
+      return customInstance<void>(
+      {url: `/api/Reports/${id}/interested`, method: 'POST'
     },
-  );
-}
-
+      );
+    }
+  
 
 
 export const getPostApiReportsIdInterestedMutationOptions = <TError = unknown,
-  TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof postApiReportsIdInterested>>, TError, { id: number }, TContext>, }
-  ): UseMutationOptions<Awaited<ReturnType<typeof postApiReportsIdInterested>>, TError, { id: number }, TContext> => {
-  const { mutation: mutationOptions } = options ?? {};
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiReportsIdInterested>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof postApiReportsIdInterested>>, TError,{id: number}, TContext> => {
+const {mutation: mutationOptions} = options ?? {};
+
+      
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiReportsIdInterested>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  postApiReportsIdInterested(id,)
+        }
+
+        
 
 
-  const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiReportsIdInterested>>, { id: number }> = (props) => {
-    const { id } = props ?? {};
+  return  { mutationFn, ...mutationOptions }}
 
-    return postApiReportsIdInterested(id,)
-  }
+    export type PostApiReportsIdInterestedMutationResult = NonNullable<Awaited<ReturnType<typeof postApiReportsIdInterested>>>
+    
+    export type PostApiReportsIdInterestedMutationError = unknown
 
-
-
-
-  return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiReportsIdInterestedMutationResult = NonNullable<Awaited<ReturnType<typeof postApiReportsIdInterested>>>
-
-export type PostApiReportsIdInterestedMutationError = unknown
-
-/**
-* @summary Express interest in a report. Notifies the report owner.
-*/
+    /**
+ * @summary Express interest in a report. Notifies the report owner.
+ */
 export const usePostApiReportsIdInterested = <TError = unknown,
-  TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof postApiReportsIdInterested>>, TError, { id: number }, TContext>, }
-  ): UseMutationResult<
-    Awaited<ReturnType<typeof postApiReportsIdInterested>>,
-    TError,
-    { id: number },
-    TContext
-  > => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiReportsIdInterested>>, TError,{id: number}, TContext>, }
+): UseMutationResult<
+        Awaited<ReturnType<typeof postApiReportsIdInterested>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
 
-  const mutationOptions = getPostApiReportsIdInterestedMutationOptions(options);
+      const mutationOptions = getPostApiReportsIdInterestedMutationOptions(options);
 
-  return useMutation(mutationOptions);
-}
-/**
-* @summary Get the current user's reports.
-*/
+      return useMutation(mutationOptions);
+    }
+    /**
+ * @summary Get the current user's reports.
+ */
 export const getApiReportsMyReports = (
-  params?: GetApiReportsMyReportsParams,
-  signal?: AbortSignal
+    params?: GetApiReportsMyReportsParams,
+ signal?: AbortSignal
 ) => {
-
-
-  return customInstance<void>(
-    {
-      url: `/api/Reports/my-reports`, method: 'GET',
-      params, signal
+      
+      
+      return customInstance<void>(
+      {url: `/api/Reports/my-reports`, method: 'GET',
+        params, signal
     },
-  );
-}
-
+      );
+    }
+  
 
 export const getGetApiReportsMyReportsQueryKey = (params?: GetApiReportsMyReportsParams,) => {
-  return [`/api/Reports/my-reports`, ...(params ? [params] : [])] as const;
-}
+    return [`/api/Reports/my-reports`, ...(params ? [params]: [])] as const;
+    }
 
-
-export const getGetApiReportsMyReportsQueryOptions = <TData = Awaited<ReturnType<typeof getApiReportsMyReports>>, TError = unknown>(params?: GetApiReportsMyReportsParams, options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiReportsMyReports>>, TError, TData>>, }
+    
+export const getGetApiReportsMyReportsQueryOptions = <TData = Awaited<ReturnType<typeof getApiReportsMyReports>>, TError = unknown>(params?: GetApiReportsMyReportsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiReportsMyReports>>, TError, TData>>, }
 ) => {
 
-  const { query: queryOptions } = options ?? {};
+const {query: queryOptions} = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiReportsMyReportsQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getGetApiReportsMyReportsQueryKey(params);
 
+  
 
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiReportsMyReports>>> = ({ signal }) => getApiReportsMyReports(params, signal);
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiReportsMyReports>>> = ({ signal }) => getApiReportsMyReports(params, signal);
+      
 
+      
 
-
-
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<Awaited<ReturnType<typeof getApiReportsMyReports>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiReportsMyReports>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type GetApiReportsMyReportsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiReportsMyReports>>>
@@ -488,15 +477,15 @@ export type GetApiReportsMyReportsQueryError = unknown
  * @summary Get the current user's reports.
  */
 export const useGetApiReportsMyReports = <TData = Awaited<ReturnType<typeof getApiReportsMyReports>>, TError = unknown>(
-  params?: GetApiReportsMyReportsParams, options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiReportsMyReports>>, TError, TData>>, }
+ params?: GetApiReportsMyReportsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiReportsMyReports>>, TError, TData>>, }
 
-): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getGetApiReportsMyReportsQueryOptions(params, options)
+  const queryOptions = getGetApiReportsMyReportsQueryOptions(params,options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
@@ -507,41 +496,40 @@ export const useGetApiReportsMyReports = <TData = Awaited<ReturnType<typeof getA
  * @summary Get nearby reports using geo-coordinates.
  */
 export const getApiReportsNearby = (
-  params?: GetApiReportsNearbyParams,
-  signal?: AbortSignal
+    params?: GetApiReportsNearbyParams,
+ signal?: AbortSignal
 ) => {
-
-
-  return customInstance<void>(
-    {
-      url: `/api/Reports/nearby`, method: 'GET',
-      params, signal
+      
+      
+      return customInstance<void>(
+      {url: `/api/Reports/nearby`, method: 'GET',
+        params, signal
     },
-  );
-}
-
+      );
+    }
+  
 
 export const getGetApiReportsNearbyQueryKey = (params?: GetApiReportsNearbyParams,) => {
-  return [`/api/Reports/nearby`, ...(params ? [params] : [])] as const;
-}
+    return [`/api/Reports/nearby`, ...(params ? [params]: [])] as const;
+    }
 
-
-export const getGetApiReportsNearbyQueryOptions = <TData = Awaited<ReturnType<typeof getApiReportsNearby>>, TError = unknown>(params?: GetApiReportsNearbyParams, options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiReportsNearby>>, TError, TData>>, }
+    
+export const getGetApiReportsNearbyQueryOptions = <TData = Awaited<ReturnType<typeof getApiReportsNearby>>, TError = unknown>(params?: GetApiReportsNearbyParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiReportsNearby>>, TError, TData>>, }
 ) => {
 
-  const { query: queryOptions } = options ?? {};
+const {query: queryOptions} = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiReportsNearbyQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getGetApiReportsNearbyQueryKey(params);
 
+  
 
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiReportsNearby>>> = ({ signal }) => getApiReportsNearby(params, signal);
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiReportsNearby>>> = ({ signal }) => getApiReportsNearby(params, signal);
+      
 
+      
 
-
-
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<Awaited<ReturnType<typeof getApiReportsNearby>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiReportsNearby>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type GetApiReportsNearbyQueryResult = NonNullable<Awaited<ReturnType<typeof getApiReportsNearby>>>
@@ -551,15 +539,15 @@ export type GetApiReportsNearbyQueryError = unknown
  * @summary Get nearby reports using geo-coordinates.
  */
 export const useGetApiReportsNearby = <TData = Awaited<ReturnType<typeof getApiReportsNearby>>, TError = unknown>(
-  params?: GetApiReportsNearbyParams, options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiReportsNearby>>, TError, TData>>, }
+ params?: GetApiReportsNearbyParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiReportsNearby>>, TError, TData>>, }
 
-): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getGetApiReportsNearbyQueryOptions(params, options)
+  const queryOptions = getGetApiReportsNearbyQueryOptions(params,options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
@@ -570,233 +558,226 @@ export const useGetApiReportsNearby = <TData = Awaited<ReturnType<typeof getApiR
  * @summary Update report status.
  */
 export const putApiReportsIdStatus = (
-  id: number,
-  updateReportStatusDto: UpdateReportStatusDto,
-) => {
-
-
-  return customInstance<void>(
-    {
-      url: `/api/Reports/${id}/status`, method: 'PUT',
-      headers: { 'Content-Type': 'application/json', },
+    id: number,
+    updateReportStatusDto: UpdateReportStatusDto,
+ ) => {
+      
+      
+      return customInstance<void>(
+      {url: `/api/Reports/${id}/status`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
       data: updateReportStatusDto
     },
-  );
-}
-
+      );
+    }
+  
 
 
 export const getPutApiReportsIdStatusMutationOptions = <TError = unknown,
-  TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof putApiReportsIdStatus>>, TError, { id: number; data: UpdateReportStatusDto }, TContext>, }
-  ): UseMutationOptions<Awaited<ReturnType<typeof putApiReportsIdStatus>>, TError, { id: number; data: UpdateReportStatusDto }, TContext> => {
-  const { mutation: mutationOptions } = options ?? {};
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiReportsIdStatus>>, TError,{id: number;data: UpdateReportStatusDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof putApiReportsIdStatus>>, TError,{id: number;data: UpdateReportStatusDto}, TContext> => {
+const {mutation: mutationOptions} = options ?? {};
+
+      
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putApiReportsIdStatus>>, {id: number;data: UpdateReportStatusDto}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  putApiReportsIdStatus(id,data,)
+        }
+
+        
 
 
-  const mutationFn: MutationFunction<Awaited<ReturnType<typeof putApiReportsIdStatus>>, { id: number; data: UpdateReportStatusDto }> = (props) => {
-    const { id, data } = props ?? {};
+  return  { mutationFn, ...mutationOptions }}
 
-    return putApiReportsIdStatus(id, data,)
-  }
+    export type PutApiReportsIdStatusMutationResult = NonNullable<Awaited<ReturnType<typeof putApiReportsIdStatus>>>
+    export type PutApiReportsIdStatusMutationBody = UpdateReportStatusDto
+    export type PutApiReportsIdStatusMutationError = unknown
 
-
-
-
-  return { mutationFn, ...mutationOptions }
-}
-
-export type PutApiReportsIdStatusMutationResult = NonNullable<Awaited<ReturnType<typeof putApiReportsIdStatus>>>
-export type PutApiReportsIdStatusMutationBody = UpdateReportStatusDto
-export type PutApiReportsIdStatusMutationError = unknown
-
-/**
-* @summary Update report status.
-*/
+    /**
+ * @summary Update report status.
+ */
 export const usePutApiReportsIdStatus = <TError = unknown,
-  TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof putApiReportsIdStatus>>, TError, { id: number; data: UpdateReportStatusDto }, TContext>, }
-  ): UseMutationResult<
-    Awaited<ReturnType<typeof putApiReportsIdStatus>>,
-    TError,
-    { id: number; data: UpdateReportStatusDto },
-    TContext
-  > => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiReportsIdStatus>>, TError,{id: number;data: UpdateReportStatusDto}, TContext>, }
+): UseMutationResult<
+        Awaited<ReturnType<typeof putApiReportsIdStatus>>,
+        TError,
+        {id: number;data: UpdateReportStatusDto},
+        TContext
+      > => {
 
-  const mutationOptions = getPutApiReportsIdStatusMutationOptions(options);
+      const mutationOptions = getPutApiReportsIdStatusMutationOptions(options);
 
-  return useMutation(mutationOptions);
-}
-/**
-* @summary Report abuse for a specific report. Cannot report your own report and cannot create duplicates.
-*/
+      return useMutation(mutationOptions);
+    }
+    /**
+ * @summary Report abuse for a specific report. Cannot report your own report and cannot create duplicates.
+ */
 export const postApiReportsIdReport = (
-  id: number,
-  reportAbuseDto: ReportAbuseDto,
-) => {
-
-
-  return customInstance<void>(
-    {
-      url: `/api/Reports/${id}/report`, method: 'POST',
-      headers: { 'Content-Type': 'application/json', },
+    id: number,
+    reportAbuseDto: ReportAbuseDto,
+ ) => {
+      
+      
+      return customInstance<void>(
+      {url: `/api/Reports/${id}/report`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
       data: reportAbuseDto
     },
-  );
-}
-
+      );
+    }
+  
 
 
 export const getPostApiReportsIdReportMutationOptions = <TError = unknown,
-  TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof postApiReportsIdReport>>, TError, { id: number; data: ReportAbuseDto }, TContext>, }
-  ): UseMutationOptions<Awaited<ReturnType<typeof postApiReportsIdReport>>, TError, { id: number; data: ReportAbuseDto }, TContext> => {
-  const { mutation: mutationOptions } = options ?? {};
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiReportsIdReport>>, TError,{id: number;data: ReportAbuseDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof postApiReportsIdReport>>, TError,{id: number;data: ReportAbuseDto}, TContext> => {
+const {mutation: mutationOptions} = options ?? {};
+
+      
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiReportsIdReport>>, {id: number;data: ReportAbuseDto}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  postApiReportsIdReport(id,data,)
+        }
+
+        
 
 
-  const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiReportsIdReport>>, { id: number; data: ReportAbuseDto }> = (props) => {
-    const { id, data } = props ?? {};
+  return  { mutationFn, ...mutationOptions }}
 
-    return postApiReportsIdReport(id, data,)
-  }
+    export type PostApiReportsIdReportMutationResult = NonNullable<Awaited<ReturnType<typeof postApiReportsIdReport>>>
+    export type PostApiReportsIdReportMutationBody = ReportAbuseDto
+    export type PostApiReportsIdReportMutationError = unknown
 
-
-
-
-  return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiReportsIdReportMutationResult = NonNullable<Awaited<ReturnType<typeof postApiReportsIdReport>>>
-export type PostApiReportsIdReportMutationBody = ReportAbuseDto
-export type PostApiReportsIdReportMutationError = unknown
-
-/**
-* @summary Report abuse for a specific report. Cannot report your own report and cannot create duplicates.
-*/
+    /**
+ * @summary Report abuse for a specific report. Cannot report your own report and cannot create duplicates.
+ */
 export const usePostApiReportsIdReport = <TError = unknown,
-  TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof postApiReportsIdReport>>, TError, { id: number; data: ReportAbuseDto }, TContext>, }
-  ): UseMutationResult<
-    Awaited<ReturnType<typeof postApiReportsIdReport>>,
-    TError,
-    { id: number; data: ReportAbuseDto },
-    TContext
-  > => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiReportsIdReport>>, TError,{id: number;data: ReportAbuseDto}, TContext>, }
+): UseMutationResult<
+        Awaited<ReturnType<typeof postApiReportsIdReport>>,
+        TError,
+        {id: number;data: ReportAbuseDto},
+        TContext
+      > => {
 
-  const mutationOptions = getPostApiReportsIdReportMutationOptions(options);
+      const mutationOptions = getPostApiReportsIdReportMutationOptions(options);
 
-  return useMutation(mutationOptions);
-}
-/**
-* @summary Save a report for quick access.
-*/
+      return useMutation(mutationOptions);
+    }
+    /**
+ * @summary Save a report for quick access.
+ */
 export const postApiReportsIdSave = (
-  id: number,
-) => {
-
-
-  return customInstance<void>(
-    {
-      url: `/api/Reports/${id}/save`, method: 'POST'
+    id: number,
+ ) => {
+      
+      
+      return customInstance<void>(
+      {url: `/api/Reports/${id}/save`, method: 'POST'
     },
-  );
-}
-
+      );
+    }
+  
 
 
 export const getPostApiReportsIdSaveMutationOptions = <TError = unknown,
-  TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof postApiReportsIdSave>>, TError, { id: number }, TContext>, }
-  ): UseMutationOptions<Awaited<ReturnType<typeof postApiReportsIdSave>>, TError, { id: number }, TContext> => {
-  const { mutation: mutationOptions } = options ?? {};
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiReportsIdSave>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof postApiReportsIdSave>>, TError,{id: number}, TContext> => {
+const {mutation: mutationOptions} = options ?? {};
+
+      
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiReportsIdSave>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  postApiReportsIdSave(id,)
+        }
+
+        
 
 
-  const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiReportsIdSave>>, { id: number }> = (props) => {
-    const { id } = props ?? {};
+  return  { mutationFn, ...mutationOptions }}
 
-    return postApiReportsIdSave(id,)
-  }
+    export type PostApiReportsIdSaveMutationResult = NonNullable<Awaited<ReturnType<typeof postApiReportsIdSave>>>
+    
+    export type PostApiReportsIdSaveMutationError = unknown
 
-
-
-
-  return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiReportsIdSaveMutationResult = NonNullable<Awaited<ReturnType<typeof postApiReportsIdSave>>>
-
-export type PostApiReportsIdSaveMutationError = unknown
-
-/**
-* @summary Save a report for quick access.
-*/
+    /**
+ * @summary Save a report for quick access.
+ */
 export const usePostApiReportsIdSave = <TError = unknown,
-  TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof postApiReportsIdSave>>, TError, { id: number }, TContext>, }
-  ): UseMutationResult<
-    Awaited<ReturnType<typeof postApiReportsIdSave>>,
-    TError,
-    { id: number },
-    TContext
-  > => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiReportsIdSave>>, TError,{id: number}, TContext>, }
+): UseMutationResult<
+        Awaited<ReturnType<typeof postApiReportsIdSave>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
 
-  const mutationOptions = getPostApiReportsIdSaveMutationOptions(options);
+      const mutationOptions = getPostApiReportsIdSaveMutationOptions(options);
 
-  return useMutation(mutationOptions);
-}
-/**
-* @summary Remove a saved report.
-*/
+      return useMutation(mutationOptions);
+    }
+    /**
+ * @summary Remove a saved report.
+ */
 export const deleteApiReportsIdSave = (
-  id: number,
-) => {
-
-
-  return customInstance<void>(
-    {
-      url: `/api/Reports/${id}/save`, method: 'DELETE'
+    id: number,
+ ) => {
+      
+      
+      return customInstance<void>(
+      {url: `/api/Reports/${id}/save`, method: 'DELETE'
     },
-  );
-}
-
+      );
+    }
+  
 
 
 export const getDeleteApiReportsIdSaveMutationOptions = <TError = unknown,
-  TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteApiReportsIdSave>>, TError, { id: number }, TContext>, }
-  ): UseMutationOptions<Awaited<ReturnType<typeof deleteApiReportsIdSave>>, TError, { id: number }, TContext> => {
-  const { mutation: mutationOptions } = options ?? {};
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiReportsIdSave>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteApiReportsIdSave>>, TError,{id: number}, TContext> => {
+const {mutation: mutationOptions} = options ?? {};
+
+      
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteApiReportsIdSave>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteApiReportsIdSave(id,)
+        }
+
+        
 
 
-  const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteApiReportsIdSave>>, { id: number }> = (props) => {
-    const { id } = props ?? {};
+  return  { mutationFn, ...mutationOptions }}
 
-    return deleteApiReportsIdSave(id,)
-  }
+    export type DeleteApiReportsIdSaveMutationResult = NonNullable<Awaited<ReturnType<typeof deleteApiReportsIdSave>>>
+    
+    export type DeleteApiReportsIdSaveMutationError = unknown
 
-
-
-
-  return { mutationFn, ...mutationOptions }
-}
-
-export type DeleteApiReportsIdSaveMutationResult = NonNullable<Awaited<ReturnType<typeof deleteApiReportsIdSave>>>
-
-export type DeleteApiReportsIdSaveMutationError = unknown
-
-/**
-* @summary Remove a saved report.
-*/
+    /**
+ * @summary Remove a saved report.
+ */
 export const useDeleteApiReportsIdSave = <TError = unknown,
-  TContext = unknown>(options?: { mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteApiReportsIdSave>>, TError, { id: number }, TContext>, }
-  ): UseMutationResult<
-    Awaited<ReturnType<typeof deleteApiReportsIdSave>>,
-    TError,
-    { id: number },
-    TContext
-  > => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiReportsIdSave>>, TError,{id: number}, TContext>, }
+): UseMutationResult<
+        Awaited<ReturnType<typeof deleteApiReportsIdSave>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
 
-  const mutationOptions = getDeleteApiReportsIdSaveMutationOptions(options);
+      const mutationOptions = getDeleteApiReportsIdSaveMutationOptions(options);
 
-  return useMutation(mutationOptions);
-}
+      return useMutation(mutationOptions);
+    }
+    
