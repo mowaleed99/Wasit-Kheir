@@ -221,11 +221,9 @@ export const CategoryTree: React.FC = () => {
       return;
     }
 
-    // This is a parent category
-    const newExpanded = new Set(expanded);
-    if (newExpanded.has(cat.id)) {
-      newExpanded.delete(cat.id);
-    } else {
+    // This is a parent category (accordion behavior: only one open at a time)
+    const newExpanded = new Set<number>();
+    if (!expanded.has(cat.id)) {
       newExpanded.add(cat.id);
     }
     setExpanded(newExpanded);
