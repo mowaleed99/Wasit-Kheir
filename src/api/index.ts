@@ -69,6 +69,12 @@ const extractList = (res: any): any[] => {
   if (Array.isArray(res?.data?.data)) return res.data.data;
   // { data: [] }  <- flat list wrapper
   if (Array.isArray(res?.data)) return res.data;
+  // Check for C# capitalized properties
+  if (Array.isArray(res?.data?.Items)) return res.data.Items;
+  if (Array.isArray(res?.data?.items)) return res.data.items;
+  if (Array.isArray(res?.Items)) return res.Items;
+  if (Array.isArray(res?.items)) return res.items;
+  if (Array.isArray(res?.Data)) return res.Data;
   // already an array
   if (Array.isArray(res)) return res;
   return [];
@@ -100,8 +106,8 @@ export const useReports = (
     getNextPageParam: (lastPage: any) => {
       // Handle both { data: { page, totalPages } } and { page, totalPages }
       const pagination = lastPage?.data ?? lastPage;
-      const page = pagination?.page ?? pagination?.currentPage;
-      const totalPages = pagination?.totalPages;
+      const page = pagination?.page ?? pagination?.currentPage ?? pagination?.Page ?? pagination?.CurrentPage;
+      const totalPages = pagination?.totalPages ?? pagination?.TotalPages;
       if (page != null && totalPages != null && page < totalPages) {
         return page + 1;
       }

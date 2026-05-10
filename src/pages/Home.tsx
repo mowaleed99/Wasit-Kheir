@@ -1,4 +1,4 @@
-import { useReports, useFilteredReports, extractList } from "@/api";
+import { useReports, extractList } from "@/api";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useAuth } from "@/context/AuthContext";
 import { useCategoryFilter } from "@/context/CategoryFilterContext";
@@ -14,36 +14,21 @@ export const Home = () => {
 
   const hasFilter = selectedCategoryId !== null || selectedSubCategoryId !== null;
 
-  // ── Filtered reports (single page) ──────────────────────────────────────
-  const {
-    data: filteredRaw,
-    isLoading: filteredLoading,
-    error: filteredError,
-  } = useFilteredReports(
-    {
-      CategoryId: selectedCategoryId ?? undefined,
-      SubCategoryId: selectedSubCategoryId ?? undefined,
-      PageSize: 100,
-      Page: 1,
-    },
-    hasFilter
-  );
-
-  // ── Infinite scroll (unfiltered feed) ───────────────────────────────────
+  // ── Infinite scroll feed (handles both filtered and unfiltered) ─────────
   const {
     data,
     fetchNextPage,
     hasNextPage,
-    isLoading: reportsLoading,
-    error: reportsError,
-  } = useReports(undefined, !hasFilter && isAuthenticated);
-
-  const loading = hasFilter ? filteredLoading : reportsLoading;
-  const error = hasFilter ? filteredError : reportsError;
-
-  // Extract the array from the filtered response
-  // API shape: { success, data: { data: [], page, totalPages } }
-  const filteredReports = extractList(filteredRaw);
+    isLoading: loading,
+    error,
+  } = useReports(
+    {
+      CategoryId: selectedCategoryId ?? undefined,
+      SubCategoryId: selectedSubCategoryId ?? undefined,
+      PageSize: 10,
+    },
+    isAuthenticated
+  );
 
   // Extract all report items from infinite pages
   const allReports =
@@ -108,58 +93,42 @@ export const Home = () => {
         {/* Reports */}
         {!loading && !error && (
           <>
-            {hasFilter ? (
-              // ── Filtered grid ────────────────────────────────────────────
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {filteredReports.length === 0 ? (
-                  <div className="col-span-2 text-center py-12">
-                    <div className="bg-muted rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                      <Search className="w-8 h-8 text-muted-foreground" />
-                    </div>
-                    <h3 className="text-lg font-medium text-foreground">{t('home.noReportsFound')}</h3>
-                    <p className="text-muted-foreground mt-1">{t('home.noReportsMatch')}</p>
-                    <button
-                      onClick={clearFilter}
-                      className="mt-4 text-blue-600 hover:text-blue-700 font-medium"
-                    >
-                      {t('home.clearFilter')}
-                    </button>
-                  </div>
-                ) : (
-                  filteredReports.map((report: any) => (
-                    <ReportCard key={report.id} report={report} />
-                  ))
+            {allReports.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="bg-muted rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <Search className="w-8 h-8 text-muted-foreground" />
+                </div>
+                <h3 className="text-lg font-medium text-foreground">
+                  {hasFilter ? t('home.noReportsFound') : t('home.noReportsYet')}
+                </h3>
+                <p className="text-muted-foreground mt-1">
+                  {hasFilter ? t('home.noReportsMatch') : t('home.beTheFirst')}
+                </p>
+                {hasFilter && (
+                  <button
+                    onClick={clearFilter}
+                    className="mt-4 text-blue-600 hover:text-blue-700 font-medium"
+                  >
+                    {t('home.clearFilter')}
+                  </button>
                 )}
               </div>
             ) : (
-              // ── Infinite scroll feed ─────────────────────────────────────
-              <>
-                {allReports.length === 0 ? (
-                  <div className="text-center py-12">
-                    <div className="bg-muted rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                      <Search className="w-8 h-8 text-muted-foreground" />
-                    </div>
-                    <h3 className="text-lg font-medium text-foreground">{t('home.noReportsYet')}</h3>
-                    <p className="text-muted-foreground mt-1">{t('home.beTheFirst')}</p>
+              <InfiniteScroll
+                dataLength={allReports.length}
+                next={fetchNextPage}
+                hasMore={!!hasNextPage}
+                loader={
+                  <div className="text-center py-8">
+                    <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto" />
                   </div>
-                ) : (
-                  <InfiniteScroll
-                    dataLength={allReports.length}
-                    next={fetchNextPage}
-                    hasMore={!!hasNextPage}
-                    loader={
-                      <div className="text-center py-8">
-                        <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto" />
-                      </div>
-                    }
-                    className="grid grid-cols-1 md:grid-cols-2 gap-6"
-                  >
-                    {allReports.map((report: any, i: number) => (
-                      <ReportCard key={`${i}-${report.id}`} report={report} />
-                    ))}
-                  </InfiniteScroll>
-                )}
-              </>
+                }
+                className="flex flex-col gap-6"
+              >
+                {allReports.map((report: any, i: number) => (
+                  <ReportCard key={`${i}-${report.id}`} report={report} />
+                ))}
+              </InfiniteScroll>
             )}
           </>
         )}

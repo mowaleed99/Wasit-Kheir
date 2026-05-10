@@ -41,8 +41,8 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report }) => {
         >
             {/* Image */}
             {images.length > 0 && (
-                <div className="w-full h-48 bg-muted overflow-hidden relative">
-                    <ImageGallery images={images} altText={report.title} className="h-full" />
+                <div className="w-full aspect-video sm:aspect-[16/9] bg-muted overflow-hidden relative">
+                    <ImageGallery images={images} altText={report.title} className="w-full h-full object-cover" />
                 </div>
             )}
 
