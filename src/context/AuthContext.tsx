@@ -5,10 +5,9 @@ import {
   useState,
   ReactNode,
 } from "react";
-import { useUser } from "@/api";
-import { removeAuthToken } from "@/api/mutator";
-import { requestForToken } from "@/lib/firebase";
 import { usePostApiNotificationsRegisterDevice } from "@/api/generated/notifications/notifications";
+import { getAuthToken, removeAuthToken } from "@/api/mutator";
+import { requestForToken } from "@/lib/firebase";
 
 interface AuthContextType {
   user: any | null;
@@ -65,23 +64,39 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Check if it's a 401 (unauthorized) - that's expected when not logged in
       // Only treat as error if it's not a 401
       const errorResponse = (error as any)?.response;
-      if (errorResponse?.status === 401) {
-        console.log("401 error - user not authenticated");
+      const status = errorResponse?.status;
+      
+      if (status === 401 || status === 403) {
+        console.log(`${status} error - user not authenticated`);
         setUser(null);
         setIsAuthenticated(false);
+        removeAuthToken();
       } else {
-        // Other errors might be network issues, but we'll treat as not authenticated
-        console.log("Non-401 error, treating as not authenticated");
-        setUser(null);
-        setIsAuthenticated(false);
+        // Other errors might be network issues. Don't drop session if we have a token!
+        console.log("Non-401 error, keeping session if token exists. Error:", error);
+        const hasToken = !!getAuthToken();
+        if (hasToken && !isAuthenticated) {
+           // We have a token but couldn't fetch user due to network/500 error.
+           // Keep them "authenticated" so the app doesn't kick them to login screen.
+           setIsAuthenticated(true);
+        } else if (!hasToken) {
+           setUser(null);
+           setIsAuthenticated(false);
+        }
       }
-    } else if (!isLoading) {
-      // Only set to not authenticated if we're done loading and have no data
-      console.log("No user data and not loading, setting not authenticated");
-      setUser(null);
-      setIsAuthenticated(false);
+    } else if (!isLoading && !userData) {
+      // Only set to not authenticated if we're done loading and have no data, AND no token exists
+      const hasToken = !!getAuthToken();
+      if (!hasToken) {
+          console.log("No user data, not loading, and no token. Setting not authenticated.");
+          setUser(null);
+          setIsAuthenticated(false);
+      } else if (!isAuthenticated) {
+          // Token exists, maybe waiting for retry or hydration
+          setIsAuthenticated(true);
+      }
     }
-  }, [userData, error, isLoading]);
+  }, [userData, error, isLoading, isAuthenticated]);
 
 
   const logout = () => {
