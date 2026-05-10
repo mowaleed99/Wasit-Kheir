@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { MapPin, Calendar, Tag } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { ImageGallery } from "@/components/ui/ImageGallery";
+import { resolveImageUrl } from "@/utils/imageUrl";
 
 const typeColors: Record<string, string> = {
     LostItem: "bg-red-100 text-red-700 border-red-200 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20",
@@ -30,10 +32,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report }) => {
 
     const typeClass = typeColors[report.type] || "bg-muted text-muted-foreground border-border";
     const typeLabel = t(`reportTypes.${report.type}`, { defaultValue: report.type });
-    const firstImage = report.images?.[0]?.imageUrl;
-    const imageUrl = firstImage
-        ? `https://wasitkheir.runasp.net${firstImage}`
-        : null;
+    const images = report.images || [];
 
     return (
         <Link
@@ -41,13 +40,9 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report }) => {
             className="group bg-card text-card-foreground rounded-2xl border border-border shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col"
         >
             {/* Image */}
-            {imageUrl && (
-                <div className="w-full h-48 bg-muted overflow-hidden">
-                    <img
-                        src={imageUrl}
-                        alt={report.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
+            {images.length > 0 && (
+                <div className="w-full h-48 bg-muted overflow-hidden relative">
+                    <ImageGallery images={images} altText={report.title} className="h-full" />
                 </div>
             )}
 
@@ -100,7 +95,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report }) => {
                         <img
                             src={
                                 report.createdByProfilePictureUrl
-                                    ? `https://wasitkheir.runasp.net${report.createdByProfilePictureUrl}`
+                                    ? resolveImageUrl(report.createdByProfilePictureUrl)
                                     : `https://ui-avatars.com/api/?name=${encodeURIComponent(report.createdByName)}&background=random&color=fff`
                             }
                             alt={report.createdByName}

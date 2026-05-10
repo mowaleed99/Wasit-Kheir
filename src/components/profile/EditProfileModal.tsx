@@ -7,6 +7,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { X, Loader2, Camera, User } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useTranslation } from "react-i18next";
+import { resolveImageUrl } from "@/utils/imageUrl";
 
 const editProfileSchema = z.object({
     fullName: z.string().min(2, "Name must be at least 2 characters"),
@@ -125,7 +126,7 @@ export const EditProfileModal = ({ user, isOpen, onClose }: EditProfileModalProp
 
     if (!isOpen) return null;
 
-    const profilePic = user?.profilePictureUrl ? (user.profilePictureUrl.startsWith('http') ? user.profilePictureUrl : `https://wasitkheir.runasp.net${user.profilePictureUrl}`) : null;
+    const profilePic = user?.profilePictureUrl ? resolveImageUrl(user.profilePictureUrl) : null;
     const currentPhoto = photoPreview || profilePic || user?.avatar;
 
     return (

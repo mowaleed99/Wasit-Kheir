@@ -7,6 +7,7 @@ import {
 import { useGetApiHomeDashboard } from "@/api/generated/home/home";
 import { Search, Clock, Activity } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { resolveImageUrl } from "@/utils/imageUrl";
 
 export const AdminDashboard: React.FC = () => {
     const { t } = useTranslation();
@@ -140,7 +141,7 @@ export const AdminDashboard: React.FC = () => {
                                                 <div className="w-16 h-16 rounded-lg bg-muted overflow-hidden flex-shrink-0">
                                                     {report.images?.[0]?.imageUrl ? (
                                                         <img
-                                                            src={`https://wasitkheir.runasp.net${report.images[0].imageUrl}`}
+                                                            src={resolveImageUrl(report.images[0].imageUrl)}
                                                             alt={report.title}
                                                             className="w-full h-full object-cover"
                                                         />
@@ -172,7 +173,7 @@ export const AdminDashboard: React.FC = () => {
                                                 <img
                                                     src={
                                                         report.createdByProfilePictureUrl
-                                                            ? `https://wasitkheir.runasp.net${report.createdByProfilePictureUrl}`
+                                                            ? resolveImageUrl(report.createdByProfilePictureUrl)
                                                             : `https://ui-avatars.com/api/?name=${encodeURIComponent(
                                                                 report.createdByName || "User"
                                                             )}&background=random&color=fff`

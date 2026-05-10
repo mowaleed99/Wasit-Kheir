@@ -3,6 +3,7 @@ import { Loader2, Search } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { resolveImageUrl } from "@/utils/imageUrl";
 
 interface ChatListProps {
     selectedSessionId?: number | null;
@@ -106,7 +107,7 @@ const ChatListItem = ({ session, isSelected, onSelect }: ChatListItemProps) => {
         >
             <div className="relative">
                 <img
-                    src={otherUser?.avatar || otherUser?.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(otherUser?.fullName || 'User')}&background=random&color=fff`}
+                    src={otherUser?.avatar || (otherUser?.profilePicture ? resolveImageUrl(otherUser.profilePicture) : null) || `https://ui-avatars.com/api/?name=${encodeURIComponent(otherUser?.fullName || 'User')}&background=random&color=fff`}
                     alt={otherUser?.fullName}
                     className="w-12 h-12 rounded-full object-cover border border-border"
                 />

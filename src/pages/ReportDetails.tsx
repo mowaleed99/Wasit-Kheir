@@ -8,6 +8,8 @@ import { usePostApiChatSessionsOtherUserId, apiClient } from "@/api";
 import { MapPicker } from "@/components/ui/MapPicker";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/Button";
+import { ImageGallery } from "@/components/ui/ImageGallery";
+import { resolveImageUrl } from "@/utils/imageUrl";
 import {
     ArrowLeft, MapPin, Calendar, MessageCircle, Share2, Send,
     Trash2, CheckCircle, Tag, User, Sparkles, Bookmark, BookmarkCheck
@@ -22,7 +24,7 @@ const typeColors: Record<string, string> = {
     FoundPerson: "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-900/50",
 };
 
-const BASE_URL = "https://wasitkheir.runasp.net";
+// Using resolveImageUrl instead of BASE_URL where needed
 
 export const ReportDetails: React.FC = () => {
     const { t } = useTranslation();
@@ -251,27 +253,7 @@ export const ReportDetails: React.FC = () => {
 
                             {/* Image Gallery */}
                             {images.length > 0 && (
-                                <div className="relative">
-                                    <img
-                                        src={`${BASE_URL}${images[0].imageUrl}`}
-                                        alt={reportData.title}
-                                        className="w-full h-72 object-cover"
-                                        onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
-                                    />
-                                    {images.length > 1 && (
-                                        <div className="absolute bottom-3 right-3 flex gap-2">
-                                            {images.slice(1).map((img: any, i: number) => (
-                                                <img
-                                                    key={i}
-                                                    src={`${BASE_URL}${img.imageUrl}`}
-                                                    alt={`Image ${i + 2}`}
-                                                    className="w-16 h-16 rounded-xl object-cover border-2 border-white shadow-md"
-                                                    onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
-                                                />
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
+                                <ImageGallery images={images} altText={reportData.title} className="h-72 md:h-[400px]" />
                             )}
 
                             {/* Type & Status badges */}
@@ -296,7 +278,7 @@ export const ReportDetails: React.FC = () => {
                                     <img
                                         src={
                                             reportData.createdByProfilePictureUrl
-                                                ? `${BASE_URL}${reportData.createdByProfilePictureUrl}`
+                                                ? resolveImageUrl(reportData.createdByProfilePictureUrl)
                                                 : `https://ui-avatars.com/api/?name=${encodeURIComponent(reportData.createdByName || t('reportDetails.unknownUser'))}&background=random&color=fff`
                                         }
                                         alt={reportData.createdByName}
@@ -510,7 +492,7 @@ export const ReportDetails: React.FC = () => {
                                 <img
                                     src={
                                         reportData.createdByProfilePictureUrl
-                                            ? `${BASE_URL}${reportData.createdByProfilePictureUrl}`
+                                            ? resolveImageUrl(reportData.createdByProfilePictureUrl)
                                             : `https://ui-avatars.com/api/?name=${encodeURIComponent(reportData.createdByName || t('reportDetails.unknownUser'))}&background=random&color=fff`
                                     }
                                     alt={reportData.createdByName}

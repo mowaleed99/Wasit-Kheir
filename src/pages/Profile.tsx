@@ -1,5 +1,6 @@
 import { useAuth } from "@/context/AuthContext";
 import { useMyReports, extractList } from "@/api";
+import { resolveImageUrl } from "@/utils/imageUrl";
 import { ReportCard } from "@/components/reports/ReportCard";
 import { Mail, Phone, MapPin, Calendar, Edit2, Bookmark, Settings } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -52,7 +53,7 @@ export const Profile: React.FC = () => {
               <img
                 src={
                   user?.profilePictureUrl
-                    ? (user.profilePictureUrl.startsWith('http') ? user.profilePictureUrl : `https://wasitkheir.runasp.net${user.profilePictureUrl}`)
+                    ? resolveImageUrl(user.profilePictureUrl)
                     : user?.avatar
                       ? user.avatar
                       : `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.fullName || "User")}&background=3b82f6&color=fff&size=128`

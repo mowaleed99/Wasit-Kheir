@@ -4,6 +4,7 @@ import { ArrowLeft, Loader2, Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { resolveImageUrl } from "@/utils/imageUrl";
 
 interface ChatWindowProps {
     sessionId: number;
@@ -116,7 +117,7 @@ export const ChatWindow = ({ sessionId, onBack }: ChatWindowProps) => {
                     {otherUser ? (
                         <>
                             <img
-                                src={otherUser.avatar || otherUser.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(otherUser.fullName || 'User')}&background=random&color=fff`}
+                                src={otherUser.avatar || (otherUser.profilePicture ? resolveImageUrl(otherUser.profilePicture) : null) || `https://ui-avatars.com/api/?name=${encodeURIComponent(otherUser.fullName || 'User')}&background=random&color=fff`}
                                 alt={otherUser.fullName}
                                 className="w-10 h-10 rounded-full object-cover border border-border"
                             />

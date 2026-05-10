@@ -7,7 +7,9 @@ import { usePutApiAdminUsersIdVerify } from "@/api/generated/admin/admin";
 import { queryClient } from "@/api";
 import { Search, CheckCircle, Shield, UserX, UserCheck } from "lucide-react";
 import { CreateAdminCommand } from "@/api/generated/lostAndFoundAPI.schemas";
+import { useAuth } from "@/context/AuthContext";
 import { useTranslation } from "react-i18next";
+import { resolveImageUrl } from "@/utils/imageUrl";
 
 export const AdminUsers: React.FC = () => {
     const { t } = useTranslation();
@@ -183,7 +185,7 @@ export const AdminUsers: React.FC = () => {
                                                 <img
                                                     src={
                                                         usr.profilePictureUrl
-                                                            ? `https://wasitkheir.runasp.net${usr.profilePictureUrl}`
+                                                            ? resolveImageUrl(usr.profilePictureUrl)
                                                             : `https://ui-avatars.com/api/?name=${encodeURIComponent(
                                                                 usr.fullName || "User"
                                                             )}&background=3b82f6&color=fff`
