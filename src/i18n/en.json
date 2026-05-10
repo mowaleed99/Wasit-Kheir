@@ -148,6 +148,7 @@
     "loadingPosts": "Loading your posts...",
     "failedToLoad": "Failed to load posts. Please try again.",
     "noPostsYet": "You haven't created any posts yet",
+    "createFirstReport": "Create your first report",
     "allPostsTab": "All Posts ({{count}})",
     "lostItemsTab": "Lost Items ({{count}})",
     "foundItemsTab": "Found Items ({{count}})",
