@@ -16,6 +16,7 @@ export const AdminReports: React.FC = () => {
     const { t } = useTranslation();
     const { user, isAuthenticated } = useAuth();
     const [activeTab, setActiveTab] = useState<"Active" | "Archived" | "Closed">("Active");
+    const [confirmDialog, setConfirmDialog] = useState<{ action: "delete" | "archive", reportId: number } | null>(null);
 
     // Fetch reports using the Admin endpoint
     const {
@@ -45,6 +46,7 @@ export const AdminReports: React.FC = () => {
 
     const invalidateReports = () => {
         queryClient.invalidateQueries({ queryKey: ["/api/Admin/reports"] });
+        queryClient.invalidateQueries({ queryKey: ["/api/Home/dashboard"] });
     };
 
     const handleAction = (actionMutate: any, id: number) => {
@@ -200,7 +202,7 @@ export const AdminReports: React.FC = () => {
                                                 {/* Active actions */}
                                                 {activeTab === "Active" && (
                                                     <button
-                                                        onClick={() => handleAction(archiveReport, report.id)}
+                                                        onClick={() => setConfirmDialog({ action: "archive", reportId: report.id })}
                                                         disabled={isAnyActionPending}
                                                         className="p-1.5 text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded transition-colors disabled:opacity-50"
                                                         title={t('admin.reports.table.archive')}
@@ -211,11 +213,7 @@ export const AdminReports: React.FC = () => {
 
                                                 {/* Extra universal actions */}
                                                 <button
-                                                    onClick={() => {
-                                                        if (window.confirm(t('admin.reports.table.confirmDelete'))) {
-                                                            handleAction(deleteReport, report.id);
-                                                        }
-                                                    }}
+                                                    onClick={() => setConfirmDialog({ action: "delete", reportId: report.id })}
                                                     disabled={isAnyActionPending}
                                                     className="p-1.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors disabled:opacity-50"
                                                     title={t('admin.reports.table.delete')}
@@ -231,6 +229,55 @@ export const AdminReports: React.FC = () => {
                     </div>
                 )}
             </div>
+
+            {/* Confirmation Dialog */}
+            {confirmDialog && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+                    <div className="bg-card w-full max-w-md rounded-2xl p-6 shadow-xl border border-border animate-in fade-in zoom-in duration-200">
+                        <h3 className="text-xl font-bold text-foreground mb-2">
+                            {confirmDialog.action === "delete" 
+                                ? t('admin.reports.table.confirmDeleteTitle', { defaultValue: 'Confirm Deletion' })
+                                : t('admin.reports.table.confirmArchiveTitle', { defaultValue: 'Confirm Archive' })}
+                        </h3>
+                        <p className="text-muted-foreground mb-6">
+                            {confirmDialog.action === "delete"
+                                ? t('admin.reports.table.confirmDelete', { defaultValue: 'Are you sure you want to delete this report?' })
+                                : t('admin.reports.table.confirmArchive', { defaultValue: 'Are you sure you want to archive this report?' })}
+                        </p>
+                        <div className="flex justify-end gap-3">
+                            <button
+                                onClick={() => setConfirmDialog(null)}
+                                disabled={isAnyActionPending}
+                                className="px-4 py-2 font-medium text-foreground bg-muted hover:bg-muted/80 rounded-lg transition-colors"
+                            >
+                                {t('common.cancel', { defaultValue: 'Cancel' })}
+                            </button>
+                            <button
+                                onClick={() => {
+                                    if (confirmDialog.action === "delete") {
+                                        handleAction(deleteReport, confirmDialog.reportId);
+                                    } else {
+                                        handleAction(archiveReport, confirmDialog.reportId);
+                                    }
+                                    setConfirmDialog(null);
+                                }}
+                                disabled={isAnyActionPending}
+                                className={`px-4 py-2 font-medium text-white rounded-lg transition-colors flex items-center justify-center min-w-[5rem] ${
+                                    confirmDialog.action === "delete" 
+                                        ? "bg-red-600 hover:bg-red-700" 
+                                        : "bg-orange-600 hover:bg-orange-700"
+                                }`}
+                            >
+                                {isAnyActionPending ? (
+                                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                ) : confirmDialog.action === "delete" 
+                                    ? t('admin.reports.table.delete', { defaultValue: 'Delete' })
+                                    : t('admin.reports.table.archive', { defaultValue: 'Archive' })}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
