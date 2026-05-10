@@ -7,7 +7,6 @@ import { usePutApiAdminUsersIdVerify } from "@/api/generated/admin/admin";
 import { queryClient } from "@/api";
 import { Search, CheckCircle, Shield, UserX, UserCheck } from "lucide-react";
 import { CreateAdminCommand } from "@/api/generated/lostAndFoundAPI.schemas";
-import { useAuth } from "@/context/AuthContext";
 import { useTranslation } from "react-i18next";
 import { resolveImageUrl } from "@/utils/imageUrl";
 
