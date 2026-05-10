@@ -8,6 +8,7 @@ import {
 import { usePostApiNotificationsRegisterDevice } from "@/api/generated/notifications/notifications";
 import { getAuthToken, removeAuthToken } from "@/api/mutator";
 import { requestForToken } from "@/lib/firebase";
+import { useUser } from "@/api";
 
 interface AuthContextType {
   user: any | null;
