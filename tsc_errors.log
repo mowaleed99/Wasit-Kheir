@@ -1,9 +1,0 @@
-﻿
-> lost-found-frontend@0.0.0 build
-> tsc && vite build
-
-src/components/categories/CategoryTree.tsx(1,1): error TS6133: 'useCategoriesTree' is declared but its value is never read.
-src/components/categories/CategoryTree.tsx(172,22): error TS6133: 'setCategories' is declared but its value is never read.
-src/components/ErrorBoundary.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
-src/components/posts/EditPostModal.tsx(180,61): error TS2345: Argument of type 'number' is not assignable to parameter of type 'SetStateAction<{ lat: number; lng: number; } | null>'.
-src/pages/Profile.tsx(8,34): error TS2306: File 'C:/Users/moham/Desktop/Lost_and_Found_frontend/src/components/profile/EditProfileModal.tsx' is not a module.

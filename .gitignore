@@ -24,8 +24,14 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.log
+ts_check.txt
+diff.txt
+api_report.md
+test-*.json
 
 # local env files
+.env
 .env*.local
 
 # vercel
