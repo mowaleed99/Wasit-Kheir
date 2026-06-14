@@ -103,20 +103,20 @@ export const AdminDashboard: React.FC = () => {
                                 <Activity className="w-5 h-5" />
                             </div>
                             <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                                System Status
+                                {t('admin.scraper.serviceStatus', 'System Status')}
                             </h3>
                         </div>
                         <div>
                             <div className="flex items-center gap-3">
                                 <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                                    Operational
+                                    {t('admin.scraper.online', 'Operational')}
                                 </p>
                                 <span className="relative flex h-3 w-3">
                                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                                     <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
                                 </span>
                             </div>
-                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">All services are running normally</p>
+                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t('admin.dashboard.subtitle', 'All services are running normally')}</p>
                         </div>
                     </div>
                 </div>
@@ -207,7 +207,7 @@ export const AdminDashboard: React.FC = () => {
                                                     <div className="hidden md:block">
                                                         <div>
                                                             <p className="text-sm text-gray-900 dark:text-white">
-                                                                Reported by <span className="font-medium">{report.createdByName || t('reportDetails.unknownUser')}</span>
+                                                                {t('admin.reports.table.creator', 'Reported by')} <span className="font-medium">{report.createdByName || t('reportDetails.unknownUser')}</span>
                                                             </p>
                                                             <p className="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-400 gap-1">
                                                                 <Clock className="w-4 h-4" />

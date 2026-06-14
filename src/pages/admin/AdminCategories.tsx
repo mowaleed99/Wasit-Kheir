@@ -115,7 +115,7 @@ export const AdminCategories: React.FC = () => {
             <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
                 <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50 flex items-center gap-3">
                     <Network className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                    <h2 className="text-base font-semibold text-gray-900 dark:text-white">Taxonomy Tree</h2>
+                    <h2 className="text-base font-semibold text-gray-900 dark:text-white">{t('admin.categories.taxonomyTree', 'Taxonomy Tree')}</h2>
                 </div>
 
                 {isLoading ? (
@@ -155,7 +155,7 @@ export const AdminCategories: React.FC = () => {
                                             </h3>
                                             <div className="flex items-center gap-2 mt-0.5">
                                                 <span className="text-xs font-medium px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
-                                                    {cat.subCategories?.length || 0} Subcategories
+                                                    {cat.subCategories?.length || 0} {t('admin.categories.subcategoriesCountText', 'Subcategories')}
                                                 </span>
                                             </div>
                                         </div>
@@ -170,7 +170,7 @@ export const AdminCategories: React.FC = () => {
                                             title={t('admin.categories.addSubcategory', 'Add Subcategory')}
                                         >
                                             <PlusCircle className="w-3.5 h-3.5" />
-                                            <span className="hidden sm:inline">Add Sub</span>
+                                            <span className="hidden sm:inline">{t('admin.categories.add', 'Add Sub')}</span>
                                         </button>
                                         <div className="w-px h-5 bg-gray-200 dark:bg-gray-700 mx-1 hidden sm:block"></div>
                                         <button

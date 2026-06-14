@@ -1,19 +1,23 @@
 import React, { useState } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
+import { useSettings } from "@/context/SettingsContext";
 import { FileText, Users, FolderTree, ArrowLeft, Menu, X, Database, LayoutDashboard } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export const AdminLayout: React.FC = () => {
     const location = useLocation();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const { t, i18n } = useTranslation();
+    const { toggleLanguage } = useSettings();
 
     const links = [
-        { name: "Reports", path: "/admin/reports", icon: <FileText className="w-5 h-5" /> },
-        { name: "Users", path: "/admin/users", icon: <Users className="w-5 h-5" /> },
-        { name: "Categories", path: "/admin/categories", icon: <FolderTree className="w-5 h-5" /> },
-        { name: "Scraper", path: "/admin/scraper", icon: <Database className="w-5 h-5" /> },
+        { name: t('admin.sidebar.reports', 'Reports'), path: "/admin/reports", icon: <FileText className="w-5 h-5" /> },
+        { name: t('admin.sidebar.users', 'Users'), path: "/admin/users", icon: <Users className="w-5 h-5" /> },
+        { name: t('admin.sidebar.categories', 'Categories'), path: "/admin/categories", icon: <FolderTree className="w-5 h-5" /> },
+        { name: t('admin.sidebar.scraper', 'Scraper'), path: "/admin/scraper", icon: <Database className="w-5 h-5" /> },
     ];
 
-    const currentTitle = links.find((l) => location.pathname.startsWith(l.path))?.name || "Dashboard";
+    const currentTitle = links.find((l) => location.pathname.startsWith(l.path))?.name || t('admin.dashboard.title', 'Dashboard');
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col font-sans transition-colors duration-200">
@@ -27,7 +31,7 @@ export const AdminLayout: React.FC = () => {
                         W
                     </div>
                     <div className="hidden sm:flex flex-col leading-tight">
-                        <span className="text-gray-900 dark:text-white font-bold text-sm">Admin</span>
+                        <span className="text-gray-900 dark:text-white font-bold text-sm">{t('admin.sidebar.title', 'Admin')}</span>
                     </div>
                 </Link>
 
@@ -60,13 +64,21 @@ export const AdminLayout: React.FC = () => {
                 {/* Spacer */}
                 <div className="flex-1" />
 
+                {/* Language Toggle */}
+                <button
+                    onClick={toggleLanguage}
+                    className="hidden sm:block px-3 py-1.5 text-xs font-medium rounded-md bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                >
+                    {i18n.language === "ar" ? "EN" : "AR"}
+                </button>
+
                 {/* Back to App (desktop) */}
                 <Link
                     to="/"
                     className="hidden md:flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-all"
                 >
-                    <ArrowLeft className="w-4 h-4" />
-                    <span>Back to App</span>
+                    <ArrowLeft className="w-4 h-4 rtl:rotate-180" />
+                    <span>{t('admin.sidebar.backToApp', 'Back to App')}</span>
                 </Link>
 
                 {/* Mobile: Page title + hamburger */}
@@ -102,7 +114,7 @@ export const AdminLayout: React.FC = () => {
                 <div className="h-16 px-5 flex items-center justify-between border-b border-gray-200 dark:border-gray-800">
                     <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white shadow-sm">W</div>
-                        <span className="text-gray-900 dark:text-white font-bold">Admin</span>
+                        <span className="text-gray-900 dark:text-white font-bold">{t('admin.sidebar.title', 'Admin')}</span>
                     </div>
                     <button
                         className="p-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors"
@@ -115,7 +127,7 @@ export const AdminLayout: React.FC = () => {
                 {/* Drawer nav */}
                 <nav className="flex-1 p-4 space-y-1">
                     <p className="px-3 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3 mt-2">
-                        Menu
+                        {t('admin.sidebar.menu', 'Menu')}
                     </p>
                     {links.map((link) => {
                         const isActive = location.pathname.startsWith(link.path);
@@ -140,14 +152,20 @@ export const AdminLayout: React.FC = () => {
                 </nav>
 
                 {/* Drawer footer */}
-                <div className="p-4 border-t border-gray-200 dark:border-gray-800">
+                <div className="p-4 border-t border-gray-200 dark:border-gray-800 flex flex-col gap-2">
+                    <button
+                        onClick={toggleLanguage}
+                        className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-all"
+                    >
+                        {i18n.language === "ar" ? "English" : "العربية"}
+                    </button>
                     <Link
                         to="/"
                         onClick={() => setIsSidebarOpen(false)}
                         className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-all"
                     >
-                        <ArrowLeft className="w-4 h-4" />
-                        Back to App
+                        <ArrowLeft className="w-4 h-4 rtl:rotate-180" />
+                        {t('admin.sidebar.backToApp', 'Back to App')}
                     </Link>
                 </div>
             </aside>

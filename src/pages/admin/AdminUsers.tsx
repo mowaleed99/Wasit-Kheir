@@ -98,7 +98,7 @@ export const AdminUsers: React.FC = () => {
                         }`}
                     >
                         {showAddAdmin ? (
-                            <>Cancel</>
+                            <>{t('admin.users.cancel', 'Cancel')}</>
                         ) : (
                             <>
                                 <Plus className="w-4 h-4" />
@@ -201,7 +201,7 @@ export const AdminUsers: React.FC = () => {
                             <div className="w-12 h-12 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center mb-3">
                                 <UserX className="w-6 h-6" />
                             </div>
-                            <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-1">Error Loading Data</h3>
+                            <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-1">{t('admin.users.errorTitle', 'Error Loading Data')}</h3>
                             <p className="text-sm text-gray-500 dark:text-gray-400">{t('admin.users.error', 'Failed to fetch users. Please try again.')}</p>
                         </div>
                     ) : usersList.length === 0 ? (
@@ -267,7 +267,7 @@ export const AdminUsers: React.FC = () => {
                                             </span>
                                         )}
                                         <span className="text-xs text-gray-500 dark:text-gray-400">
-                                            Joined {new Date(usr.createdAt).toLocaleDateString()}
+                                            {t('admin.users.table.joined', 'Joined')} {new Date(usr.createdAt).toLocaleDateString()}
                                         </span>
                                     </div>
 
@@ -288,7 +288,7 @@ export const AdminUsers: React.FC = () => {
                                             onClick={() => handleDeleteUser(usr.id, usr.fullName)}
                                             disabled={isVerifying || isDeleting}
                                             className="p-1.5 text-red-600 dark:text-red-400 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:bg-red-50 dark:hover:bg-gray-800 rounded-md transition-colors disabled:opacity-50"
-                                            title="Delete User"
+                                            title={t('admin.users.table.deleteUser', 'Delete User')}
                                         >
                                             <Trash2 className="w-4 h-4" />
                                         </button>

@@ -120,13 +120,13 @@ export const AdminReports: React.FC = () => {
                                 <Activity className="w-5 h-5" />
                             </div>
                             <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                                System Status
+                                {t('admin.scraper.serviceStatus', 'System Status')}
                             </h3>
                         </div>
                         <div>
                             <div className="flex items-center gap-3">
                                 <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                                    Operational
+                                    {t('admin.scraper.online', 'Operational')}
                                 </p>
                             </div>
                         </div>
@@ -169,7 +169,7 @@ export const AdminReports: React.FC = () => {
                             <div className="w-12 h-12 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center mb-3">
                                 <AlertCircle className="w-6 h-6" />
                             </div>
-                            <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-1">Error Loading Data</h3>
+                            <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-1">{t('admin.reports.errorTitle', 'Error Loading Data')}</h3>
                             <p className="text-sm text-gray-500 dark:text-gray-400">{t('admin.reports.error', 'Failed to fetch reports. Please try again later.')}</p>
                         </div>
                     ) : reportsList.length === 0 ? (
@@ -228,7 +228,7 @@ export const AdminReports: React.FC = () => {
                                     {/* Actions */}
                                     <div className="flex items-center gap-2 mt-4 sm:mt-0 w-full sm:w-auto">
                                         <Link to={`/report/${report.id}`} className="flex-1 sm:flex-none text-center px-3 py-2 text-sm font-medium bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-900 dark:text-white rounded-lg transition-colors">
-                                            View
+                                            {t('admin.reports.table.view', 'View')}
                                         </Link>
                                         
                                         {/* Archive button only for active */}

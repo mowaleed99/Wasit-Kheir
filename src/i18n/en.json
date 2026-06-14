@@ -434,6 +434,15 @@
     "Surveying Equipment": "Surveying Equipment"
   },
   "admin": {
+    "sidebar": {
+      "reports": "Reports",
+      "users": "Users",
+      "categories": "Categories",
+      "scraper": "Scraper",
+      "title": "Admin",
+      "backToApp": "Back to App",
+      "menu": "Menu"
+    },
     "dashboard": {
       "title": "Admin Dashboard",
       "subtitle": "Overview of activity and recent submissions",
@@ -519,6 +528,37 @@
         "verified": "Verified",
         "unverified": "Unverified",
         "verify": "Verify"
+      }
+    },
+    "scraper": {
+      "title": "Data Scraper",
+      "subtitle": "Manage the automated external data collection service. This service scans public sources for lost and found items to populate our database.",
+      "triggerJob": "Trigger Scraper Job",
+      "runningJob": "Running Job...",
+      "totalItems": "Total Scraped Items",
+      "serviceStatus": "Service Status",
+      "online": "Online",
+      "recentData": "Recently Scraped Data",
+      "loading": "Loading scraped database...",
+      "errorTitle": "Connection Error",
+      "errorDesc": "Failed to connect to the scraper service database.",
+      "noDataTitle": "No Scraped Data",
+      "noDataDesc": "The scraper database is currently empty. Trigger a new job to fetch items.",
+      "extractedData": "Extracted Data",
+      "unknownDate": "Unknown Date",
+      "untitledPost": "Untitled Post",
+      "noDescription": "No description available for this scraped item.",
+      "locationNotSpecified": "Location Not Specified",
+      "source": "Source",
+      "modal": {
+        "title": "Trigger Scraper Job?",
+        "warningDesc": "You are about to trigger the external FastAPI scraper service to crawl public sources for new lost and found data.",
+        "warningNote": "⚠️ This process might take several minutes to complete. Data will appear in the grid once processing finishes.",
+        "targetUrl": "Target Group URL",
+        "targetUrlPlaceholder": "e.g., https://www.facebook.com/groups/example",
+        "limit": "Number of Posts to Scrape",
+        "cancel": "Cancel",
+        "confirm": "Confirm & Run"
       }
     }
   }
