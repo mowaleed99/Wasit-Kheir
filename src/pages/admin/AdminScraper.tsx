@@ -34,34 +34,29 @@ export const AdminScraper: React.FC = () => {
     };
 
     return (
-        <div className="w-full pb-12">
+        <div className="space-y-6">
             {/* Header Section */}
-            <div className="mb-8 bg-gradient-to-r from-stone-900 via-stone-800 to-neutral-900 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
-                <div className="absolute bottom-0 left-0 w-48 h-48 bg-rose-500/10 rounded-full blur-2xl translate-y-1/3 -translate-x-1/4"></div>
-                
-                <div className="relative z-10">
-                    <div className="flex items-center gap-3 mb-2">
-                        <div className="p-2 bg-stone-800 rounded-xl">
-                            <Database className="w-6 h-6 text-amber-400" />
-                        </div>
-                        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Data Scraper</h1>
-                    </div>
-                    <p className="text-stone-300 max-w-lg">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
+                        <Database className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                        Data Scraper
+                    </h1>
+                    <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 max-w-xl">
                         Manage the automated external data collection service. This service scans public sources for lost and found items to populate our database.
                     </p>
                 </div>
 
-                <div className="relative z-10 flex-shrink-0">
+                <div className="flex-shrink-0">
                     <button
                         onClick={() => setIsWarningModalOpen(true)}
                         disabled={isRunning}
-                        className="flex items-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold rounded-xl shadow-lg transition-all hover:scale-105 hover:shadow-amber-500/25 disabled:opacity-50 disabled:hover:scale-100"
+                        className="flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg shadow-sm transition-colors disabled:opacity-50 w-full sm:w-auto"
                     >
                         {isRunning ? (
-                            <div className="w-5 h-5 border-2 border-stone-900/30 border-t-stone-900 rounded-full animate-spin" />
+                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                         ) : (
-                            <Play className="w-5 h-5" />
+                            <Play className="w-4 h-4" />
                         )}
                         {isRunning ? "Running Job..." : "Trigger Scraper Job"}
                     </button>
@@ -69,24 +64,24 @@ export const AdminScraper: React.FC = () => {
             </div>
 
             {/* Stats Overview */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-                <div className="bg-card rounded-3xl p-6 shadow-sm border border-border flex items-center justify-between">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="bg-white dark:bg-gray-900 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-gray-800 flex items-center justify-between">
                     <div>
-                        <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Total Scraped Items</p>
-                        <p className="text-4xl font-bold text-foreground tracking-tight">{totalCount}</p>
+                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Total Scraped Items</p>
+                        <p className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{totalCount}</p>
                     </div>
-                    <div className="p-4 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-500 rounded-2xl">
-                        <Database className="w-8 h-8" />
+                    <div className="p-3 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-lg">
+                        <Database className="w-6 h-6" />
                     </div>
                 </div>
-                <div className="bg-card rounded-3xl p-6 shadow-sm border border-border flex items-center justify-between bg-gradient-to-br from-card to-emerald-50/50 dark:to-emerald-900/10">
+                <div className="bg-white dark:bg-gray-900 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-gray-800 flex items-center justify-between">
                     <div>
-                        <p className="text-sm font-semibold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider mb-1">Service Status</p>
-                        <p className="text-4xl font-bold text-foreground flex items-center gap-3">
+                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Service Status</p>
+                        <p className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3 tracking-tight">
                             Online
-                            <span className="flex h-4 w-4 relative">
+                            <span className="flex h-3 w-3 relative">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-500"></span>
+                                <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
                             </span>
                         </p>
                     </div>
@@ -94,83 +89,83 @@ export const AdminScraper: React.FC = () => {
             </div>
 
             {/* Data Grid */}
-            <div className="bg-card rounded-3xl shadow-sm border border-border overflow-hidden">
-                <div className="p-6 border-b border-border bg-muted/20">
-                    <h2 className="text-lg font-bold text-foreground">Recently Scraped Data</h2>
+            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50">
+                    <h2 className="text-base font-semibold text-gray-900 dark:text-white">Recently Scraped Data</h2>
                 </div>
 
                 <div className="p-0">
                     {isLoading ? (
-                        <div className="py-24 text-center">
-                            <div className="w-12 h-12 border-4 border-stone-800 dark:border-stone-200 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                            <p className="text-muted-foreground font-medium">Loading scraped database...</p>
+                        <div className="py-16 text-center">
+                            <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                            <p className="text-sm text-gray-500 dark:text-gray-400">Loading scraped database...</p>
                         </div>
                     ) : error ? (
-                        <div className="py-24 flex flex-col items-center justify-center text-center px-4">
-                            <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 text-red-600 rounded-full flex items-center justify-center mb-4">
-                                <AlertCircle className="w-8 h-8" />
+                        <div className="py-16 flex flex-col items-center justify-center text-center px-4">
+                            <div className="w-12 h-12 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center mb-3">
+                                <AlertCircle className="w-6 h-6" />
                             </div>
-                            <h3 className="text-lg font-bold text-foreground mb-1">Connection Error</h3>
-                            <p className="text-muted-foreground">Failed to connect to the scraper service database.</p>
+                            <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-1">Connection Error</h3>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">Failed to connect to the scraper service database.</p>
                         </div>
                     ) : postsList.length === 0 ? (
-                        <div className="py-24 flex flex-col items-center justify-center text-center px-4">
-                            <div className="w-20 h-20 bg-muted/50 text-muted-foreground rounded-full flex items-center justify-center mb-4 ring-8 ring-muted/20">
-                                <Database className="w-8 h-8" />
+                        <div className="py-16 flex flex-col items-center justify-center text-center px-4">
+                            <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 rounded-full flex items-center justify-center mb-3">
+                                <Database className="w-6 h-6" />
                             </div>
-                            <h3 className="text-xl font-bold text-foreground mb-2">No Scraped Data</h3>
-                            <p className="text-muted-foreground max-w-sm mx-auto">The scraper database is currently empty. Trigger a new job to fetch items.</p>
+                            <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-1">No Scraped Data</h3>
+                            <p className="text-sm text-gray-500 dark:text-gray-400 max-w-sm mx-auto">The scraper database is currently empty. Trigger a new job to fetch items.</p>
                         </div>
                     ) : (
-                        <div className="divide-y divide-border">
+                        <div className="divide-y divide-gray-200 dark:divide-gray-800">
                             {postsList.map((post: any) => (
-                                <div key={post.id} className="flex flex-col lg:flex-row items-start lg:items-center p-6 gap-6 hover:bg-muted/30 transition-colors group">
+                                <div key={post.id} className="flex flex-col sm:flex-row items-start sm:items-center p-4 sm:p-6 gap-4 sm:gap-6 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group">
                                     {/* Image */}
-                                    <div className="w-full lg:w-48 h-48 lg:h-32 rounded-2xl bg-muted overflow-hidden flex-shrink-0 shadow-sm border border-border group-hover:shadow-md transition-shadow relative">
+                                    <div className="w-full sm:w-32 h-40 sm:h-24 rounded-xl bg-gray-100 dark:bg-gray-800 overflow-hidden flex-shrink-0 border border-gray-200 dark:border-gray-700 relative">
                                         {post.imageUrl ? (
                                             <img
                                                 src={resolveImageUrl(post.imageUrl)}
                                                 alt={post.title}
-                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                className="w-full h-full object-cover"
                                             />
                                         ) : (
-                                            <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground bg-muted/50">
-                                                <ImageIcon className="w-8 h-8 mb-2 opacity-50" />
-                                                <span className="text-xs font-medium uppercase tracking-wider">No Image</span>
+                                            <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 dark:text-gray-500">
+                                                <ImageIcon className="w-6 h-6 mb-1 opacity-50" />
+                                                <span className="text-[10px] font-medium uppercase tracking-wider">No Image</span>
                                             </div>
                                         )}
                                     </div>
 
                                     {/* Core Info */}
-                                    <div className="flex-1 min-w-0 w-full space-y-2">
-                                        <div className="flex flex-wrap items-center gap-3">
-                                            <span className="text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider bg-stone-100 text-stone-700 dark:bg-stone-900/50 dark:text-stone-300 border border-stone-200 dark:border-stone-800">
+                                    <div className="flex-1 min-w-0 w-full space-y-1.5">
+                                        <div className="flex flex-wrap items-center gap-2">
+                                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">
                                                 Extracted Data
                                             </span>
-                                            <span className="text-xs font-medium text-muted-foreground flex items-center gap-1">
+                                            <span className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
                                                 <Clock className="w-3.5 h-3.5" />
                                                 {post.createdAt ? new Date(post.createdAt).toLocaleDateString() : 'Unknown Date'}
                                             </span>
                                         </div>
-                                        <h3 className="text-xl font-bold text-foreground truncate">
+                                        <h3 className="text-base font-semibold text-gray-900 dark:text-white truncate">
                                             {post.title || 'Untitled Post'}
                                         </h3>
-                                        <p className="text-sm text-muted-foreground line-clamp-2 max-w-2xl">
+                                        <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">
                                             {post.description || 'No description available for this scraped item.'}
                                         </p>
-                                        <p className="text-sm font-semibold text-foreground truncate">
-                                            📍 {post.location || 'Location Not Specified'}
+                                        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate flex items-center gap-1.5">
+                                            <span className="text-gray-400">📍</span> {post.location || 'Location Not Specified'}
                                         </p>
                                     </div>
 
                                     {/* Action */}
-                                    <div className="shrink-0 self-end lg:self-center mt-4 lg:mt-0">
+                                    <div className="shrink-0 self-end sm:self-center mt-2 sm:mt-0 w-full sm:w-auto">
                                         {post.originalUrl && (
                                             <a 
                                                 href={post.originalUrl} 
                                                 target="_blank" 
                                                 rel="noopener noreferrer"
-                                                className="flex items-center gap-2 px-4 py-2.5 text-sm font-bold bg-muted hover:bg-muted/80 text-foreground rounded-xl transition-colors border border-border shadow-sm hover:shadow-md"
+                                                className="flex items-center justify-center sm:justify-start gap-2 px-3 py-2 text-sm font-medium bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-900 dark:text-white rounded-lg transition-colors"
                                             >
                                                 Source
                                                 <ExternalLink className="w-4 h-4" />
@@ -186,66 +181,65 @@ export const AdminScraper: React.FC = () => {
 
             {/* Warning Modal */}
             {isWarningModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-                    <div className="bg-card w-full max-w-lg rounded-3xl p-8 shadow-2xl border border-border animate-in fade-in zoom-in duration-200 relative overflow-hidden">
-                        <div className="absolute top-0 left-0 w-full h-1.5 bg-amber-500"></div>
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 dark:bg-black/60 backdrop-blur-sm">
+                    <div className="bg-white dark:bg-gray-900 w-full max-w-md rounded-2xl p-6 shadow-xl border border-gray-200 dark:border-gray-800 animate-in fade-in zoom-in duration-200 relative overflow-hidden">
                         
-                        <div className="w-16 h-16 rounded-full flex items-center justify-center mb-6 bg-amber-100 text-amber-600 dark:bg-amber-900/30">
-                            <AlertCircle className="w-8 h-8" />
+                        <div className="w-12 h-12 rounded-full flex items-center justify-center mb-4 bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400">
+                            <AlertCircle className="w-6 h-6" />
                         </div>
                         
-                        <h3 className="text-2xl font-bold text-foreground mb-3 tracking-tight">
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
                             Trigger Scraper Job?
                         </h3>
                         
-                        <div className="space-y-4 mb-8 text-muted-foreground">
-                            <p>
+                        <div className="space-y-4 mb-6">
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
                                 You are about to trigger the external FastAPI scraper service to crawl public sources for new lost and found data.
                             </p>
-                            <p className="text-sm p-4 bg-amber-50 dark:bg-amber-900/10 rounded-xl border border-amber-200 dark:border-amber-900/30 text-amber-900 dark:text-amber-200 font-medium mb-4">
-                                ⚠️ <strong>Note:</strong> This process might take several minutes to complete and consumes server resources. Data will appear in the grid once processing finishes.
+                            <p className="text-sm p-3 bg-amber-50 dark:bg-amber-500/10 rounded-lg text-amber-800 dark:text-amber-400 font-medium">
+                                ⚠️ This process might take several minutes to complete. Data will appear in the grid once processing finishes.
                             </p>
 
-                            <div className="space-y-3 mt-4">
+                            <div className="space-y-3 pt-2">
                                 <div>
-                                    <label className="block text-sm font-bold text-foreground mb-1">Target Group URL</label>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Target Group URL</label>
                                     <input 
                                         type="url" 
                                         placeholder="e.g., https://www.facebook.com/groups/example"
                                         value={groupUrl}
                                         onChange={(e) => setGroupUrl(e.target.value)}
-                                        className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                                        className="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-bold text-foreground mb-1">Number of Posts to Scrape</label>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Number of Posts to Scrape</label>
                                     <input 
                                         type="number" 
                                         min="1"
                                         max="500"
                                         value={limit}
                                         onChange={(e) => setLimit(Number(e.target.value))}
-                                        className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                                        className="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                                     />
                                 </div>
                             </div>
                         </div>
 
-                        <div className="flex justify-end gap-3 mt-6">
+                        <div className="flex justify-end gap-3">
                             <button
                                 onClick={() => setIsWarningModalOpen(false)}
                                 disabled={isRunning}
-                                className="px-6 py-3 font-semibold text-foreground bg-muted hover:bg-muted/80 rounded-xl transition-colors"
+                                className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleRunScraper}
                                 disabled={isRunning}
-                                className="px-6 py-3 font-bold text-stone-950 bg-amber-500 hover:bg-amber-600 rounded-xl transition-colors shadow-lg shadow-amber-500/20 flex items-center justify-center min-w-[8rem]"
+                                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors flex items-center justify-center min-w-[7rem] shadow-sm"
                             >
                                 {isRunning ? (
-                                    <div className="w-5 h-5 border-2 border-stone-900/30 border-t-stone-900 rounded-full animate-spin" />
+                                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                                 ) : (
                                     "Confirm & Run"
                                 )}
