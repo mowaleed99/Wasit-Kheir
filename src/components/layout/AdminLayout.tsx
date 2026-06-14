@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
 import { useSettings } from "@/context/SettingsContext";
-import { FileText, Users, FolderTree, ArrowLeft, Menu, X, Database, LayoutDashboard } from "lucide-react";
+import { FileText, Users, FolderTree, ArrowLeft, Menu, X, Database } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export const AdminLayout: React.FC = () => {
@@ -28,7 +28,7 @@ export const AdminLayout: React.FC = () => {
                 {/* Brand */}
                 <Link to="/admin" className="flex items-center gap-3 group">
                     <img
-                        src="/waseet-kheir-logo-transparent.svg"
+                        src="/logo2.png"
                         alt="Waseet Kheir Logo"
                         className="w-8 h-8 object-contain"
                     />
@@ -116,7 +116,7 @@ export const AdminLayout: React.FC = () => {
                 <div className="h-16 px-5 flex items-center justify-between border-b border-gray-200 dark:border-gray-800">
                     <div className="flex items-center gap-3">
                         <img
-                            src="/waseet-kheir-logo-transparent.svg"
+                            src="/logo2.png"
                             alt="Waseet Kheir Logo"
                             className="w-8 h-8 object-contain"
                         />
