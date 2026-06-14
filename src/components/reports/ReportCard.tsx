@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { MapPin, Calendar, Tag } from "lucide-react";
+import { MapPin, Calendar } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { ImageGallery } from "@/components/ui/ImageGallery";
 import { resolveImageUrl } from "@/utils/imageUrl";
@@ -13,10 +13,12 @@ const typeColors: Record<string, string> = {
 
 interface ReportCardProps {
     report: any;
+    aiScore?: number;
 }
 
-export const ReportCard: React.FC<ReportCardProps> = ({ report }) => {
+export const ReportCard: React.FC<ReportCardProps> = ({ report, aiScore }) => {
     const { t } = useTranslation();
+
     const formatTime = (dateString: string) => {
         if (!dateString) return "";
         const date = new Date(dateString);
@@ -47,14 +49,14 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report }) => {
             )}
 
             <div className="p-4 flex flex-col gap-3 flex-1">
-                {/* Type & Status badges */}
+                {/* Type badge */}
                 <div className="flex items-center gap-2 flex-wrap">
                     <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold border ${typeClass}`}>
                         {typeLabel}
                     </span>
-                    {report.lifecycleStatus && !["Pending", "Approved", "Rejected", "Flagged", "Active"].includes(report.lifecycleStatus) && (
-                        <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground border border-border">
-                            {t(`admin.reports.tabs.${report.lifecycleStatus}`, { defaultValue: report.lifecycleStatus })}
+                    {aiScore !== undefined && (
+                        <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold border bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-500/10 dark:text-indigo-400 dark:border-indigo-500/20">
+                            AI Match: {(aiScore * 100).toFixed(0)}%
                         </span>
                     )}
                 </div>
@@ -77,12 +79,6 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report }) => {
                             {report.locationName}
                         </span>
                     )}
-                    {report.subCategoryName && (
-                        <span className="flex items-center gap-1">
-                            <Tag className="w-3 h-3" />
-                            {t(`subcategories.${report.subCategoryName}`, { defaultValue: report.subCategoryName })}
-                        </span>
-                    )}
                     <span className="flex items-center gap-1 ml-auto">
                         <Calendar className="w-3 h-3" />
                         {formatTime(report.createdAt)}
@@ -91,7 +87,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report }) => {
 
                 {/* Creator */}
                 {report.createdByName && (
-                    <div className="flex items-center gap-2 mt-2">
+                    <div className="flex items-center gap-2">
                         <img
                             src={
                                 report.createdByProfilePictureUrl

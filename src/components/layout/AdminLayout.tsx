@@ -27,9 +27,11 @@ export const AdminLayout: React.FC = () => {
                 
                 {/* Brand */}
                 <Link to="/admin" className="flex items-center gap-3 group">
-                    <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white shadow-sm group-hover:bg-indigo-700 transition-colors">
-                        W
-                    </div>
+                    <img
+                        src="/waseet-kheir-logo-transparent.svg"
+                        alt="Waseet Kheir Logo"
+                        className="w-8 h-8 object-contain"
+                    />
                     <div className="hidden sm:flex flex-col leading-tight">
                         <span className="text-gray-900 dark:text-white font-bold text-sm">{t('admin.sidebar.title', 'Admin')}</span>
                     </div>
@@ -113,7 +115,11 @@ export const AdminLayout: React.FC = () => {
                 {/* Drawer header */}
                 <div className="h-16 px-5 flex items-center justify-between border-b border-gray-200 dark:border-gray-800">
                     <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white shadow-sm">W</div>
+                        <img
+                            src="/waseet-kheir-logo-transparent.svg"
+                            alt="Waseet Kheir Logo"
+                            className="w-8 h-8 object-contain"
+                        />
                         <span className="text-gray-900 dark:text-white font-bold">{t('admin.sidebar.title', 'Admin')}</span>
                     </div>
                     <button
