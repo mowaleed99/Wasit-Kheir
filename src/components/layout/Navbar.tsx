@@ -107,8 +107,6 @@ export const Navbar: React.FC = () => {
             title="Messages"
           >
             <MessageCircle className={`w-6 h-6 ${isActive("/chat") ? "fill-current" : ""}`} />
-            {/* Unread Badge Placeholder */}
-            {/* <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span> */}
           </Link>
 
           <Link
@@ -158,24 +156,91 @@ export const Navbar: React.FC = () => {
             <Search className="w-5 h-5" />
           </Link>
 
-          <Link to="/profile" className="flex items-center space-x-2 group">
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 to-purple-500 rounded-full blur opacity-0 group-hover:opacity-50 transition-opacity"></div>
-              <img
-                src={
-                  user?.profilePictureUrl
-                    ? resolveImageUrl(user.profilePictureUrl)
-                    : user?.avatar
-                      ? user.avatar
-                      : `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.fullName || 'User')}&background=3b82f6&color=fff`
-                }
-                alt={user?.fullName || 'User'}
-                className="relative w-9 h-9 rounded-full object-cover border-2 border-white shadow-sm group-hover:border-blue-100 transition-all"
-              />
-            </div>
-          </Link>
+          {/* Avatar with dropdown */}
+          <UserMenu user={user} />
         </div>
       </div>
     </nav>
+  );
+};
+
+/* ── Avatar dropdown ── */
+import { useRef, useState, useEffect } from "react";
+import { LogOut, User } from "lucide-react";
+
+const UserMenu: React.FC<{ user: any }> = ({ user }) => {
+  const { t } = useTranslation();
+  const { logout } = useAuth();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    const handleEsc = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEsc);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEsc);
+    };
+  }, []);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        id="user-avatar-btn"
+        onClick={() => setOpen((v) => !v)}
+        className="flex items-center group focus:outline-none"
+        aria-label="User menu"
+      >
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 to-purple-500 rounded-full blur opacity-0 group-hover:opacity-50 transition-opacity"></div>
+          <img
+            src={
+              user?.profilePictureUrl
+                ? resolveImageUrl(user.profilePictureUrl)
+                : user?.avatar
+                  ? user.avatar
+                  : `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.fullName || 'User')}&background=3b82f6&color=fff`
+            }
+            alt={user?.fullName || 'User'}
+            className="relative w-9 h-9 rounded-full object-cover border-2 border-white shadow-sm group-hover:border-blue-100 transition-all"
+          />
+        </div>
+      </button>
+
+      {/* Dropdown */}
+      {open && (
+        <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg py-1 z-50">
+          {/* User info */}
+          <div className="px-4 py-2.5 border-b border-gray-100 dark:border-gray-800">
+            <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{user?.fullName || 'User'}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user?.email || ''}</p>
+          </div>
+
+          {/* Profile */}
+          <Link
+            to="/profile"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+          >
+            <User className="w-4 h-4 text-gray-400" />
+            {t('profile.title', 'Profile')}
+          </Link>
+
+          {/* Logout */}
+          <button
+            id="logout-btn"
+            onClick={() => { setOpen(false); logout(); }}
+            className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
+          >
+            <LogOut className="w-4 h-4" />
+            {t('auth.logout', 'Log out')}
+          </button>
+        </div>
+      )}
+    </div>
   );
 };
