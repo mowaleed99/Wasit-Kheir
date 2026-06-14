@@ -203,6 +203,14 @@ const UserMenu: React.FC<{ user: any }> = ({ user }) => {
   const getMenuStyle = (): React.CSSProperties => {
     if (!btnRef.current) return { position: "fixed", top: 64, right: 16 };
     const rect = btnRef.current.getBoundingClientRect();
+    const isRTL = document.documentElement.dir === "rtl" || document.documentElement.lang === "ar";
+    if (isRTL) {
+      return {
+        position: "fixed",
+        top: rect.bottom + 8,
+        left: rect.left,
+      };
+    }
     return {
       position: "fixed",
       top: rect.bottom + 8,
