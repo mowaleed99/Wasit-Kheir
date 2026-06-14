@@ -32,6 +32,17 @@ page?: number;
 pageSize?: number;
 };
 
+export type PostApiScraperRunParams = {
+limit?: number;
+group_url?: string;
+};
+
+export type GetApiScraperPostsParams = {
+type?: string;
+limit?: number;
+offset?: number;
+};
+
 export type GetApiReportsNearbyParams = {
 /**
  * Latitude (-90 to 90)
@@ -269,6 +280,25 @@ export interface UpdateCategoryDto {
   name?: string | null;
 }
 
+export interface TriggerScrapeResponseDto {
+  /** @nullable */
+  message?: string | null;
+  posts_processed?: number;
+  posts_scraped?: number;
+  skipped_duplicates?: number;
+  /** @nullable */
+  status?: string | null;
+}
+
+export interface TriggerScrapeResponseDtoBaseResponse {
+  data?: TriggerScrapeResponseDto;
+  /** @nullable */
+  errors?: string[] | null;
+  /** @nullable */
+  message?: string | null;
+  success?: boolean;
+}
+
 export interface SignupDto {
   /** @nullable */
   dateOfBirth?: string | null;
@@ -298,6 +328,38 @@ export interface SignupDto {
 export interface SendChatMessageDto {
   /** @nullable */
   text?: string | null;
+}
+
+export interface ScraperPostDto {
+  /** @nullable */
+  caption?: string | null;
+  /** @nullable */
+  contact?: string | null;
+  created_at?: string;
+  /** @nullable */
+  group_name?: string | null;
+  /** @nullable */
+  id?: string | null;
+  /** @nullable */
+  item?: string | null;
+  /** @nullable */
+  location?: string | null;
+  /** @nullable */
+  post_url?: string | null;
+  /** @nullable */
+  source?: string | null;
+  /** @nullable */
+  type?: string | null;
+}
+
+export interface ScraperPostDtoListBaseResponse {
+  /** @nullable */
+  data?: ScraperPostDto[] | null;
+  /** @nullable */
+  errors?: string[] | null;
+  /** @nullable */
+  message?: string | null;
+  success?: boolean;
 }
 
 export interface SafeUserDto {

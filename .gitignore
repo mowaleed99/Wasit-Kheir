@@ -28,6 +28,7 @@ yarn-error.log*
 ts_check.txt
 diff.txt
 api_report.md
+AGENT_HANDOFF_REPORT.md
 test-*.json
 
 # local env files

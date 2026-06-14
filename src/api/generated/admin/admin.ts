@@ -159,7 +159,7 @@ export const deleteApiAdminReportsId = (
  ) => {
       
       
-      return customInstance<void>(
+      return customInstance<ObjectBaseResponse>(
       {url: `/api/Admin/reports/${id}`, method: 'DELETE'
     },
       );

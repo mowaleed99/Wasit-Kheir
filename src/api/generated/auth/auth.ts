@@ -153,7 +153,7 @@ export const usePostApiAuthLogin = <TError = unknown,
       return useMutation(mutationOptions);
     }
     /**
- * Authenticates using a Google ID token (from Google Sign-In on mobile or web). Creates a new user if none exists for this Google account, or links to an existing account by email. Returns the same JWT access token and refresh token as login.
+ * Authenticates using a Google ID token (JWT) in idToken. The token audience must be the Web OAuth Client ID (GoogleAuth:ClientId). Flutter must use that Web Client ID as serverClientId when obtaining the ID token. Returns the same JWT access token and refresh token as login.
  * @summary Sign in with Google
  */
 export const postApiAuthGoogle = (

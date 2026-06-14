@@ -87,6 +87,62 @@ export const useGetApiChatSessions = <TData = Awaited<ReturnType<typeof getApiCh
 
 
 /**
+ * Opens an existing conversation or creates a new one between the authenticated user and the post owner for the specified post. Returns the conversation id. Requires authentication.
+ * @summary Connect with post owner
+ */
+export const postApiChatConnectPostId = (
+    postId: number,
+ ) => {
+      
+      
+      return customInstance<void>(
+      {url: `/api/chat/connect/${postId}`, method: 'POST'
+    },
+      );
+    }
+  
+
+
+export const getPostApiChatConnectPostIdMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiChatConnectPostId>>, TError,{postId: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof postApiChatConnectPostId>>, TError,{postId: number}, TContext> => {
+const {mutation: mutationOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiChatConnectPostId>>, {postId: number}> = (props) => {
+          const {postId} = props ?? {};
+
+          return  postApiChatConnectPostId(postId,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiChatConnectPostIdMutationResult = NonNullable<Awaited<ReturnType<typeof postApiChatConnectPostId>>>
+    
+    export type PostApiChatConnectPostIdMutationError = unknown
+
+    /**
+ * @summary Connect with post owner
+ */
+export const usePostApiChatConnectPostId = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiChatConnectPostId>>, TError,{postId: number}, TContext>, }
+): UseMutationResult<
+        Awaited<ReturnType<typeof postApiChatConnectPostId>>,
+        TError,
+        {postId: number},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiChatConnectPostIdMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    /**
  * Opens an existing chat session or creates a new one with another user. Returns the chat session details. Requires authentication.
  * @summary Open or create chat session
  */
@@ -205,6 +261,62 @@ export const useGetApiChatSessionsSessionId = <TData = Awaited<ReturnType<typeof
 
 
 /**
+ * Removes the chat from the authenticated user's inbox (soft delete). The other participant keeps the session unless they also delete it. When both participants delete, the session and messages are permanently removed. Admins permanently delete the session for all users. Requires authentication.
+ * @summary Delete chat session from inbox
+ */
+export const deleteApiChatSessionsSessionId = (
+    sessionId: number,
+ ) => {
+      
+      
+      return customInstance<void>(
+      {url: `/api/chat/sessions/${sessionId}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteApiChatSessionsSessionIdMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiChatSessionsSessionId>>, TError,{sessionId: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteApiChatSessionsSessionId>>, TError,{sessionId: number}, TContext> => {
+const {mutation: mutationOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteApiChatSessionsSessionId>>, {sessionId: number}> = (props) => {
+          const {sessionId} = props ?? {};
+
+          return  deleteApiChatSessionsSessionId(sessionId,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteApiChatSessionsSessionIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteApiChatSessionsSessionId>>>
+    
+    export type DeleteApiChatSessionsSessionIdMutationError = unknown
+
+    /**
+ * @summary Delete chat session from inbox
+ */
+export const useDeleteApiChatSessionsSessionId = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiChatSessionsSessionId>>, TError,{sessionId: number}, TContext>, }
+): UseMutationResult<
+        Awaited<ReturnType<typeof deleteApiChatSessionsSessionId>>,
+        TError,
+        {sessionId: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteApiChatSessionsSessionIdMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    /**
  * Retrieves all messages in a specific chat session. Only participants can access messages. Requires authentication.
  * @summary Get chat messages
  */

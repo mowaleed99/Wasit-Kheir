@@ -25,6 +25,7 @@ import { AdminLayout } from "./components/layout/AdminLayout";
 import { AdminReports } from "./pages/admin/AdminReports";
 import { AdminUsers } from "./pages/admin/AdminUsers";
 import { AdminCategories } from "./pages/admin/AdminCategories";
+import { AdminScraper } from "./pages/admin/AdminScraper";
 import { Navigate } from "react-router-dom";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import "./i18n";
@@ -116,6 +117,7 @@ const router = createBrowserRouter([
       { path: "reports", element: <AdminReports /> },
       { path: "users", element: <AdminUsers /> },
       { path: "categories", element: <AdminCategories /> },
+      { path: "scraper", element: <AdminScraper /> },
     ]
   },
   { path: "/login", element: <Login /> },

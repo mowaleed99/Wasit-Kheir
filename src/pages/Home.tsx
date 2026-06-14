@@ -115,6 +115,7 @@ export const Home = () => {
               </div>
             ) : (
               <InfiniteScroll
+                scrollableTarget="scrollable-feed"
                 dataLength={allReports.length}
                 next={fetchNextPage}
                 hasMore={!!hasNextPage}

@@ -23,7 +23,7 @@ export const HomeLayout: React.FC = () => {
           <CategoryTree />
         </div>
         {/* Center: Feed */}
-        <div className="flex-1 overflow-y-auto p-4 pb-20 md:pb-4 relative">
+        <div id="scrollable-feed" className="flex-1 overflow-y-auto p-4 pb-20 md:pb-4 relative">
           <Outlet />
         </div>
       </div>

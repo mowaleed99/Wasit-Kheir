@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   } = useUser({
     query: {
       retry: false,
-      refetchOnWindowFocus: true,
+      refetchOnWindowFocus: false,  // Silent refresh interceptor handles token expiry
       refetchOnMount: true,
       // Don't fail on 401 - it's expected when not logged in
       throwOnError: false,

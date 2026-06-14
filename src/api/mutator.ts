@@ -19,6 +19,11 @@ export const setAuthToken = (token: string) => {
 };
 export const removeAuthToken = () => {
   localStorage.removeItem("authToken");
+  localStorage.removeItem("refreshToken");
+};
+export const getRefreshToken = () => localStorage.getItem("refreshToken");
+export const setRefreshToken = (token: string) => {
+  localStorage.setItem("refreshToken", token);
 };
 
 // Add request interceptor to include auth token
@@ -41,44 +46,101 @@ apiClient.interceptors.request.use(
   }
 );
 
+// Track if a refresh is already in flight to avoid multiple simultaneous refreshes
+let isRefreshing = false;
+let refreshSubscribers: ((token: string) => void)[] = [];
+
+const onRefreshed = (token: string) => {
+  refreshSubscribers.forEach((cb) => cb(token));
+  refreshSubscribers = [];
+};
+
+const addRefreshSubscriber = (cb: (token: string) => void) => {
+  refreshSubscribers.push(cb);
+};
+
 // Add response interceptor for better error handling and token extraction
 apiClient.interceptors.response.use(
   (response) => {
-    // Check if this is a login or signup response and extract the token
+    // Check if this is a login/google response and extract tokens
     const url = response.config.url || '';
     const method = response.config.method;
     const isAuthResponse =
-      (url.includes('/api/auth/login') || url.includes('/api/auth/signup')) &&
+      (url.includes('/api/auth/login') || url.includes('/api/auth/google')) &&
       method === 'post';
 
     if (isAuthResponse) {
-      console.log("Auth response detected, checking for token...");
+      console.log("Auth response detected, checking for tokens...");
       const responseData = response.data;
+      const data = responseData?.data || responseData;
 
-      // Handle the API response structure: { success, message, data: { user, accessToken, expiresAt }, errors }
-      if (responseData?.data?.accessToken) {
-        const token = responseData.data.accessToken;
+      if (data?.accessToken) {
         console.log("Token found in auth response, storing it");
-        setAuthToken(token);
-      } else if (responseData?.accessToken) {
-        // Fallback if token is at root level
-        const token = responseData.accessToken;
-        console.log("Token found in auth response (root level), storing it");
-        setAuthToken(token);
-      } else {
-        console.warn("Auth response received but no token found:", responseData);
+        setAuthToken(data.accessToken);
+      }
+      if (data?.refreshToken) {
+        console.log("Refresh token found, storing it");
+        setRefreshToken(data.refreshToken);
       }
     }
 
     return response;
   },
-  (error) => {
+  async (error) => {
     console.error("API Response Error:", error);
 
-    // If we get a 401, clear the stored token
-    if (error.response?.status === 401) {
-      console.log("401 Unauthorized - clearing stored token");
-      removeAuthToken();
+    const originalRequest = error.config;
+
+    // If we get a 401 and haven't already retried, attempt a token refresh
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      const refreshToken = getRefreshToken();
+
+      // No refresh token available — clear session and reject
+      if (!refreshToken) {
+        console.log("401 Unauthorized and no refresh token — clearing session");
+        removeAuthToken();
+        return Promise.reject(error);
+      }
+
+      if (isRefreshing) {
+        // Another refresh is in flight — queue this request
+        return new Promise((resolve) => {
+          addRefreshSubscriber((newToken: string) => {
+            originalRequest.headers.Authorization = `Bearer ${newToken}`;
+            resolve(apiClient(originalRequest));
+          });
+        });
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      try {
+        console.log("Attempting silent token refresh...");
+        const res = await apiClient.post('/api/auth/refresh-token', { refreshToken });
+        const data = res.data?.data || res.data;
+        const newAccessToken = data?.accessToken;
+        const newRefreshToken = data?.refreshToken;
+
+        if (newAccessToken) {
+          setAuthToken(newAccessToken);
+          if (newRefreshToken) setRefreshToken(newRefreshToken);
+          apiClient.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
+          onRefreshed(newAccessToken);
+          console.log("Token refreshed silently ✅");
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return apiClient(originalRequest);
+        } else {
+          throw new Error("No access token in refresh response");
+        }
+      } catch (refreshError) {
+        console.log("Token refresh failed — clearing session");
+        removeAuthToken();
+        refreshSubscribers = [];
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
     }
 
     if (error.code === "ECONNABORTED") {
@@ -89,6 +151,7 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
 
 export const customInstance = <T>(config: AxiosRequestConfig): Promise<T> => {
   const source = axios.CancelToken.source();

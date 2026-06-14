@@ -10,6 +10,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Eye, EyeOff, Loader2, AlertCircle } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+
 interface LoginFormData {
   email: string;
   password: string;
@@ -106,6 +107,7 @@ export const LoginForm: React.FC = () => {
 
   const isLoading = isSubmitting || authLoading || loginMutation.isPending;
 
+
   return (
     <div className="w-full space-y-6">
       <form
@@ -117,7 +119,7 @@ export const LoginForm: React.FC = () => {
       >
         {/* Email Field */}
         <div className="space-y-2">
-          <Label htmlFor="email" className="text-white font-medium">
+          <Label htmlFor="email" className="text-gray-700 font-medium">
             {t('auth.emailAddressLabel')}
           </Label>
           <Input
@@ -125,11 +127,11 @@ export const LoginForm: React.FC = () => {
             type="email"
             placeholder={t('auth.emailPlaceholder')}
             {...register("email", { required: t('auth.emailRequired') })}
-            className={`w-full bg-white/20 border-white/30 text-white placeholder:text-white/60 focus:bg-white/30 focus:border-white/50 transition-all duration-300 ${errors.email ? "border-red-400" : ""
+            className={`w-full bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400 focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-300 ${errors.email ? "border-red-400" : ""
               }`}
           />
           {errors.email && (
-            <p className="mt-1 text-sm text-red-200 flex items-center gap-1">
+            <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
               <AlertCircle className="w-4 h-4" />
               {errors.email.message}
             </p>
@@ -138,7 +140,7 @@ export const LoginForm: React.FC = () => {
 
         {/* Password Field */}
         <div className="space-y-2">
-          <Label htmlFor="password" className="text-white font-medium">
+          <Label htmlFor="password" className="text-gray-700 font-medium">
             {t('auth.passwordLabel')}
           </Label>
           <div className="relative">
@@ -147,13 +149,13 @@ export const LoginForm: React.FC = () => {
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
               {...register("password", { required: t('auth.passwordRequired') })}
-              className={`w-full bg-white/20 border-white/30 text-white placeholder:text-white/60 focus:bg-white/30 focus:border-white/50 transition-all duration-300 pr-10 ${errors.password ? "border-red-400" : ""
+              className={`w-full bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400 focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-300 pr-10 ${errors.password ? "border-red-400" : ""
                 }`}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
             >
               {showPassword ? (
                 <EyeOff className="w-5 h-5" />
@@ -163,7 +165,7 @@ export const LoginForm: React.FC = () => {
             </button>
           </div>
           {errors.password && (
-            <p className="mt-1 text-sm text-red-200 flex items-center gap-1">
+            <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
               <AlertCircle className="w-4 h-4" />
               {errors.password.message}
             </p>
@@ -172,8 +174,8 @@ export const LoginForm: React.FC = () => {
 
         {/* Error Message */}
         {loginError && (
-          <div className="rounded-xl bg-red-500/20 backdrop-blur-sm border border-red-400/30 p-4 animate-shake">
-            <div className="text-sm text-white flex items-start gap-2">
+          <div className="rounded-xl bg-red-50 border border-red-200 p-4 animate-shake">
+            <div className="text-sm text-red-600 flex items-start gap-2">
               <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
               <span>{loginError}</span>
             </div>
@@ -184,7 +186,7 @@ export const LoginForm: React.FC = () => {
         <Button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-white text-indigo-600 hover:bg-white/90 font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          className="w-full bg-indigo-600 text-white hover:bg-indigo-700 font-semibold py-3 rounded-xl shadow-md hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
         >
           {isLoading ? (
             <span className="flex items-center justify-center gap-2">
@@ -197,13 +199,15 @@ export const LoginForm: React.FC = () => {
         </Button>
       </form>
 
+
+
       {/* Sign Up Link */}
-      <div className="text-center pt-4 border-t border-white/20">
-        <p className="text-white/90 text-sm">
+      <div className="text-center pt-4 border-t border-gray-100">
+        <p className="text-gray-600 text-sm">
           {t('auth.noAccount')} {" "}
           <Link
             to="/signup"
-            className="font-semibold text-white hover:text-white/80 underline underline-offset-2 transition-colors"
+            className="font-semibold text-indigo-600 hover:text-indigo-500 underline underline-offset-2 transition-colors"
           >
             {t('auth.signUpHere')}
           </Link>

@@ -18,7 +18,7 @@ import { customInstance } from '../../mutator';
 
 
 /**
- * @summary Get dashboard data: recent reports, stats, and categories count.
+ * @summary Get dashboard data: all reports (newest first), stats, and categories count.
 When authenticated, includes the current user's reports count.
  */
 export const getApiHomeDashboard = (
@@ -61,7 +61,7 @@ export type GetApiHomeDashboardQueryResult = NonNullable<Awaited<ReturnType<type
 export type GetApiHomeDashboardQueryError = unknown
 
 /**
- * @summary Get dashboard data: recent reports, stats, and categories count.
+ * @summary Get dashboard data: all reports (newest first), stats, and categories count.
 When authenticated, includes the current user's reports count.
  */
 export const useGetApiHomeDashboard = <TData = Awaited<ReturnType<typeof getApiHomeDashboard>>, TError = unknown>(

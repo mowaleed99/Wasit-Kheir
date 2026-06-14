@@ -11,7 +11,7 @@ import {
     useDeleteApiSubCategoriesId,
 } from "@/api/generated/sub-categories/sub-categories";
 import { queryClient } from "@/api";
-import { FolderPlus, Edit3, Trash2, ChevronDown, ChevronRight, PlusCircle, Tag } from "lucide-react";
+import { FolderPlus, Edit3, Trash2, ChevronDown, ChevronRight, PlusCircle, Tag, FolderTree, Network } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export const AdminCategories: React.FC = () => {
@@ -44,38 +44,38 @@ export const AdminCategories: React.FC = () => {
 
     // Category Actions
     const handleCreateCategory = () => {
-        const name = window.prompt(t('admin.categories.prompts.newCategory'));
+        const name = window.prompt(t('admin.categories.prompts.newCategory', 'Enter new category name:'));
         if (!name) return;
         createCat({ data: { name } }, { onSuccess: invalidateTree });
     };
 
     const handleEditCategory = (id: number, currentName: string) => {
-        const name = window.prompt(t('admin.categories.prompts.editCategory'), currentName);
+        const name = window.prompt(t('admin.categories.prompts.editCategory', 'Edit category name:'), currentName);
         if (!name || name === currentName) return;
         editCat({ id, data: { name } }, { onSuccess: invalidateTree });
     };
 
     const handleDeleteCategory = (id: number, name: string) => {
-        if (window.confirm(t('admin.categories.prompts.confirmDeleteCategory', { name }))) {
+        if (window.confirm(t('admin.categories.prompts.confirmDeleteCategory', `Are you sure you want to delete the category "${name}"?`))) {
             deleteCat({ id }, { onSuccess: invalidateTree });
         }
     };
 
     // SubCategory Actions
     const handleCreateSubCategory = (categoryId: number) => {
-        const name = window.prompt(t('admin.categories.prompts.newSubcategory'));
+        const name = window.prompt(t('admin.categories.prompts.newSubcategory', 'Enter new subcategory name:'));
         if (!name) return;
         createSub({ data: { categoryId, name } }, { onSuccess: invalidateTree });
     };
 
     const handleEditSubCategory = (id: number, categoryId: number, currentName: string) => {
-        const name = window.prompt(t('admin.categories.prompts.editSubcategory'), currentName);
+        const name = window.prompt(t('admin.categories.prompts.editSubcategory', 'Edit subcategory name:'), currentName);
         if (!name || name === currentName) return;
         editSub({ id, data: { categoryId, name } }, { onSuccess: invalidateTree });
     };
 
     const handleDeleteSubCategory = (id: number, name: string) => {
-        if (window.confirm(t('admin.categories.prompts.confirmDeleteSubcategory', { name }))) {
+        if (window.confirm(t('admin.categories.prompts.confirmDeleteSubcategory', `Are you sure you want to delete the subcategory "${name}"?`))) {
             deleteSub({ id }, { onSuccess: invalidateTree });
         }
     };
@@ -83,44 +83,64 @@ export const AdminCategories: React.FC = () => {
     const isMutating = isCreatingCat || isEditingCat || isCreatingSub || isEditingSub;
 
     return (
-        <div className="w-full">
-            <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h2 className="text-2xl font-bold text-foreground">{t('admin.categories.title')}</h2>
-                    <p className="text-muted-foreground mt-1 text-sm">{t('admin.categories.subtitle')}</p>
+        <div className="w-full pb-12">
+            {/* Header Section */}
+            <div className="mb-8 bg-gradient-to-r from-stone-900 via-stone-800 to-neutral-900 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+                <div className="absolute bottom-0 left-0 w-48 h-48 bg-rose-500/10 rounded-full blur-2xl translate-y-1/3 -translate-x-1/4"></div>
+                
+                <div className="relative z-10">
+                    <h1 className="text-3xl sm:text-4xl font-bold mb-2 tracking-tight">{t('admin.categories.title', 'Categories Engine')}</h1>
+                    <p className="text-stone-300 max-w-lg">{t('admin.categories.subtitle', 'Build and manage the hierarchical taxonomy of items in the system.')}</p>
                 </div>
-                <button
-                    onClick={handleCreateCategory}
-                    disabled={isMutating}
-                    className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium disabled:opacity-50"
-                >
-                    <FolderPlus className="w-4 h-4 rtl:ml-2 rtl:mr-0" />
-                    {t('admin.categories.newCategory')}
-                </button>
+
+                <div className="relative z-10 flex-shrink-0">
+                    <button
+                        onClick={handleCreateCategory}
+                        disabled={isMutating}
+                        className="flex items-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold rounded-xl shadow-lg transition-all hover:scale-105 hover:shadow-amber-500/25 disabled:opacity-50 disabled:hover:scale-100"
+                    >
+                        {isCreatingCat ? (
+                            <div className="w-5 h-5 border-2 border-stone-900/30 border-t-stone-900 rounded-full animate-spin" />
+                        ) : (
+                            <FolderPlus className="w-5 h-5" />
+                        )}
+                        {t('admin.categories.newCategory', 'New Category')}
+                    </button>
+                </div>
             </div>
 
-            <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
+            {/* Tree Container */}
+            <div className="bg-card rounded-3xl shadow-sm border border-border overflow-hidden">
+                <div className="p-6 border-b border-border bg-muted/20 flex items-center gap-3">
+                    <Network className="w-5 h-5 text-amber-600" />
+                    <h2 className="text-lg font-bold text-foreground">Taxonomy Tree</h2>
+                </div>
+
                 {isLoading ? (
-                    <div className="text-center py-12">
-                        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                        <p className="text-muted-foreground">{t('admin.categories.loading')}</p>
+                    <div className="text-center py-24">
+                        <div className="w-12 h-12 border-4 border-stone-800 dark:border-stone-200 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                        <p className="text-muted-foreground font-medium">{t('admin.categories.loading', 'Loading taxonomy tree...')}</p>
                     </div>
                 ) : categoriesList.length === 0 ? (
-                    <div className="text-center py-16">
-                        <h3 className="text-lg font-medium text-foreground">{t('admin.categories.noCategories')}</h3>
-                        <p className="text-muted-foreground mt-1 text-sm">{t('admin.categories.createFirst')}</p>
+                    <div className="text-center py-24 px-4">
+                        <div className="w-20 h-20 bg-muted/50 text-muted-foreground rounded-full flex items-center justify-center mb-4 mx-auto ring-8 ring-muted/20">
+                            <FolderTree className="w-8 h-8" />
+                        </div>
+                        <h3 className="text-xl font-bold text-foreground mb-2">{t('admin.categories.noCategories', 'No Categories Yet')}</h3>
+                        <p className="text-muted-foreground text-sm max-w-md mx-auto">{t('admin.categories.createFirst', 'Start building the taxonomy by adding your first root category using the button above.')}</p>
                     </div>
                 ) : (
                     <div className="divide-y divide-border">
                         {categoriesList.map((cat: any) => (
                             <div key={cat.id} className="group">
                                 {/* Category Row */}
-                                <div className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors">
+                                <div className="flex items-center justify-between p-5 hover:bg-muted/40 transition-colors">
                                     <div
-                                        className="flex items-center gap-3 cursor-pointer flex-1"
+                                        className="flex items-center gap-4 cursor-pointer flex-1"
                                         onClick={() => toggleExpand(cat.id)}
                                     >
-                                        <button className="p-1 text-muted-foreground hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                                        <button className="w-8 h-8 flex items-center justify-center rounded-lg bg-background border border-border text-foreground hover:bg-amber-50 dark:hover:bg-amber-900/20 hover:text-amber-600 dark:hover:text-amber-500 hover:border-amber-200 dark:hover:border-amber-800 transition-colors shadow-sm">
                                             {expandedCats[cat.id] ? (
                                                 <ChevronDown className="w-5 h-5" />
                                             ) : (
@@ -128,37 +148,43 @@ export const AdminCategories: React.FC = () => {
                                             )}
                                         </button>
                                         <div>
-                                            <h3 className="font-semibold text-foreground">
+                                            <h3 className="font-bold text-lg text-foreground flex items-center gap-2">
+                                                <FolderTree className="w-5 h-5 text-amber-500" />
                                                 {t(`categories.${cat.name}`, { defaultValue: cat.name })}
                                             </h3>
-                                            <p className="text-xs text-muted-foreground">
-                                                {t('admin.categories.subcategoriesCount', { count: cat.subCategories?.length || 0 })}
-                                            </p>
+                                            <div className="flex items-center gap-2 mt-1">
+                                                <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-stone-100 text-stone-600 dark:bg-stone-800 dark:text-stone-300">
+                                                    {cat.subCategories?.length || 0} Subcategories
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
 
+                                    {/* Category Actions */}
                                     <div className="flex items-center gap-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                                         <button
                                             onClick={() => handleCreateSubCategory(cat.id)}
                                             disabled={isMutating}
-                                            className="p-1.5 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded"
-                                            title={t('admin.categories.addSubcategory')}
+                                            className="px-3 py-1.5 text-sm font-semibold text-emerald-700 bg-emerald-100 hover:bg-emerald-200 dark:text-emerald-300 dark:bg-emerald-900/30 dark:hover:bg-emerald-900/50 rounded-lg flex items-center gap-1.5 transition-colors disabled:opacity-50"
+                                            title={t('admin.categories.addSubcategory', 'Add Subcategory')}
                                         >
                                             <PlusCircle className="w-4 h-4" />
+                                            <span className="hidden sm:inline">Add Sub</span>
                                         </button>
+                                        <div className="w-px h-6 bg-border mx-1 hidden sm:block"></div>
                                         <button
                                             onClick={() => handleEditCategory(cat.id, cat.name)}
                                             disabled={isMutating}
-                                            className="p-1.5 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded"
-                                            title={t('admin.categories.editCategory')}
+                                            className="p-2 text-blue-600 hover:bg-blue-100 dark:text-blue-400 dark:hover:bg-blue-900/40 rounded-lg transition-colors disabled:opacity-50"
+                                            title={t('admin.categories.editCategory', 'Edit Category')}
                                         >
                                             <Edit3 className="w-4 h-4" />
                                         </button>
                                         <button
                                             onClick={() => handleDeleteCategory(cat.id, cat.name)}
                                             disabled={cat.subCategories?.length > 0 || isMutating}
-                                            className="p-1.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded disabled:opacity-30 disabled:hover:bg-transparent"
-                                            title={cat.subCategories?.length > 0 ? t('admin.categories.cannotDelete') : t('admin.categories.deleteCategory')}
+                                            className="p-2 text-rose-600 hover:bg-rose-100 dark:text-rose-400 dark:hover:bg-rose-900/40 rounded-lg transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
+                                            title={cat.subCategories?.length > 0 ? t('admin.categories.cannotDelete', 'Cannot delete while subcategories exist') : t('admin.categories.deleteCategory', 'Delete Category')}
                                         >
                                             <Trash2 className="w-4 h-4" />
                                         </button>
@@ -167,38 +193,41 @@ export const AdminCategories: React.FC = () => {
 
                                 {/* SubCategories Drawer */}
                                 {expandedCats[cat.id] && (
-                                    <div className="bg-muted/30 border-t border-border">
+                                    <div className="bg-stone-50/50 dark:bg-stone-900/20 border-t border-border">
                                         {(!cat.subCategories || cat.subCategories.length === 0) ? (
-                                            <div className="px-12 py-4 text-sm text-muted-foreground italic">
-                                                {t('admin.categories.noSubcategories')}
+                                            <div className="pl-16 pr-6 py-6 text-sm font-medium text-muted-foreground flex items-center gap-2">
+                                                <Tag className="w-4 h-4 opacity-50" />
+                                                {t('admin.categories.noSubcategories', 'This category has no subcategories yet.')}
                                             </div>
                                         ) : (
-                                            <div className="pl-12 pr-4 rtl:pr-12 rtl:pl-4 divide-y divide-border">
+                                            <div className="divide-y divide-border/50">
                                                 {cat.subCategories.map((sub: any) => (
-                                                    <div key={sub.id} className="flex items-center justify-between py-3 group/sub">
-                                                        <div className="flex items-center gap-2">
-                                                            <Tag className="w-3.5 h-3.5 text-muted-foreground rtl:rotate-90" />
-                                                            <span className="text-sm font-medium text-foreground">
+                                                    <div key={sub.id} className="flex items-center justify-between py-3 pl-16 pr-6 rtl:pr-16 rtl:pl-6 group/sub hover:bg-background transition-colors">
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="w-6 h-px bg-border/80 rtl:rotate-180"></div>
+                                                            <Tag className="w-4 h-4 text-stone-400 dark:text-stone-500 rtl:rotate-90" />
+                                                            <span className="text-sm font-bold text-foreground">
                                                                 {t(`subcategories.${sub.name}`, { defaultValue: sub.name })}
                                                             </span>
                                                         </div>
 
-                                                        <div className="flex items-center gap-2 opacity-100 md:opacity-0 md:group-hover/sub:opacity-100 transition-opacity">
+                                                        {/* Subcategory Actions */}
+                                                        <div className="flex items-center gap-1 opacity-100 md:opacity-0 md:group-hover/sub:opacity-100 transition-opacity">
                                                             <button
                                                                 onClick={() => handleEditSubCategory(sub.id, cat.id, sub.name)}
                                                                 disabled={isMutating}
-                                                                className="p-1 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded"
-                                                                title={t('admin.categories.editSubcategory')}
+                                                                className="p-1.5 text-stone-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-md transition-colors"
+                                                                title={t('admin.categories.editSubcategory', 'Edit Subcategory')}
                                                             >
-                                                                <Edit3 className="w-3.5 h-3.5" />
+                                                                <Edit3 className="w-4 h-4" />
                                                             </button>
                                                             <button
                                                                 onClick={() => handleDeleteSubCategory(sub.id, sub.name)}
                                                                 disabled={isMutating}
-                                                                className="p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
-                                                                title={t('admin.categories.deleteSubcategory')}
+                                                                className="p-1.5 text-stone-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-md transition-colors"
+                                                                title={t('admin.categories.deleteSubcategory', 'Delete Subcategory')}
                                                             >
-                                                                <Trash2 className="w-3.5 h-3.5" />
+                                                                <Trash2 className="w-4 h-4" />
                                                             </button>
                                                         </div>
                                                     </div>

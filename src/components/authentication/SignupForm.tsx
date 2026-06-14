@@ -10,6 +10,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Eye, EyeOff, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 
+
 const getSignupSchema = (t: any) => z.object({
   firstName: z.string().min(1, t('auth.firstNameRequired')).max(50),
   lastName: z.string().min(1, t('auth.lastNameRequired')).max(50),
@@ -25,6 +26,7 @@ export const SignupForm: React.FC = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [signupError, setSignupError] = useState<string | null>(null);
+
 
   const mutation = usePostApiAuthSignupMutation({
     mutation: {
@@ -94,36 +96,36 @@ export const SignupForm: React.FC = () => {
         {/* First & Last Name Row */}
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="firstName" className="text-white font-medium">
+            <Label htmlFor="firstName" className="text-gray-700 font-medium">
               {t('auth.firstNameLabel')}
             </Label>
             <Input
               id="firstName"
               {...register("firstName")}
               placeholder={t('auth.firstNamePlaceholder')}
-              className={`w-full bg-white/20 border-white/30 text-white placeholder:text-white/60 focus:bg-white/30 focus:border-white/50 transition-all duration-300 ${errors.firstName ? "border-red-400" : ""
+              className={`w-full bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400 focus:bg-white focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-300 ${errors.firstName ? "border-red-400" : ""
                 }`}
             />
             {errors.firstName && (
-              <p className="mt-1 text-sm text-red-200 flex items-center gap-1">
+              <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
                 <AlertCircle className="w-4 h-4" />
                 {errors.firstName.message}
               </p>
             )}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="lastName" className="text-white font-medium">
+            <Label htmlFor="lastName" className="text-gray-700 font-medium">
               {t('auth.lastNameLabel')}
             </Label>
             <Input
               id="lastName"
               {...register("lastName")}
               placeholder={t('auth.lastNamePlaceholder')}
-              className={`w-full bg-white/20 border-white/30 text-white placeholder:text-white/60 focus:bg-white/30 focus:border-white/50 transition-all duration-300 ${errors.lastName ? "border-red-400" : ""
+              className={`w-full bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400 focus:bg-white focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-300 ${errors.lastName ? "border-red-400" : ""
                 }`}
             />
             {errors.lastName && (
-              <p className="mt-1 text-sm text-red-200 flex items-center gap-1">
+              <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
                 <AlertCircle className="w-4 h-4" />
                 {errors.lastName.message}
               </p>
@@ -133,7 +135,7 @@ export const SignupForm: React.FC = () => {
 
         {/* Email Field */}
         <div className="space-y-2">
-          <Label htmlFor="email" className="text-white font-medium">
+          <Label htmlFor="email" className="text-gray-700 font-medium">
             {t('auth.emailAddressLabel')}
           </Label>
           <Input
@@ -141,11 +143,11 @@ export const SignupForm: React.FC = () => {
             {...register("email")}
             type="email"
             placeholder={t('auth.emailPlaceholder')}
-            className={`w-full bg-white/20 border-white/30 text-white placeholder:text-white/60 focus:bg-white/30 focus:border-white/50 transition-all duration-300 ${errors.email ? "border-red-400" : ""
+            className={`w-full bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400 focus:bg-white focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-300 ${errors.email ? "border-red-400" : ""
               }`}
           />
           {errors.email && (
-            <p className="mt-1 text-sm text-red-200 flex items-center gap-1">
+            <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
               <AlertCircle className="w-4 h-4" />
               {errors.email.message}
             </p>
@@ -154,7 +156,7 @@ export const SignupForm: React.FC = () => {
 
         {/* Password Field */}
         <div className="space-y-2">
-          <Label htmlFor="password" className="text-white font-medium">
+          <Label htmlFor="password" className="text-gray-700 font-medium">
             {t('auth.passwordLabel')}
           </Label>
           <div className="relative">
@@ -163,13 +165,13 @@ export const SignupForm: React.FC = () => {
               type={showPassword ? "text" : "password"}
               {...register("password")}
               placeholder="••••••••"
-              className={`w-full bg-white/20 border-white/30 text-white placeholder:text-white/60 focus:bg-white/30 focus:border-white/50 transition-all duration-300 pr-10 ${errors.password ? "border-red-400" : ""
+              className={`w-full bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400 focus:bg-white focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-300 pr-10 ${errors.password ? "border-red-400" : ""
                 }`}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
             >
               {showPassword ? (
                 <EyeOff className="w-5 h-5" />
@@ -179,7 +181,7 @@ export const SignupForm: React.FC = () => {
             </button>
           </div>
           {errors.password && (
-            <p className="mt-1 text-sm text-red-200 flex items-center gap-1">
+            <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
               <AlertCircle className="w-4 h-4" />
               {errors.password.message}
             </p>
@@ -194,12 +196,12 @@ export const SignupForm: React.FC = () => {
                     key={i}
                     className={`h-1 flex-1 rounded-full transition-all duration-300 ${i < passwordStrength.strength
                       ? passwordStrength.color
-                      : "bg-white/20"
+                      : "bg-gray-200"
                       }`}
                   />
                 ))}
               </div>
-              <p className="text-xs text-white/80">
+              <p className="text-xs text-gray-500">
                 {t('auth.passwordStrength')}{passwordStrength.label}
               </p>
             </div>
@@ -208,7 +210,7 @@ export const SignupForm: React.FC = () => {
 
         {/* Phone Field */}
         <div className="space-y-2">
-          <Label htmlFor="phone" className="text-white font-medium">
+          <Label htmlFor="phone" className="text-gray-700 font-medium">
             {t('auth.phoneNumberLabel')}
           </Label>
           <Input
@@ -216,11 +218,11 @@ export const SignupForm: React.FC = () => {
             {...register("phone")}
             type="tel"
             placeholder={t('auth.phonePlaceholder')}
-            className={`w-full bg-white/20 border-white/30 text-white placeholder:text-white/60 focus:bg-white/30 focus:border-white/50 transition-all duration-300 ${errors.phone ? "border-red-400" : ""
+            className={`w-full bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400 focus:bg-white focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-300 ${errors.phone ? "border-red-400" : ""
               }`}
           />
           {errors.phone && (
-            <p className="mt-1 text-sm text-red-200 flex items-center gap-1">
+            <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
               <AlertCircle className="w-4 h-4" />
               {errors.phone.message}
             </p>
@@ -229,8 +231,8 @@ export const SignupForm: React.FC = () => {
 
         {/* Error Message */}
         {signupError && (
-          <div className="rounded-xl bg-red-500/20 backdrop-blur-sm border border-red-400/30 p-4 animate-shake">
-            <div className="text-sm text-white flex items-start gap-2">
+          <div className="rounded-xl bg-red-50 border border-red-200 p-4 animate-shake">
+            <div className="text-sm text-red-600 flex items-start gap-2">
               <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
               <span>{signupError}</span>
             </div>
@@ -241,7 +243,7 @@ export const SignupForm: React.FC = () => {
         <Button
           type="submit"
           disabled={mutation.isPending}
-          className="w-full bg-white text-purple-600 hover:bg-white/90 font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          className="w-full bg-purple-600 text-white hover:bg-purple-700 font-semibold py-3 rounded-xl shadow-md hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
         >
           {mutation.isPending ? (
             <span className="flex items-center justify-center gap-2">
@@ -257,13 +259,15 @@ export const SignupForm: React.FC = () => {
         </Button>
       </form>
 
+
+
       {/* Sign In Link */}
-      <div className="text-center pt-4 border-t border-white/20">
-        <p className="text-white/90 text-sm">
+      <div className="text-center pt-4 border-t border-gray-100">
+        <p className="text-gray-600 text-sm">
           {t('auth.alreadyHaveAccount')} {" "}
           <Link
             to="/login"
-            className="font-semibold text-white hover:text-white/80 underline underline-offset-2 transition-colors"
+            className="font-semibold text-purple-600 hover:text-purple-500 underline underline-offset-2 transition-colors"
           >
             {t('auth.signInHere')}
           </Link>

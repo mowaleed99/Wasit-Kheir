@@ -265,7 +265,7 @@ if(putApiReportsIdBody.DateReported !== undefined) {
  formData.append('DateReported', putApiReportsIdBody.DateReported)
  }
 if(putApiReportsIdBody.ImageIdsToRemove !== undefined) {
- putApiReportsIdBody.ImageIdsToRemove.forEach(value => formData.append('ImageIdsToRemove', value.toString()));
+ putApiReportsIdBody.ImageIdsToRemove.forEach(value => formData.append('ImageIdsToRemove', value as any));
  }
 if(putApiReportsIdBody.NewImages !== undefined) {
  putApiReportsIdBody.NewImages.forEach(value => formData.append('NewImages', value));
