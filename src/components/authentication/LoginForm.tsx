@@ -170,6 +170,11 @@ export const LoginForm: React.FC = () => {
               {errors.password.message}
             </p>
           )}
+          <div className="flex justify-end mt-1">
+            <Link to="/forgot-password" className="text-xs text-indigo-600 hover:text-indigo-500 hover:underline transition-colors">
+              Forgot password?
+            </Link>
+          </div>
         </div>
 
         {/* Error Message */}

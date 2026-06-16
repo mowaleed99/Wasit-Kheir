@@ -11,6 +11,8 @@ import { useAuth } from "@/context/AuthContext";
 import { useGetApiHomeDashboard } from "@/api/generated/home/home";
 import { useTranslation } from "react-i18next";
 import { resolveImageUrl } from "@/utils/imageUrl";
+import { EditReportModal } from "@/components/reports/EditReportModal";
+import { Edit } from "lucide-react";
 
 type TabState = "Active" | "Archived" | "Closed";
 
@@ -19,6 +21,7 @@ export const AdminReports: React.FC = () => {
     const { user, isAuthenticated } = useAuth();
     const [activeTab, setActiveTab] = useState<TabState>("Active");
     const [confirmDialog, setConfirmDialog] = useState<{ action: "delete" | "archive", reportId: number } | null>(null);
+    const [editingReport, setEditingReport] = useState<any | null>(null);
 
     // Fetch reports using the Admin endpoint
     const {
@@ -231,6 +234,14 @@ export const AdminReports: React.FC = () => {
                                             {t('admin.reports.table.view', 'View')}
                                         </Link>
                                         
+                                        <button
+                                            onClick={() => setEditingReport(report)}
+                                            className="p-2 text-blue-600 dark:text-blue-400 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                                            title="Edit"
+                                        >
+                                            <Edit className="w-5 h-5" />
+                                        </button>
+                                        
                                         {/* Archive button only for active */}
                                         {activeTab === "Active" && (
                                             <button
@@ -313,6 +324,16 @@ export const AdminReports: React.FC = () => {
                     </div>
                 </div>
             )}
+
+            {/* Edit Modal */}
+            <EditReportModal
+                report={editingReport}
+                isOpen={!!editingReport}
+                onClose={() => {
+                    setEditingReport(null);
+                    invalidateReports();
+                }}
+            />
         </div>
     );
 };

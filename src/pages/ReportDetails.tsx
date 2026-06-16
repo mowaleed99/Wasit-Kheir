@@ -5,6 +5,7 @@ import { useDeleteApiAdminReportsId } from "@/api/generated/admin/admin";
 import { useGetApiUsersMeSavedReports } from "@/api/generated/users/users";
 import { useGetApiMatchingReportId, usePostApiMatchingRunReportId } from "@/api/generated/matching/matching";
 import { usePostApiChatSessionsOtherUserId, apiClient } from "@/api";
+import { usePostApiChatConnectPostId } from "@/api/generated/chat/chat";
 import { MapPicker } from "@/components/ui/MapPicker";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/Button";
@@ -12,10 +13,14 @@ import { ImageGallery } from "@/components/ui/ImageGallery";
 import { resolveImageUrl } from "@/utils/imageUrl";
 import {
     ArrowLeft, MapPin, Calendar, MessageCircle, Share2, Send,
-    Trash2, CheckCircle, Tag, User, Sparkles, Bookmark, BookmarkCheck
+    Trash2, CheckCircle, Tag, User, Sparkles, Bookmark, BookmarkCheck, Edit, AlertTriangle, Heart
 } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { EditReportModal } from "@/components/reports/EditReportModal";
+import { UpdateStatusModal } from "@/components/reports/UpdateStatusModal";
+import { ReportAbuseModal } from "@/components/reports/ReportAbuseModal";
+import { usePostApiReportsIdInterested } from "@/api/generated/reports/reports";
 
 const typeColors: Record<string, string> = {
     LostItem: "bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-900/50",
@@ -150,7 +155,45 @@ export const ReportDetails: React.FC = () => {
         },
     });
 
+    const { mutate: connectChatToPost, isPending: isConnecting } = usePostApiChatConnectPostId({
+        mutation: {
+            onSuccess: (response: any) => {
+                const sessionId = response?.data?.id || response?.data?.data?.id || response?.id;
+                if (sessionId) navigate(`/chat/${sessionId}`);
+                else navigate("/chat");
+            },
+            onError: () => alert("Failed to connect chat to this report."),
+        }
+    });
+
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    
+    // New Modals State
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+
+    // Express Interest
+    const { mutate: expressInterest, isPending: isExpressingInterest } = usePostApiReportsIdInterested({
+        mutation: {
+            onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ["report-detail", reportId] });
+                alert("You've expressed interest in this report!");
+            },
+            onError: (error: any) => {
+                const msg = error?.response?.data?.message || error?.message || "Failed to express interest.";
+                alert(msg);
+            }
+        }
+    });
+
+    const handleInterest = () => {
+        if (!user) {
+            alert("You must be logged in to express interest.");
+            return;
+        }
+        expressInterest({ id: reportId });
+    };
 
     // API body: { success, data: { id, title, ... } }
     const reportData = (reportResponse as any)?.data ?? reportResponse;
@@ -321,6 +364,22 @@ export const ReportDetails: React.FC = () => {
                                                 Delete
                                             </Button>
                                         )}
+                                        <Button
+                                            size="sm" variant="ghost"
+                                            className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                                            onClick={() => setIsEditModalOpen(true)}
+                                        >
+                                            <Edit className="w-4 h-4 mr-1" />
+                                            Edit
+                                        </Button>
+                                        <Button
+                                            size="sm" variant="ghost"
+                                            className="text-green-600 hover:text-green-700 hover:bg-green-50"
+                                            onClick={() => setIsStatusModalOpen(true)}
+                                        >
+                                            <CheckCircle className="w-4 h-4 mr-1" />
+                                            Update Status
+                                        </Button>
                                     </div>
                                     <div className="flex gap-2">
                                         <Button
@@ -404,19 +463,43 @@ export const ReportDetails: React.FC = () => {
                                 </div>
 
                                 {!isOwner && (
-                                    <button
-                                        onClick={handleContact}
-                                        disabled={isCreatingChat}
-                                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    >
-                                        <Send className="w-4 h-4 rtl:-scale-x-100" />
-                                        <span className="text-sm font-medium">
-                                            {isCreatingChat ? "Connecting..." : "Contact Reporter"}
-                                        </span>
-                                    </button>
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                        <button
+                                            onClick={handleContact}
+                                            disabled={isCreatingChat}
+                                            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            <Send className="w-4 h-4 rtl:-scale-x-100" />
+                                            <span className="text-sm font-medium">
+                                                {isCreatingChat ? "Connecting..." : "Contact Reporter"}
+                                            </span>
+                                        </button>
+                                        <button
+                                            onClick={() => connectChatToPost({ postId: reportId })}
+                                            disabled={isConnecting}
+                                            className="flex items-center gap-2 px-4 py-2 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-900/50 transition-all duration-300 disabled:opacity-50 text-sm font-medium"
+                                            title="Start a chat session linked to this specific report"
+                                        >
+                                            <MessageCircle className="w-4 h-4" />
+                                            {isConnecting ? "Linking..." : "Chat about Report"}
+                                        </button>
+                                    </div>
                                 )}
                             </div>
                         </div>
+
+                        {/* Additional non-owner actions */}
+                        {!isOwner && !isAdmin && (
+                            <div className="mt-4 flex flex-wrap justify-between gap-4">
+                                <button
+                                    onClick={() => setIsReportModalOpen(true)}
+                                    className="flex items-center gap-2 text-sm text-red-500 hover:text-red-700 transition-colors"
+                                >
+                                    <AlertTriangle className="w-4 h-4" />
+                                    Report Abuse
+                                </button>
+                            </div>
+                        )}
 
                         {/* Match Results */}
                         {(isOwner || isAdmin) && (
@@ -523,17 +606,49 @@ export const ReportDetails: React.FC = () => {
 
                         {/* Interested count */}
                         {reportData.interestedCount !== undefined && (
-                            <div className="bg-card text-card-foreground rounded-3xl overflow-hidden shadow-sm border border-border p-6">
+                            <div className="bg-card text-card-foreground rounded-3xl overflow-hidden shadow-sm border border-border p-6 mt-6">
                                 <h3 className="text-lg font-bold text-foreground mb-3">Engagement</h3>
-                                <div className="flex items-center gap-2 text-muted-foreground">
-                                    <CheckCircle className="w-5 h-5 text-green-500" />
-                                    <span>{reportData.interestedCount} people marked as interested</span>
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2 text-muted-foreground">
+                                        <CheckCircle className="w-5 h-5 text-green-500" />
+                                        <span>{reportData.interestedCount} people marked as interested</span>
+                                    </div>
+                                    {!isOwner && (
+                                        <button
+                                            onClick={handleInterest}
+                                            disabled={isExpressingInterest}
+                                            className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors text-sm font-medium disabled:opacity-50"
+                                        >
+                                            <Heart className={`w-4 h-4 ${isExpressingInterest ? 'animate-pulse' : ''}`} />
+                                            I'm Interested
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         )}
                     </div>
                 </div>
             </div >
+            
+            {/* Modals */}
+            <EditReportModal
+                report={reportData}
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+            />
+            
+            <UpdateStatusModal
+                reportId={reportId}
+                currentStatus={reportData.lifecycleStatus}
+                isOpen={isStatusModalOpen}
+                onClose={() => setIsStatusModalOpen(false)}
+            />
+
+            <ReportAbuseModal
+                reportId={reportId}
+                isOpen={isReportModalOpen}
+                onClose={() => setIsReportModalOpen(false)}
+            />
         </div >
     );
 };
