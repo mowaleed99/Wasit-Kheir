@@ -43,7 +43,7 @@ export const Navbar: React.FC = () => {
                 className="relative h-10 w-10 rounded-full object-cover border-2 border-white shadow-md group-hover:scale-105 transition-transform duration-200 bg-white"
               />
             </div>
-            <span className="font-bold text-lg text-foreground hidden sm:block tracking-tight">{t('app.title', 'Wasit Kheir')}</span>
+            <span className="font-bold text-lg text-foreground tracking-tight">{t('app.title', 'Wasit Kheir')}</span>
           </Link>
 
           <Link to="/search" className="relative flex-1 max-w-md hidden md:block">
