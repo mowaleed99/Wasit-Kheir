@@ -63,7 +63,7 @@ export const Home = () => {
             to="/create-report"
             className="w-full sm:w-auto text-center justify-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
           >
-            <Plus className="w-5 h-5 mx-auto sm:mx-0" />
+            <Plus className="w-5 h-5" />
             <span>{t('home.reportButton')}</span>
           </Link>
         </div>
