@@ -5,6 +5,7 @@ import { MapPin, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { MapPicker } from "@/components/ui/MapPicker";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 export const NearbyPage: React.FC = () => {
     const { t } = useTranslation();
@@ -43,11 +44,11 @@ export const NearbyPage: React.FC = () => {
                 },
                 (error) => {
                     console.error("Error getting location:", error);
-                    alert(t('nearbyPage.alertCantGetLocation'));
+                    toast.error(t('nearbyPage.alertCantGetLocation'));
                 }
             );
         } else {
-            alert(t('nearbyPage.alertGeoNotSupported'));
+            toast.error(t('nearbyPage.alertGeoNotSupported'));
         }
     };
 

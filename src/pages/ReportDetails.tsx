@@ -21,6 +21,7 @@ import { EditReportModal } from "@/components/reports/EditReportModal";
 import { UpdateStatusModal } from "@/components/reports/UpdateStatusModal";
 import { ReportAbuseModal } from "@/components/reports/ReportAbuseModal";
 import { usePostApiReportsIdInterested } from "@/api/generated/reports/reports";
+import { toast } from "sonner";
 
 const typeColors: Record<string, string> = {
     LostItem: "bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-900/50",
@@ -60,10 +61,10 @@ export const ReportDetails: React.FC = () => {
     const { mutate: runMatch, isPending: isRunningMatch } = usePostApiMatchingRunReportId({
         mutation: {
       onSuccess: () => {
-        alert("AI Match scan complete!");
+        toast.success("AI Match scan complete!");
         refetchMatches();
       },
-      onError: () => alert("Failed to run AI matching.")
+      onError: () => toast.error("Failed to run AI matching.")
         }
     });
 
@@ -103,7 +104,7 @@ export const ReportDetails: React.FC = () => {
                         error?.response?.data?.includes("already saved"))) {
                     setLocalIsSaved(true);
                 } else {
-                    alert("Failed to save report. Check console for details.");
+                    toast.error("Failed to save report. Check console for details.");
                 }
             }
         }
@@ -117,14 +118,14 @@ export const ReportDetails: React.FC = () => {
             },
             onError: (error) => {
                 console.error("Unsave Report Error:", error);
-                alert("Failed to unsave report. Check console for details.");
+                toast.error("Failed to unsave report. Check console for details.");
             }
         }
     });
 
     const toggleSave = () => {
         if (!user) {
-            alert("You must be logged in to save reports.");
+            toast.error("You must be logged in to save reports.");
             return;
         }
         if (isSaved) {
@@ -150,7 +151,7 @@ export const ReportDetails: React.FC = () => {
             },
             onError: (error) => {
                 console.error("Chat creation error:", error);
-                alert("Failed to start chat. Please try again.");
+                toast.error("Failed to start chat. Please try again.");
             },
         },
     });
@@ -162,7 +163,7 @@ export const ReportDetails: React.FC = () => {
                 if (sessionId) navigate(`/chat/${sessionId}`);
                 else navigate("/chat");
             },
-            onError: () => alert("Failed to connect chat to this report."),
+            onError: () => toast.error("Failed to connect chat to this report."),
         }
     });
 
@@ -178,18 +179,18 @@ export const ReportDetails: React.FC = () => {
         mutation: {
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: ["report-detail", reportId] });
-                alert("You've expressed interest in this report!");
+                toast.success("You've expressed interest in this report!");
             },
             onError: (error: any) => {
                 const msg = error?.response?.data?.message || error?.message || "Failed to express interest.";
-                alert(msg);
+                toast.error(msg);
             }
         }
     });
 
     const handleInterest = () => {
         if (!user) {
-            alert("You must be logged in to express interest.");
+            toast.error("You must be logged in to express interest.");
             return;
         }
         expressInterest({ id: reportId });
@@ -214,7 +215,7 @@ export const ReportDetails: React.FC = () => {
             catch (e) { /* cancelled */ }
         } else {
             await navigator.clipboard.writeText(shareUrl).catch(() => { });
-            alert("Link copied to clipboard!");
+            toast.success("Link copied to clipboard!");
         }
     };
 
@@ -225,7 +226,7 @@ export const ReportDetails: React.FC = () => {
             queryClient.invalidateQueries({ queryKey: ["/api/Admin/reports"] });
             navigate("/");
         };
-        const onErrorAction = () => alert("Failed to delete report.");
+        const onErrorAction = () => toast.error("Failed to delete report.");
 
         if (!isOwner && isAdmin) {
             deleteAdminReport({ id: reportId }, { onSuccess: onSuccessAction, onError: onErrorAction });
@@ -236,12 +237,12 @@ export const ReportDetails: React.FC = () => {
 
     const handleContact = () => {
         if (!user) {
-            alert(t('auth.loginRequired', { defaultValue: "You must be logged in to contact the reporter." }));
+            toast.error(t('auth.loginRequired', { defaultValue: "You must be logged in to contact the reporter." }));
             navigate("/login");
             return;
         }
         const ownerId = reportData?.createdById;
-        if (!ownerId) { alert("Unable to contact reporter. Owner ID is missing."); return; }
+        if (!ownerId) { toast.error("Unable to contact reporter. Owner ID is missing."); return; }
         createChatSession({ otherUserId: ownerId });
     };
 

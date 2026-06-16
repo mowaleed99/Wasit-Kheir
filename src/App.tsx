@@ -4,6 +4,8 @@ import { AuthProvider } from "./context/AuthContext";
 import { SettingsProvider } from "./context/SettingsContext";
 import { CategoryFilterProvider } from "./context/CategoryFilterContext";
 import { ThemeProvider } from "./context/ThemeContext";
+import { DialogProvider } from "./context/DialogContext";
+import { Toaster } from "./components/ui/Toaster";
 
 import { HomeLayout } from "./components/layout/HomeLayout";
 import { ProtectedRoute } from "./components/layout/ProtectedRoute";
@@ -137,7 +139,10 @@ function App() {
           <AuthProvider>
             <SettingsProvider>
               <CategoryFilterProvider>
-                <RouterProvider router={router} />
+                <DialogProvider>
+                  <RouterProvider router={router} />
+                  <Toaster />
+                </DialogProvider>
               </CategoryFilterProvider>
             </SettingsProvider>
           </AuthProvider>

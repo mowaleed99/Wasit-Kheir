@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Locate } from "lucide-react";
+import { toast } from "sonner";
 
 // Fix for default marker icons
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -172,11 +173,11 @@ export const MapPicker: React.FC<MapPickerProps> = ({
         },
         (error) => {
           console.error("Error getting location:", error);
-          alert("Unable to get your location. Please enable location services.");
+          toast.error("Unable to get your location. Please enable location services.");
         }
       );
     } else {
-      alert("Geolocation is not supported by your browser.");
+      toast.error("Geolocation is not supported by your browser.");
     }
   };
 

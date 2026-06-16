@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { KeyRound, ArrowLeft, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface ResetPasswordForm {
     email: string;
@@ -27,12 +28,12 @@ export const ResetPassword: React.FC = () => {
     const { mutate: resetPassword, isPending } = usePostApiAuthResetPassword({
         mutation: {
             onSuccess: () => {
-                alert("Password reset successfully! Please log in.");
+                toast.success("Password reset successfully! Please log in.");
                 navigate("/login");
             },
             onError: (err: any) => {
                 const msg = err?.response?.data?.message || err?.message || "Failed to reset password.";
-                alert(msg);
+                toast.error(msg);
             }
         }
     });

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { Mail, ArrowLeft, CheckCircle, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface ForgotPasswordForm {
     email: string;
@@ -21,7 +22,7 @@ export const ForgotPassword: React.FC = () => {
             onSuccess: () => setSent(true),
             onError: (err: any) => {
                 const msg = err?.response?.data?.message || err?.message || "Failed to send reset email.";
-                alert(msg);
+                toast.error(msg);
             }
         }
     });

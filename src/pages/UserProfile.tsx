@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 export const UserProfile: React.FC = () => {
     const { t } = useTranslation();
@@ -54,7 +55,7 @@ export const UserProfile: React.FC = () => {
             },
             onError: (error) => {
                 console.error("Chat creation error:", error);
-                alert(t('userProfile.failedToStartChat'));
+                toast.error(t('userProfile.failedToStartChat'));
             },
         },
     });

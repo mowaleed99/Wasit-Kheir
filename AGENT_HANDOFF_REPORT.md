@@ -98,6 +98,15 @@ All admin pages fully redesigned with a **dark slate/stone + amber** premium aes
 | **Admin Reports Edit** | `AdminReports.tsx` | Integrated the newly created `EditReportModal` into the admin reports table so admins can edit posts directly. |
 | **Global Scrollbar Cleanup** | `globals.css` | Added `@layer utilities { .no-scrollbar { ... } }` and fixed HSL color syntax warnings. |
 
+### Phase 11 -- This Session (Browser Dialog Migration)
+
+| What | Files | Notes |
+|---|---|---|
+| **Global Dialog & Toast** | `DialogContext.tsx`, `Toaster.tsx`, `App.tsx` | Added Sonner for toasts and built a custom `useAppDialog` context that provides an async `confirm()` and `prompt()` UI, replacing the browser native `window.confirm`, `window.alert`, and `window.prompt`. |
+| **Admin Panel Migration** | `AdminCategories.tsx`, `AdminUsers.tsx` | Migrated native `window.prompt` (for adding categories) and `window.confirm` (for deleting items and users) to `useAppDialog`'s async methods. |
+| **Settings Migration** | `Settings.tsx` | Replaced `window.confirm` with `useAppDialog().confirm` for Account Deletion, and swapped all `alert()` calls for `toast.success`/`toast.error`. |
+| **Toast Conversions** | `ReportDetails.tsx`, `NearbyPage.tsx`, `UserProfile.tsx`, `MapPicker.tsx`, `ResetPassword.tsx`, `ForgotPassword.tsx`, `VerifyEmail.tsx`, `ReportAbuseModal.tsx`, `EditProfileModal.tsx` | Mass replaced all `alert()` usages across pages and modals with modern `toast()` notifications for better UX. |
+
 ---
 
 ## 4. Architecture & Key Files

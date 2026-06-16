@@ -13,9 +13,11 @@ import {
 import { queryClient } from "@/api";
 import { FolderPlus, Edit3, Trash2, ChevronDown, ChevronRight, PlusCircle, Tag, FolderTree, Network } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useAppDialog } from "@/context/DialogContext";
 
 export const AdminCategories: React.FC = () => {
     const { t } = useTranslation();
+    const { prompt, confirm } = useAppDialog();
     const [expandedCats, setExpandedCats] = useState<Record<number, boolean>>({});
 
     // Fetch the entire tree
@@ -43,39 +45,39 @@ export const AdminCategories: React.FC = () => {
     };
 
     // Category Actions
-    const handleCreateCategory = () => {
-        const name = window.prompt(t('admin.categories.prompts.newCategory', 'Enter new category name:'));
+    const handleCreateCategory = async () => {
+        const name = await prompt(t('admin.categories.prompts.newCategory', 'Enter new category name:'));
         if (!name) return;
         createCat({ data: { name } }, { onSuccess: invalidateTree });
     };
 
-    const handleEditCategory = (id: number, currentName: string) => {
-        const name = window.prompt(t('admin.categories.prompts.editCategory', 'Edit category name:'), currentName);
+    const handleEditCategory = async (id: number, currentName: string) => {
+        const name = await prompt(t('admin.categories.prompts.editCategory', 'Edit category name:'), currentName);
         if (!name || name === currentName) return;
         editCat({ id, data: { name } }, { onSuccess: invalidateTree });
     };
 
-    const handleDeleteCategory = (id: number, name: string) => {
-        if (window.confirm(t('admin.categories.prompts.confirmDeleteCategory', `Are you sure you want to delete the category "${name}"?`))) {
+    const handleDeleteCategory = async (id: number, name: string) => {
+        if (await confirm(t('admin.categories.prompts.confirmDeleteCategory', `Are you sure you want to delete the category "${name}"?`))) {
             deleteCat({ id }, { onSuccess: invalidateTree });
         }
     };
 
     // SubCategory Actions
-    const handleCreateSubCategory = (categoryId: number) => {
-        const name = window.prompt(t('admin.categories.prompts.newSubcategory', 'Enter new subcategory name:'));
+    const handleCreateSubCategory = async (categoryId: number) => {
+        const name = await prompt(t('admin.categories.prompts.newSubcategory', 'Enter new subcategory name:'));
         if (!name) return;
         createSub({ data: { categoryId, name } }, { onSuccess: invalidateTree });
     };
 
-    const handleEditSubCategory = (id: number, categoryId: number, currentName: string) => {
-        const name = window.prompt(t('admin.categories.prompts.editSubcategory', 'Edit subcategory name:'), currentName);
+    const handleEditSubCategory = async (id: number, categoryId: number, currentName: string) => {
+        const name = await prompt(t('admin.categories.prompts.editSubcategory', 'Edit subcategory name:'), currentName);
         if (!name || name === currentName) return;
         editSub({ id, data: { categoryId, name } }, { onSuccess: invalidateTree });
     };
 
-    const handleDeleteSubCategory = (id: number, name: string) => {
-        if (window.confirm(t('admin.categories.prompts.confirmDeleteSubcategory', `Are you sure you want to delete the subcategory "${name}"?`))) {
+    const handleDeleteSubCategory = async (id: number, name: string) => {
+        if (await confirm(t('admin.categories.prompts.confirmDeleteSubcategory', `Are you sure you want to delete the subcategory "${name}"?`))) {
             deleteSub({ id }, { onSuccess: invalidateTree });
         }
     };

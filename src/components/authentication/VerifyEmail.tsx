@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/Label";
 import { useTranslation } from "react-i18next";
 import { useMutation } from "@tanstack/react-query";
 import { apiClient } from "@/api";
+import { toast } from "sonner";
 
 interface VerifyFormData {
   code: string;
@@ -58,7 +59,7 @@ export const VerifyEmail: React.FC = () => {
         error?.response?.data?.message ||
         error?.message ||
         "Verification failed. Please check your code and email.";
-      alert(errorMessage);
+      toast.error(errorMessage);
     },
   });
 
@@ -71,7 +72,7 @@ export const VerifyEmail: React.FC = () => {
       return apiClient.post("/api/auth/resend-verification", { email });
     },
     onSuccess: () => {
-      alert("Verification code has been resent to your email!");
+      toast.success("Verification code has been resent to your email!");
     },
     onError: (error: any) => {
       console.error("Resend error:", error);
@@ -79,7 +80,7 @@ export const VerifyEmail: React.FC = () => {
         error?.response?.data?.message ||
         error?.message ||
         "Failed to resend verification code.";
-      alert(errorMessage);
+      toast.error(errorMessage);
     },
   });
 

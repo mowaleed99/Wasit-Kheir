@@ -8,6 +8,7 @@ import { X, Loader2, Camera, User } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useTranslation } from "react-i18next";
 import { resolveImageUrl } from "@/utils/imageUrl";
+import { toast } from "sonner";
 
 const editProfileSchema = z.object({
     fullName: z.string().min(2, "Name must be at least 2 characters"),
@@ -101,7 +102,7 @@ export const EditProfileModal = ({ user, isOpen, onClose }: EditProfileModalProp
                                         || error?.response?.data?.title
                                         || error?.message
                                         || "Failed to upload profile picture";
-                                    alert(`Profile updated but photo upload failed: ${errorMessage}`);
+                                    toast.error(`Profile updated but photo upload failed: ${errorMessage}`);
                                     queryClient.invalidateQueries({ queryKey: ["/api/Users/me"] });
                                     onClose();
                                 },
@@ -118,7 +119,7 @@ export const EditProfileModal = ({ user, isOpen, onClose }: EditProfileModalProp
                         || error?.response?.data?.title
                         || error?.message
                         || "Failed to update profile";
-                    alert(`Failed to update profile: ${errorMessage}`);
+                    toast.error(`Failed to update profile: ${errorMessage}`);
                 },
             }
         );

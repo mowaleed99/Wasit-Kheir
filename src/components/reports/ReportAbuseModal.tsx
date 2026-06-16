@@ -2,6 +2,7 @@ import { useState } from "react";
 import { usePostApiReportsIdReport } from "@/api/generated/reports/reports";
 import { X, AlertTriangle, Loader2 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 interface ReportAbuseModalProps {
     reportId: number;
@@ -28,7 +29,7 @@ export const ReportAbuseModal: React.FC<ReportAbuseModalProps> = ({ reportId, is
         mutation: {
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: ["report-detail", reportId] });
-                alert("Thank you for your report. Our team will review it shortly.");
+                toast.success("Thank you for your report. Our team will review it shortly.");
                 onClose();
             },
             onError: (error: any) => {

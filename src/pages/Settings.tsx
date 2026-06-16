@@ -14,12 +14,15 @@ import {
     usePostApiAuthChangeEmailConfirm,
     useDeleteApiAuthDeleteAccount,
 } from "@/api/generated/auth/auth";
+import { toast } from "sonner";
+import { useAppDialog } from "@/context/DialogContext";
 
 export const Settings: React.FC = () => {
     const { t } = useTranslation();
     const { user, logout } = useAuth();
     const { language, toggleLanguage } = useSettings();
     const { theme, setTheme } = useTheme();
+    const { confirm } = useAppDialog();
     const [notificationsEnabled, setNotificationsEnabled] = useState(true);
 
     // Section expanders
@@ -37,8 +40,8 @@ export const Settings: React.FC = () => {
         useForm<{ currentPassword: string; newPassword: string }>();
     const { mutate: changePassword, isPending: isChangingPwd } = usePostApiAuthChangePassword({
         mutation: {
-            onSuccess: () => { alert("Password changed successfully!"); resetPwd(); setShowChangePwd(false); },
-            onError: (e: any) => alert(e?.response?.data?.message || "Failed to change password."),
+            onSuccess: () => { toast.success("Password changed successfully!"); resetPwd(); setShowChangePwd(false); },
+            onError: (e: any) => toast.error(e?.response?.data?.message || "Failed to change password."),
         }
     });
 
@@ -48,14 +51,17 @@ export const Settings: React.FC = () => {
         useForm<{ verificationCode: string }>();
     const { mutate: requestEmailChange, isPending: isRequestingEmail } = usePostApiAuthChangeEmailRequest({
         mutation: {
-            onSuccess: () => setEmailStep("confirm"),
-            onError: (e: any) => alert(e?.response?.data?.message || "Failed to request email change."),
+            onSuccess: () => {
+                toast.success("Verification code sent to new email!");
+                setEmailStep("confirm");
+            },
+            onError: (e: any) => toast.error(e?.response?.data?.message || "Failed to request email change."),
         }
     });
     const { mutate: confirmEmailChange, isPending: isConfirmingEmail } = usePostApiAuthChangeEmailConfirm({
         mutation: {
-            onSuccess: () => { alert("Email changed! Please log in again."); logout(); },
-            onError: (e: any) => alert(e?.response?.data?.message || "Verification failed."),
+            onSuccess: () => { toast.success("Email changed! Please log in again."); logout(); },
+            onError: (e: any) => toast.error(e?.response?.data?.message || "Verification failed."),
         }
     });
 
@@ -63,8 +69,8 @@ export const Settings: React.FC = () => {
     const { register: regDelete, handleSubmit: handleDeleteSubmit } = useForm<{ password: string }>();
     const { mutate: deleteAccount, isPending: isDeletingAccount } = useDeleteApiAuthDeleteAccount({
         mutation: {
-            onSuccess: () => { alert("Account deleted."); logout(); },
-            onError: (e: any) => alert(e?.response?.data?.message || "Failed to delete account."),
+            onSuccess: () => { toast.success("Account deleted."); logout(); },
+            onError: (e: any) => toast.error(e?.response?.data?.message || "Failed to delete account."),
         }
     });
 
@@ -322,8 +328,8 @@ export const Settings: React.FC = () => {
                             </p>
                         </div>
                         <form
-                            onSubmit={handleDeleteSubmit((data) => {
-                                if (window.confirm("Are you absolutely sure? This cannot be undone.")) {
+                            onSubmit={handleDeleteSubmit(async (data) => {
+                                if (await confirm("Are you absolutely sure? This cannot be undone.")) {
                                     deleteAccount({ data: { password: data.password } });
                                 }
                             })}

@@ -9,9 +9,11 @@ import { Search, CheckCircle, Shield, UserX, UserCheck, Users as UsersIcon, Mail
 import { CreateAdminCommand } from "@/api/generated/lostAndFoundAPI.schemas";
 import { useTranslation } from "react-i18next";
 import { resolveImageUrl } from "@/utils/imageUrl";
+import { useAppDialog } from "@/context/DialogContext";
 
 export const AdminUsers: React.FC = () => {
     const { t } = useTranslation();
+    const { confirm } = useAppDialog();
     const [searchTerm, setSearchTerm] = useState("");
     const [showAddAdmin, setShowAddAdmin] = useState(false);
     const [adminForm, setAdminForm] = useState<CreateAdminCommand>({
@@ -63,8 +65,8 @@ export const AdminUsers: React.FC = () => {
         );
     };
 
-    const handleDeleteUser = (id: number, name: string) => {
-        if (window.confirm(`Are you sure you want to permanently delete the user "${name}"? This action cannot be undone.`)) {
+    const handleDeleteUser = async (id: number, name: string) => {
+        if (await confirm(`Are you sure you want to permanently delete the user "${name}"? This action cannot be undone.`)) {
             deleteUser(
                 { id },
                 {
