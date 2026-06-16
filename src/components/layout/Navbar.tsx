@@ -33,8 +33,8 @@ export const Navbar: React.FC = () => {
     <nav className="sticky top-0 z-50 px-6 py-3 bg-background/80 backdrop-blur-md border-b border-border shadow-sm transition-all duration-300">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Left: Logo & Search Bar */}
-        <div className="flex items-center space-x-6 flex-1 max-w-2xl">
-          <Link to="/" className="flex-shrink-0 group">
+        <div className="flex items-center space-x-6 rtl:space-x-reverse flex-1 max-w-2xl">
+          <Link to="/" className="flex-shrink-0 group flex items-center gap-3">
             <div className="relative">
               <div className="absolute inset-0 bg-blue-500 blur-lg opacity-20 group-hover:opacity-40 transition-opacity rounded-full" />
               <img
@@ -43,6 +43,7 @@ export const Navbar: React.FC = () => {
                 className="relative h-10 w-10 rounded-full object-cover border-2 border-white shadow-md group-hover:scale-105 transition-transform duration-200 bg-white"
               />
             </div>
+            <span className="font-bold text-lg text-foreground hidden sm:block tracking-tight">{t('app.title', 'Wasit Kheir')}</span>
           </Link>
 
           <Link to="/search" className="relative flex-1 max-w-md hidden md:block">
@@ -54,7 +55,7 @@ export const Navbar: React.FC = () => {
         </div>
 
         {/* Center: Icon Navigation */}
-        <div className="hidden md:flex items-center space-x-1 md:space-x-2 mx-4">
+        <div className="hidden md:flex items-center gap-1 md:gap-2 mx-4">
           {(user?.roles?.includes("Admin") || user?.email === "lost.found2026@gmail.com") && (
             <Link
               to="/admin"
