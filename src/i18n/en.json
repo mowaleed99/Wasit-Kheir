@@ -118,7 +118,15 @@
     "comment": "Comment",
     "share": "Share"
   },
+  "common": {
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "moreOptions": "More options"
+  },
   "chat": {
+    "deleteChat": "Delete Chat",
+    "confirmDelete": "Are you sure you want to delete this chat?",
+    "viewProfile": "View Profile",
     "messages": "Messages",
     "searchPlaceholder": "Search chats...",
     "noConversations": "No conversations found",
@@ -351,6 +359,9 @@
     }
   },
   "chat": {
+    "deleteChat": "Delete Chat",
+    "confirmDelete": "Are you sure you want to delete this chat?",
+    "viewProfile": "View Profile",
     "messages": "Messages",
     "searchPlaceholder": "Search chats...",
     "noConversations": "No conversations found",

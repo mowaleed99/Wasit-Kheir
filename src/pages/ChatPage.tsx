@@ -28,13 +28,15 @@ export const ChatPage = () => {
     };
 
     return (
-        <div className="bg-background h-[calc(100vh-4rem)] pb-16 md:pb-0">
-            <div className="max-w-6xl mx-auto h-full bg-card md:rounded-3xl shadow-sm border-0 md:border border-border overflow-hidden flex">
+        <div className="bg-gradient-to-br from-blue-50/50 via-background to-indigo-50/50 dark:from-background dark:via-background dark:to-blue-950/20 h-[calc(100vh-4rem)] pb-16 md:pb-0 md:p-4 lg:p-6">
+            <div className="max-w-6xl mx-auto h-full bg-card/80 backdrop-blur-xl md:rounded-[2rem] shadow-2xl border-0 md:border border-border/50 overflow-hidden flex ring-1 ring-black/5 dark:ring-white/10 relative">
                 {/* Sidebar - Chat List */}
-                <div className={`w-full md:w-80 lg:w-96 border-r border-border flex flex-col ${selectedSessionId ? 'hidden md:flex' : 'flex'}`}>
-                    <div className="p-4 border-b border-border flex items-center justify-between">
-                        <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                            <MessageCircle className="w-6 h-6 text-blue-600 rtl:ml-2 rtl:mr-0" />
+                <div className={`w-full md:w-80 lg:w-96 border-r border-border/50 flex flex-col bg-card/50 ${selectedSessionId ? 'hidden md:flex' : 'flex'}`}>
+                    <div className="p-5 border-b border-border/50 flex items-center justify-between sticky top-0 z-10 bg-card/80 backdrop-blur-md">
+                        <h2 className="text-xl font-bold text-foreground flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                                <MessageCircle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                            </div>
                             {t('chat.messages')}
                         </h2>
                     </div>
@@ -45,19 +47,22 @@ export const ChatPage = () => {
                 </div>
 
                 {/* Main Area - Chat Window */}
-                <div className={`flex-1 flex flex-col bg-muted/30 ${!selectedSessionId ? 'hidden md:flex' : 'flex'}`}>
+                <div className={`flex-1 flex flex-col bg-muted/20 ${!selectedSessionId ? 'hidden md:flex' : 'flex'}`}>
                     {selectedSessionId ? (
                         <ChatWindow
                             sessionId={selectedSessionId}
                             onBack={() => navigate('/chat')}
                         />
                     ) : (
-                        <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground p-8 text-center">
-                            <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-4 border border-border">
-                                <MessageCircle className="w-10 h-10 text-muted-foreground opacity-50" />
+                        <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-gradient-to-br from-transparent to-blue-50/30 dark:to-blue-900/10">
+                            <div className="relative mb-6">
+                                <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-2xl"></div>
+                                <div className="w-24 h-24 bg-card rounded-full flex items-center justify-center border border-border/50 shadow-xl relative z-10">
+                                    <MessageCircle className="w-12 h-12 text-blue-500/70" />
+                                </div>
                             </div>
-                            <h3 className="text-lg font-medium text-foreground mb-1">{t('chat.selectConversation')}</h3>
-                            <p>{t('chat.selectConversationDesc')}</p>
+                            <h3 className="text-2xl font-bold text-foreground mb-2 tracking-tight">{t('chat.selectConversation')}</h3>
+                            <p className="text-muted-foreground max-w-sm">{t('chat.selectConversationDesc')}</p>
                         </div>
                     )}
                 </div>

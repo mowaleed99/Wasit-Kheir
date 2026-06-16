@@ -118,7 +118,15 @@
     "comment": "تعليق",
     "share": "مشاركة"
   },
+  "common": {
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "moreOptions": "خيارات إضافية"
+  },
   "chat": {
+    "deleteChat": "حذف المحادثة",
+    "confirmDelete": "هل أنت متأكد من حذف هذه المحادثة؟",
+    "viewProfile": "عرض الملف الشخصي",
     "chats": "المحادثات"
   },
   "search": "بحث",
@@ -339,6 +347,9 @@
     }
   },
   "chat": {
+    "deleteChat": "حذف المحادثة",
+    "confirmDelete": "هل أنت متأكد من حذف هذه المحادثة؟",
+    "viewProfile": "عرض الملف الشخصي",
     "messages": "الرسائل",
     "searchPlaceholder": "البحث في المحادثات...",
     "noConversations": "لم يتم العثور على محادثات",
