@@ -149,7 +149,7 @@ export const Navbar: React.FC = () => {
           <Button
             onClick={toggleLanguage}
             variant="ghost"
-            className="text-xs font-medium px-3 py-1.5 rounded-full bg-muted hover:bg-muted/80 text-muted-foreground transition-colors hidden sm:block"
+            className="text-xs font-medium px-3 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-colors hidden sm:block"
           >
             {i18n.language === "ar" ? "EN" : "AR"}
           </Button>

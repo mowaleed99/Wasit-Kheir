@@ -243,7 +243,7 @@ export const SignupForm: React.FC = () => {
         <Button
           type="submit"
           disabled={mutation.isPending}
-          className="w-full bg-purple-600 text-white hover:bg-purple-700 font-semibold py-3 rounded-xl shadow-md hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          className="w-full bg-blue-600 text-white hover:bg-blue-700 font-semibold py-3 rounded-xl shadow-md hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
         >
           {mutation.isPending ? (
             <span className="flex items-center justify-center gap-2">

@@ -71,7 +71,7 @@ export const AdminLayout: React.FC = () => {
                 {/* Language Toggle */}
                 <button
                     onClick={toggleLanguage}
-                    className="hidden sm:block px-3 py-1.5 text-xs font-medium rounded-md bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                    className="hidden sm:block px-3 py-1.5 text-xs font-medium rounded-md bg-blue-600 hover:bg-blue-700 text-white transition-colors"
                 >
                     {i18n.language === "ar" ? "EN" : "AR"}
                 </button>
@@ -173,7 +173,7 @@ export const AdminLayout: React.FC = () => {
                 <div className="p-4 border-t border-gray-200 dark:border-gray-800 flex flex-col gap-2">
                     <button
                         onClick={toggleLanguage}
-                        className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-all"
+                        className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-all"
                     >
                         {i18n.language === "ar" ? "English" : "العربية"}
                     </button>

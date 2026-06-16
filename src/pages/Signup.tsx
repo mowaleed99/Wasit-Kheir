@@ -48,9 +48,9 @@ export const Signup: React.FC = () => {
         <div className="absolute top-6 right-6">
           <button
             onClick={toggleLanguage}
-            className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-full transition-all duration-300 shadow-sm border border-gray-200"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-all duration-300 shadow-sm border border-blue-500"
           >
-            <Globe className="w-5 h-5 text-purple-600" />
+            <Globe className="w-5 h-5 text-white" />
             <span className="font-medium text-sm">{language === 'en' ? 'العربية' : 'English'}</span>
           </button>
         </div>
