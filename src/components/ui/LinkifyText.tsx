@@ -1,4 +1,3 @@
-import React from 'react';
 
 export const LinkifyText = ({ text }: { text: string }) => {
     if (!text) return null;
