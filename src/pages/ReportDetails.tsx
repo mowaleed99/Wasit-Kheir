@@ -10,6 +10,7 @@ import { MapPicker } from "@/components/ui/MapPicker";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/Button";
 import { ImageGallery } from "@/components/ui/ImageGallery";
+import { LinkifyText } from "@/components/ui/LinkifyText";
 import { resolveImageUrl } from "@/utils/imageUrl";
 import {
     ArrowLeft, MapPin, Calendar, MessageCircle, Share2, Send,
@@ -399,7 +400,7 @@ export const ReportDetails: React.FC = () => {
                             {/* Content */}
                             <div className="p-6 space-y-5">
                                 <p className="text-foreground text-base leading-relaxed whitespace-pre-wrap">
-                                    {reportData.description}
+                                    <LinkifyText text={reportData.description} />
                                 </p>
 
                                 {/* Meta pills */}
