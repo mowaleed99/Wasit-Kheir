@@ -131,8 +131,8 @@ export const SearchPage: React.FC = () => {
             { data: { Image: selectedImage as any, K: 5 } },
             {
                 onSuccess: (raw) => {
-                    // Filter results to only show relevant matches (score > 50)
-                    const results = extractAiResults(raw).filter(r => (r.score ?? 0) > 50);
+                    // Filter results to only show relevant matches (score > 80)
+                    const results = extractAiResults(raw).filter(r => (r.score ?? 0) > 80);
                     setImageResults(results);
                     if (results.length === 0) setAiError(t('searchPage.noResults', 'No similar images found in the database.'));
                 },
@@ -173,8 +173,8 @@ export const SearchPage: React.FC = () => {
             { data: { Image: selectedImage as any || undefined, Text: multimodalText || undefined, K: 5 } },
             {
                 onSuccess: (raw) => {
-                    // Filter results to only show relevant matches (score > 50)
-                    const results = extractAiResults(raw).filter(r => (r.score ?? 0) > 50);
+                    // Filter results to only show relevant matches (score > 80)
+                    const results = extractAiResults(raw).filter(r => (r.score ?? 0) > 80);
                     setMultimodalResults(results);
                     if (results.length === 0) setAiError(t('searchPage.noResults', 'No matches found.'));
                 },

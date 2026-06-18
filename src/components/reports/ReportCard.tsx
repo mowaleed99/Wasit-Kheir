@@ -56,7 +56,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report, aiScore }) => {
                     </span>
                     {aiScore !== undefined && (
                         <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold border bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-500/10 dark:text-indigo-400 dark:border-indigo-500/20">
-                            AI Match: {(aiScore * 100).toFixed(0)}%
+                            AI Match: {aiScore.toFixed(0)}%
                         </span>
                     )}
                 </div>
