@@ -9,7 +9,7 @@ export const apiClient = axios.create({
   baseURL: getBaseURL(),
   // Removing withCredentials because the app uses Bearer tokens. 
   // Sending cookies (especially Vercel proxy cookies) confuses the ASP.NET Core authentication middleware causing 401s.
-  timeout: 30000, // 30 seconds timeout
+  timeout: 120000, // 120 seconds — AI endpoints can be slow due to Modal cold starts
 });
 
 // Token storage
@@ -36,6 +36,16 @@ apiClient.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
       console.log("Added Authorization header with token");
+    }
+
+    // Increase timeout for scraper endpoints since they can take several minutes
+    if (config.url?.includes('/api/scraper/run')) {
+      config.timeout = 300000; // 5 minutes
+    }
+
+    // Increase timeout for AI endpoints — Modal container may have a cold start
+    if (config.url?.includes('/api/ai/')) {
+      config.timeout = 180000; // 3 minutes
     }
 
     return config;
@@ -161,6 +171,12 @@ export const customInstance = <T>(config: AxiosRequestConfig): Promise<T> => {
     if (config.headers) {
       delete config.headers['Content-Type'];
       delete config.headers['content-type'];
+    }
+  } else if (config.data instanceof URLSearchParams) {
+    // URLSearchParams is used for form-urlencoded endpoints (e.g. /api/ai/search-text, /api/ai/add-text)
+    // Axios handles it correctly — just ensure the Content-Type is set properly
+    if (config.headers) {
+      config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
     }
   } else if (config.data && typeof config.data === 'object') {
     const hasFiles = Object.values(config.data).some(value => {
