@@ -20,8 +20,9 @@ interface SearchFilters {
 type SearchMode = "text" | "image" | "face" | "multimodal";
 
 // Safely extract the real array from API results (handles both wrapped and unwrapped responses)
-// Filters out low-score results and sorts by best match first
-function extractAiResults(raw: unknown, minScore = 10): AiResultDto[] {
+// Safely extract the real array from API results (handles both wrapped and unwrapped responses)
+// Sorts by best match first (descending score)
+function extractAiResults(raw: unknown): AiResultDto[] {
     let arr: AiResultDto[] = [];
     if (!raw) return arr;
     if (Array.isArray(raw)) arr = raw;
@@ -29,9 +30,7 @@ function extractAiResults(raw: unknown, minScore = 10): AiResultDto[] {
         const obj = raw as Record<string, unknown>;
         if (Array.isArray(obj?.data)) arr = obj.data as AiResultDto[];
     }
-    return arr
-        .filter(r => (r.score ?? 0) >= minScore)       // drop irrelevant low-score results
-        .sort((a, b) => (b.score ?? 0) - (a.score ?? 0)); // best match first
+    return arr.sort((a, b) => (b.score ?? 0) - (a.score ?? 0)); // best match first
 }
 
 // For face-match the match ID lives in personId (postId comes back as empty string "")
@@ -152,7 +151,8 @@ export const SearchPage: React.FC = () => {
             { data: { Image: selectedImage as any, K: 5 } },
             {
                 onSuccess: (raw) => {
-                    const results = extractAiResults(raw);
+                    // FaceMatch returns 0-100 scores. We only want highly confident matches (e.g. > 50)
+                    const results = extractAiResults(raw).filter(r => (r.score ?? 0) > 50);
                     setFaceResults(results);
                     if (results.length === 0) setAiError(t('searchPage.noFaceResults', 'No matching faces found in the database.'));
                 },
