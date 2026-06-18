@@ -23,31 +23,151 @@ import type {
   ObjectBaseResponse,
   PostApiAiAddTextBody,
   PostApiAiFaceMatchBody,
+  PostApiAiImageEmbeddingBody,
   PostApiAiMultimodalSearchBody,
   PostApiAiSearchImageBody,
-  PostApiAiSearchTextBody
+  PostApiAiSearchTextBody,
+  PostApiAiTextEmbeddingBody
 } from '../lostAndFoundAPI.schemas'
 import { customInstance } from '../../mutator';
 
 
 
 /**
+ * @summary Generate a text embedding using the external AI service
+ */
+export const postApiAiTextEmbedding = (
+    postApiAiTextEmbeddingBody: PostApiAiTextEmbeddingBody,
+ ) => {
+      
+      const formUrlEncoded = new URLSearchParams();
+formUrlEncoded.append('Text', postApiAiTextEmbeddingBody.Text)
+
+      return customInstance<unknown>(
+      {url: `/api/ai/text-embedding`, method: 'POST',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded', },
+       data: formUrlEncoded
+    },
+      );
+    }
+  
+
+
+export const getPostApiAiTextEmbeddingMutationOptions = <TError = ObjectBaseResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiAiTextEmbedding>>, TError,{data: PostApiAiTextEmbeddingBody}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof postApiAiTextEmbedding>>, TError,{data: PostApiAiTextEmbeddingBody}, TContext> => {
+const {mutation: mutationOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiAiTextEmbedding>>, {data: PostApiAiTextEmbeddingBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiAiTextEmbedding(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiAiTextEmbeddingMutationResult = NonNullable<Awaited<ReturnType<typeof postApiAiTextEmbedding>>>
+    export type PostApiAiTextEmbeddingMutationBody = PostApiAiTextEmbeddingBody
+    export type PostApiAiTextEmbeddingMutationError = ObjectBaseResponse
+
+    /**
+ * @summary Generate a text embedding using the external AI service
+ */
+export const usePostApiAiTextEmbedding = <TError = ObjectBaseResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiAiTextEmbedding>>, TError,{data: PostApiAiTextEmbeddingBody}, TContext>, }
+): UseMutationResult<
+        Awaited<ReturnType<typeof postApiAiTextEmbedding>>,
+        TError,
+        {data: PostApiAiTextEmbeddingBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiAiTextEmbeddingMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    /**
+ * @summary Generate an image embedding using the external AI service
+ */
+export const postApiAiImageEmbedding = (
+    postApiAiImageEmbeddingBody: PostApiAiImageEmbeddingBody,
+ ) => {
+      
+      const formData = new FormData();
+formData.append('Image', postApiAiImageEmbeddingBody.Image)
+
+      return customInstance<unknown>(
+      {url: `/api/ai/image-embedding`, method: 'POST',
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData
+    },
+      );
+    }
+  
+
+
+export const getPostApiAiImageEmbeddingMutationOptions = <TError = ObjectBaseResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiAiImageEmbedding>>, TError,{data: PostApiAiImageEmbeddingBody}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof postApiAiImageEmbedding>>, TError,{data: PostApiAiImageEmbeddingBody}, TContext> => {
+const {mutation: mutationOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiAiImageEmbedding>>, {data: PostApiAiImageEmbeddingBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiAiImageEmbedding(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiAiImageEmbeddingMutationResult = NonNullable<Awaited<ReturnType<typeof postApiAiImageEmbedding>>>
+    export type PostApiAiImageEmbeddingMutationBody = PostApiAiImageEmbeddingBody
+    export type PostApiAiImageEmbeddingMutationError = ObjectBaseResponse
+
+    /**
+ * @summary Generate an image embedding using the external AI service
+ */
+export const usePostApiAiImageEmbedding = <TError = ObjectBaseResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiAiImageEmbedding>>, TError,{data: PostApiAiImageEmbeddingBody}, TContext>, }
+): UseMutationResult<
+        Awaited<ReturnType<typeof postApiAiImageEmbedding>>,
+        TError,
+        {data: PostApiAiImageEmbeddingBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiAiImageEmbeddingMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    /**
  * @summary Search using AI text similarity
  */
 export const postApiAiSearchText = (
     postApiAiSearchTextBody: PostApiAiSearchTextBody,
  ) => {
       
-      const formData = new FormData();
-formData.append('Text', postApiAiSearchTextBody.Text)
+      const formUrlEncoded = new URLSearchParams();
+formUrlEncoded.append('Text', postApiAiSearchTextBody.Text)
 if(postApiAiSearchTextBody.K !== undefined) {
- formData.append('K', postApiAiSearchTextBody.K.toString())
+ formUrlEncoded.append('K', postApiAiSearchTextBody.K.toString())
  }
 
       return customInstance<AiResultDto[]>(
       {url: `/api/ai/search-text`, method: 'POST',
-      headers: {'Content-Type': 'multipart/form-data', },
-       data: formData
+      headers: {'Content-Type': 'application/x-www-form-urlencoded', },
+       data: formUrlEncoded
     },
       );
     }
@@ -100,14 +220,14 @@ export const postApiAiAddText = (
     postApiAiAddTextBody: PostApiAiAddTextBody,
  ) => {
       
-      const formData = new FormData();
-formData.append('PostId', postApiAiAddTextBody.PostId)
-formData.append('Text', postApiAiAddTextBody.Text)
+      const formUrlEncoded = new URLSearchParams();
+formUrlEncoded.append('PostId', postApiAiAddTextBody.PostId)
+formUrlEncoded.append('Text', postApiAiAddTextBody.Text)
 
       return customInstance<unknown>(
       {url: `/api/ai/add-text`, method: 'POST',
-      headers: {'Content-Type': 'multipart/form-data', },
-       data: formData
+      headers: {'Content-Type': 'application/x-www-form-urlencoded', },
+       data: formUrlEncoded
     },
       );
     }
@@ -406,15 +526,15 @@ export const useGetApiAiHealth = <TData = Awaited<ReturnType<typeof getApiAiHeal
 
 
 /**
- * Embeds `text`, validates dimensions, then calls Modal /search-vector with embedding only (no user text).
- * @summary Semantic search: embedding → Modal vector search. Modal request contains embedding + index metadata only.
+ * Preserves the backend route and maps it to the live external AI /api/search-text endpoint. The live AI OpenAPI does not expose /api/search.
+ * @summary AI semantic text search
  */
 export const postApiAiSearch = (
     aiSearchRequestDto: AiSearchRequestDto,
  ) => {
       
       
-      return customInstance<unknown>(
+      return customInstance<AiResultDto[]>(
       {url: `/api/ai/search`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: aiSearchRequestDto
@@ -448,7 +568,7 @@ const {mutation: mutationOptions} = options ?? {};
     export type PostApiAiSearchMutationError = ObjectBaseResponse
 
     /**
- * @summary Semantic search: embedding → Modal vector search. Modal request contains embedding + index metadata only.
+ * @summary AI semantic text search
  */
 export const usePostApiAiSearch = <TError = ObjectBaseResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiAiSearch>>, TError,{data: AiSearchRequestDto}, TContext>, }

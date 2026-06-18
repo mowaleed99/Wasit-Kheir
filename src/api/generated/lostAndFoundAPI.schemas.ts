@@ -215,6 +215,14 @@ export type PostApiAiSearchTextBody = {
   Text: string;
 };
 
+export type PostApiAiImageEmbeddingBody = {
+  Image: Blob;
+};
+
+export type PostApiAiTextEmbeddingBody = {
+  Text: string;
+};
+
 export type GetApiAdminReportsParams = {
 Type?: string;
 Status?: string;
