@@ -20,17 +20,24 @@ interface SearchFilters {
 type SearchMode = "text" | "image" | "face" | "multimodal";
 
 // Safely extract the real array from API results (handles both wrapped and unwrapped responses)
-function extractAiResults(raw: unknown): AiResultDto[] {
-    if (!raw) return [];
-    if (Array.isArray(raw)) return raw;
-    const obj = raw as Record<string, unknown>;
-    if (Array.isArray(obj?.data)) return obj.data as AiResultDto[];
-    return [];
+// Filters out low-score results and sorts by best match first
+function extractAiResults(raw: unknown, minScore = 10): AiResultDto[] {
+    let arr: AiResultDto[] = [];
+    if (!raw) return arr;
+    if (Array.isArray(raw)) arr = raw;
+    else {
+        const obj = raw as Record<string, unknown>;
+        if (Array.isArray(obj?.data)) arr = obj.data as AiResultDto[];
+    }
+    return arr
+        .filter(r => (r.score ?? 0) >= minScore)       // drop irrelevant low-score results
+        .sort((a, b) => (b.score ?? 0) - (a.score ?? 0)); // best match first
 }
 
-// For face match the match ID can be in personId OR postId depending on index
+// For face-match the match ID lives in personId (postId comes back as empty string "")
+// Use || so that empty string falls through to personId
 function getMatchId(match: AiResultDto): string | null {
-    return match.postId ?? match.personId ?? null;
+    return match.postId || match.personId || null;
 }
 
 export const SearchPage: React.FC = () => {
@@ -122,7 +129,7 @@ export const SearchPage: React.FC = () => {
         setImageResults([]);
         setAiError(null);
         searchImage(
-            { data: { Image: selectedImage as any, K: 10 } },
+            { data: { Image: selectedImage as any, K: 5 } },
             {
                 onSuccess: (raw) => {
                     const results = extractAiResults(raw);
@@ -142,7 +149,7 @@ export const SearchPage: React.FC = () => {
         setFaceResults([]);
         setAiError(null);
         searchFace(
-            { data: { Image: selectedImage as any, K: 10 } },
+            { data: { Image: selectedImage as any, K: 5 } },
             {
                 onSuccess: (raw) => {
                     const results = extractAiResults(raw);
@@ -162,7 +169,7 @@ export const SearchPage: React.FC = () => {
         setMultimodalResults([]);
         setAiError(null);
         searchMultimodal(
-            { data: { Image: selectedImage as any || undefined, Text: multimodalText || undefined, K: 10 } },
+            { data: { Image: selectedImage as any || undefined, Text: multimodalText || undefined, K: 5 } },
             {
                 onSuccess: (raw) => {
                     const results = extractAiResults(raw);
