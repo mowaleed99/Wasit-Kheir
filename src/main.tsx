@@ -31,6 +31,17 @@ try {
     </React.StrictMode>
   );
 
+  // Hide splash screen after React has rendered
+  const splash = document.getElementById("splash");
+  if (splash) {
+    // Short delay so first paint is complete
+    setTimeout(() => {
+      splash.classList.add("hidden");
+      // Remove from DOM after fade-out transition ends (500ms)
+      setTimeout(() => splash.remove(), 500);
+    }, 300);
+  }
+
   console.log("App rendered successfully");
 } catch (error) {
   console.error("Failed to render app:", error);
