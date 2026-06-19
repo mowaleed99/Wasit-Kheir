@@ -11,9 +11,9 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "logo2.png"],
       manifest: {
-        name: "وسيط خير",
-        short_name: "وسيط خير",
-        description: "منصة وسيط خير للمفقودات والموجودات",
+        name: "Wasit Kheir",
+        short_name: "Wasit Kheir",
+        description: "Wasit Kheir - Lost & Found Platform",
         theme_color: "#2563eb",
         background_color: "#ffffff",
         display: "standalone",
